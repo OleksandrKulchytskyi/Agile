@@ -2,20 +2,49 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using WebSignalR.Common.Infrastructure;
 using WebSignalR.Common.Interfaces;
 
 namespace WebSignalR.Common.Entities
 {
-	public class User : IEntity<int>
+	public class User : EntityBase
 	{
-		public int Id { get; set; }
+		public User()
+		{
+			ConnectedSession = new SafeCollection<UserSession>();
+		}
 
-		public string Name { get; set; }
+		private string name;
+		public string Name
+		{
+			get { return name; }
+			set
+			{
+				OnPropChanging("Name");
+				name = value;
+				OnPropChanged("Name");
+			}
+		}
 
-		public string Password { get; set; }
+		private string password;
+		public string Password
+		{
+			get { return password; }
+			set
+			{
+				OnPropChanging("Password");
+				password = value;
+				OnPropChanged("Password");
+			}
+		}
 
-		public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+		private bool isAdmin;
+		public bool IsAdmin
+		{
+			get { return isAdmin; }
+			set { OnPropChanging("IsAdmin"); isAdmin = value; OnPropChanged("IsAdmin"); }
+		}
 
-		public event System.ComponentModel.PropertyChangingEventHandler PropertyChanging;
+		public virtual ICollection<UserSession> ConnectedSession { get; set; }
 	}
 }

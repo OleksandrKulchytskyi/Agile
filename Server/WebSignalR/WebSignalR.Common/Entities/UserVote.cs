@@ -1,0 +1,24 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace WebSignalR.Common.Entities
+{
+	public class UserVote : EntityBase
+	{
+		public int UserId { get; set; }
+		public User User { get; set; }
+
+		public int VoteId { get; set; }
+		public VoteItem VoteItem { get; set; }
+
+		private int mark;
+		public int Mark
+		{
+			get { return mark; }
+			set { OnPropChanging("Mark"); mark = value; OnPropChanged("Mark"); }
+		}
+
+	}
+}

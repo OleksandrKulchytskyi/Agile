@@ -7,3 +7,5 @@ System.Web.HttpException (0x80004005): File does not exist.
    at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
    at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
    at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-02-19 21:43:22,259   154ms Global                 Application_Start  - Application_Start()
+INFO  2014-02-19 21:48:35,663 313557ms Global                 Application_End    - Application_End()

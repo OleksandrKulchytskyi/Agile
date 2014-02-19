@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSignalR", "WebSignalR\We
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSignalR.Common", "WebSignalR.Common\WebSignalR.Common.csproj", "{30F872D9-563D-4ED9-AE99-9EF0C9A8F7C7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSignalR.DataAccess", "WebSignalR.DataAccess\WebSignalR.DataAccess.csproj", "{6F5E8B7E-94DD-44A5-AD21-7CD5C6B553CA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{30F872D9-563D-4ED9-AE99-9EF0C9A8F7C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30F872D9-563D-4ED9-AE99-9EF0C9A8F7C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30F872D9-563D-4ED9-AE99-9EF0C9A8F7C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F5E8B7E-94DD-44A5-AD21-7CD5C6B553CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F5E8B7E-94DD-44A5-AD21-7CD5C6B553CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F5E8B7E-94DD-44A5-AD21-7CD5C6B553CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F5E8B7E-94DD-44A5-AD21-7CD5C6B553CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
