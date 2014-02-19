@@ -1,0 +1,9 @@
+INFO  2014-02-19 17:11:48,000   263ms Global                 Application_Start  - Application_Start()
+WARN  2014-02-19 17:11:49,460  1723ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-02-19 17:11:49,462  1725ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
