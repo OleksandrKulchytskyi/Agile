@@ -18,13 +18,14 @@ namespace WebSignalR.App_Start
 				Resolver = resolver,
 				EnableJavaScriptProxies = true
 			};
-			var configuration = resolver.Resolve<IConfigurationManager>();
+			IConfigurationManager configuration = resolver.Resolve<IConfigurationManager>();
 
 			RouteTable.Routes.MapHubs(hubConfig);
 
-			var pipeline = resolver.Resolve<IHubPipeline>();
+			IHubPipeline pipeline = resolver.Resolve<IHubPipeline>();
 			configuration.ConnectionTimeout = TimeSpan.FromSeconds(30);
 			configuration.DisconnectTimeout = TimeSpan.FromSeconds(30);
+			pipeline.AddModule(new Hubs.Pipelines.LoggingPipelineModule());
 
 			//this was disappear since v 1.0,this feature is turned on by defult in v1.0 >
 			//pipeline.EnableAutoRejoiningGroups();

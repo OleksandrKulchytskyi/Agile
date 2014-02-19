@@ -19,12 +19,6 @@ namespace WebSignalR
 			Logger = LogManager.GetLogger(typeof(Global).FullName);
 			log4net.Config.XmlConfigurator.Configure();
 			Logger.Info("Application_Start()");
-
-		
-
-			Microsoft.AspNet.SignalR.GlobalHost.HubPipeline.AddModule(new Hubs.Pipelines.LoggingPipelineModule());
-
-			
 		}
 
 		protected void Session_Start(object sender, EventArgs e)
