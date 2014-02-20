@@ -1,0 +1,82 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using WebSignalR.Common.Interfaces;
+using WebSignalR.DataAccess.Mappings;
+
+namespace WebSignalR.DataAccess
+{
+	public class DatabaseContext : DbContext, IContext, IUnityOfWork
+	{
+		public DatabaseContext()
+			: base("ConnectionSettings")
+		{
+		}
+
+		public DatabaseContext(string connection)
+			: base(connection)
+		{
+		}
+
+		protected override void OnModelCreating(DbModelBuilder modelBuilder)
+		{
+			modelBuilder.Configurations.Add(new UserMap());
+			modelBuilder.Configurations.Add(new RoomMap());
+			
+			base.OnModelCreating(modelBuilder);
+		}
+
+		public bool EnableAuditLog { get; set; }
+
+		public int Commit()
+		{
+			int result = SaveChanges();
+			return result;
+		}
+
+		public void RollbackChanges()
+		{
+			//TODO: add implemetations here
+		}
+
+		public System.Data.Common.DbTransaction BeginTransaction()
+		{
+			DbConnection connection = this.Database.Connection;
+			if (connection.State != ConnectionState.Open && connection.State != ConnectionState.Connecting)
+				connection.Open();
+
+			return connection.BeginTransaction(IsolationLevel.ReadCommitted);
+
+		}
+
+		public bool IsAuditEnabled { get; set; }
+
+		public IDbSet<T> GetEntitySet<T>() where T : class
+		{
+			return Set<T>();
+		}
+
+		public void ChangeState<T>(T entity, EntityState state) where T : Common.Entities.EntityBase
+		{
+			Entry<T>(entity).State = state;
+		}
+
+		private static bool IsChanged(DbEntityEntry entity)
+		{
+			return IsStateEqual(entity, EntityState.Added) ||
+				   IsStateEqual(entity, EntityState.Deleted) ||
+				   IsStateEqual(entity, EntityState.Modified);
+		}
+
+		private static bool IsStateEqual(DbEntityEntry entity, EntityState state)
+		{
+			return (entity.State & state) == state;
+		}
+	}
+}

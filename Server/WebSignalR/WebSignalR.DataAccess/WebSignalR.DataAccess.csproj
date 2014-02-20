@@ -46,7 +46,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DatabaseContext.cs" />
     <Compile Include="EntityStateHelper.cs" />
+    <Compile Include="Mappings\MapBase.cs" />
+    <Compile Include="Mappings\RoomMap.cs" />
+    <Compile Include="Mappings\UserMap.cs" />
+    <Compile Include="Mappings\UserSessionMap.cs" />
+    <Compile Include="Mappings\VoteItemMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -58,6 +64,9 @@
       <Project>{30f872d9-563d-4ed9-ae99-9ef0c9a8f7c7}</Project>
       <Name>WebSignalR.Common</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Initilaizers\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

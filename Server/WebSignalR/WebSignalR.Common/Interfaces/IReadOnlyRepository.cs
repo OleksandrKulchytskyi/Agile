@@ -6,25 +6,25 @@ using System.Web;
 
 namespace WebSignalR.Common.Interfaces
 {
-	public interface IReadOnlyRepository<E, T> where E : IEntity<T>
+	public interface IReadOnlyRepository<E> where E : Entities.EntityBase
 	{
-		int Count { get; }
+		//int Count { get; }
 
-		bool Contains(T id);
+		IContext DbContext { get; set; }
 
-		E Get(T id);
-
+		bool Contains(E id);
+		E Get(E id);
 		IQueryable<E> Get(Expression<Func<E, bool>> predicate);
-
 		IEnumerable<E> GetAll();
+
+		bool Exist(Expression<Func<E, bool>> predicate = null);
+		int Count(Expression<Func<E, bool>> predicate = null);
 	}
 
-	public interface IRepository<E, T> : IReadOnlyRepository<E, T> where E : IEntity<T>
+	public interface IRepository<E> : IReadOnlyRepository<E> where E : Entities.EntityBase
 	{
 		void Add(E entity);
-
-		void Remove(T id);
-
+		void Remove(E entity);
 		void Update(E entity);
 	}
 }

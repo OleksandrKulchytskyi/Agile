@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 using WebSignalR.Common.Infrastructure;
 
 namespace WebSignalR.Common.Entities
@@ -29,8 +26,8 @@ namespace WebSignalR.Common.Entities
 			set { overallMark = value; OnPropChanged("OverallMark"); }
 		}
 
-		public int RoomId { get; set; }
-		public Room HostedRoom { get; set; }
+		public int? RoomId { get; set; }
+		public virtual Room HostRoom { get; set; }
 
 		public virtual ICollection<UserVote> VotedUsers { get; set; }
 	}

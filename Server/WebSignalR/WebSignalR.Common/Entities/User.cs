@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 using WebSignalR.Common.Infrastructure;
-using WebSignalR.Common.Interfaces;
 
 namespace WebSignalR.Common.Entities
 {
@@ -11,7 +7,8 @@ namespace WebSignalR.Common.Entities
 	{
 		public User()
 		{
-			ConnectedSession = new SafeCollection<UserSession>();
+			ConnectedSessions = new SafeCollection<UserSession>();
+			UserPrivileges = new SafeCollection<Privileges>();
 		}
 
 		private string name;
@@ -45,6 +42,7 @@ namespace WebSignalR.Common.Entities
 			set { OnPropChanging("IsAdmin"); isAdmin = value; OnPropChanged("IsAdmin"); }
 		}
 
-		public virtual ICollection<UserSession> ConnectedSession { get; set; }
+		public virtual ICollection<UserSession> ConnectedSessions { get; set; }
+		public virtual ICollection<Privileges> UserPrivileges { get; set; }
 	}
 }

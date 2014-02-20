@@ -12,7 +12,7 @@ namespace WebSignalR.Common.Entities
 		public Room()
 		{
 			ConnectedUsers = new SafeCollection<User>();
-			ItemToVote = new SafeCollection<VoteItem>();
+			ItemsToVote = new SafeCollection<VoteItem>();
 		}
 
 		private string name;
@@ -39,6 +39,6 @@ namespace WebSignalR.Common.Entities
 		}
 
 		public virtual ICollection<User> ConnectedUsers { get; set; }
-		public virtual ICollection<VoteItem> ItemToVote { get; set; }
+		public virtual ICollection<VoteItem> ItemsToVote { get; set; }
 	}
 }
