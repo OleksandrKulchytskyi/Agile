@@ -15,8 +15,7 @@ namespace WebSignalR.DataAccess.Mappings
 			this.Property(u => u.Name).HasColumnName("Name").IsRequired().HasMaxLength(50); ;
 			this.Property(u => u.Password).HasColumnName("Password").IsRequired();
 
-			//this.HasMany(x => x.ReadMessages).WithMany(x => x.UsersWhoRead)
-			//.Map(m => m.MapLeftKey("User_Key").MapRightKey("Message_Key").ToTable("UserReadMessage"));
+
 		}
 	}
 }

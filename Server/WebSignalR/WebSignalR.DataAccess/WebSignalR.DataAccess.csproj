@@ -49,9 +49,11 @@
     <Compile Include="DatabaseContext.cs" />
     <Compile Include="EntityStateHelper.cs" />
     <Compile Include="Mappings\MapBase.cs" />
+    <Compile Include="Mappings\PrivilegeMap.cs" />
     <Compile Include="Mappings\RoomMap.cs" />
     <Compile Include="Mappings\UserMap.cs" />
     <Compile Include="Mappings\UserSessionMap.cs" />
+    <Compile Include="Mappings\UserVoteMap.cs" />
     <Compile Include="Mappings\VoteItemMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

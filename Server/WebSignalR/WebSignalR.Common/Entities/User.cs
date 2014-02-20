@@ -9,6 +9,7 @@ namespace WebSignalR.Common.Entities
 		{
 			ConnectedSessions = new SafeCollection<UserSession>();
 			UserPrivileges = new SafeCollection<Privileges>();
+			UserVotes = new SafeCollection<UserVote>();
 		}
 
 		private string name;
@@ -44,5 +45,6 @@ namespace WebSignalR.Common.Entities
 
 		public virtual ICollection<UserSession> ConnectedSessions { get; set; }
 		public virtual ICollection<Privileges> UserPrivileges { get; set; }
+		public virtual ICollection<UserVote> UserVotes { get; set; }
 	}
 }
