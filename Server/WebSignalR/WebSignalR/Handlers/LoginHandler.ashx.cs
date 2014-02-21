@@ -32,6 +32,9 @@ namespace WebSignalR.Handlers
 
 		public void ProcessRequest(HttpContext context)
 		{
+			if (context.Request.IsAuthenticated)
+			{
+			} 
 			string authorization = context.Request.Headers["Authorization"];
 			if (!string.IsNullOrEmpty(authorization) && authorization.IndexOf("Basic", StringComparison.OrdinalIgnoreCase) != -1)
 			{

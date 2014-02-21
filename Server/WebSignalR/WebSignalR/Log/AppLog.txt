@@ -150,3 +150,63 @@ System.Web.HttpException (0x80004005): File does not exist.
    at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
    at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
    at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-02-21 18:13:11,007   395ms Global                 Application_Start  - Application_Start()
+WARN  2014-02-21 18:13:14,490  3877ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-02-21 18:13:14,491  3878ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+WARN  2014-02-21 18:14:18,010 67397ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-02-21 18:14:18,012 67399ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+WARN  2014-02-21 18:15:03,628 113015ms Global                 Application_Error  - URL: http://localhost:6404/handlers/loginhandler; FilePath: /handlers/loginhandler
+ERROR 2014-02-21 18:15:03,630 113017ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+ERROR 2014-02-21 18:15:59,013 168400ms Global                 Application_Error  - Application_Error
+System.PlatformNotSupportedException: This operation requires IIS integrated pipeline mode.
+   at System.Web.HttpResponse.get_Headers()
+   at WebSignalR.Handlers.LoginHandler.ProcessRequest(HttpContext context) in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Handlers\LoginHandler.ashx.cs:line 42
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-02-21 18:18:13,712   215ms Global                 Application_Start  - Application_Start()
+WARN  2014-02-21 18:18:14,714  1217ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-02-21 18:18:14,716  1219ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-02-21 18:37:50,389   599ms Global                 Application_Start  - Application_Start()
+WARN  2014-02-21 18:37:53,564  3775ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-02-21 18:37:53,567  3778ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-02-21 18:40:28,384   213ms Global                 Application_Start  - Application_Start()
+WARN  2014-02-21 18:40:31,783  3612ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-02-21 18:40:31,785  3614ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-02-21 18:42:11,836 103665ms Global                 Application_End    - Application_End()
+INFO  2014-02-21 18:43:12,079   174ms Global                 Application_Start  - Application_Start()
