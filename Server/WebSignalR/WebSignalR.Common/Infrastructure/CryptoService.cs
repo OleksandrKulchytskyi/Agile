@@ -13,7 +13,8 @@ namespace WebSignalR.Common.Infrastructure
 
 		public CryptoService(IKeyProvider provider)
 		{
-			System.Diagnostics.Contracts.Contract.Requires<ArgumentNullException>(provider != null);
+			if (provider == null)
+				throw new ArgumentNullException("provider parameter cannot ba a null.");
 			_provider = provider;
 		}
 

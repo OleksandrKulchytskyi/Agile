@@ -12,7 +12,8 @@ namespace WebSignalR.Hubs.Pipelines
 		protected override bool OnBeforeIncoming(IHubIncomingInvokerContext context)
 		{
 #if DEBUG
-			Debug.WriteLine("=> Invoking " + context.MethodDescriptor.Name + " on hub " + context.MethodDescriptor.Hub.Name);
+			if (context.MethodDescriptor.Hub != null && context.MethodDescriptor.Hub.Name != null && context.MethodDescriptor.Name != null)
+				Debug.WriteLine("=> Invoking " + context.MethodDescriptor.Name + " on hub " + context.MethodDescriptor.Hub == null ? string.Empty : context.MethodDescriptor.Hub.Name);
 #endif
 			return base.OnBeforeIncoming(context);
 		}

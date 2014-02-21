@@ -114,3 +114,39 @@ System.Web.HttpException (0x80004005): File does not exist.
    at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
    at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
    at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-02-21 17:53:00,594  1345ms Global                 Application_Start  - Application_Start()
+WARN  2014-02-21 17:53:21,566 22317ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-02-21 17:53:21,567 22318ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-02-21 17:57:07,466   309ms Global                 Application_Start  - Application_Start()
+WARN  2014-02-21 17:57:08,505  1348ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-02-21 17:57:08,507  1350ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-02-21 18:00:40,128   228ms Global                 Application_Start  - Application_Start()
+WARN  2014-02-21 18:00:41,261  1361ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-02-21 18:00:41,264  1364ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-02-21 18:04:51,306   225ms Global                 Application_Start  - Application_Start()
+WARN  2014-02-21 18:04:52,210  1129ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-02-21 18:04:52,212  1131ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
