@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 using WebSignalR.Common.Interfaces;
 using WebSignalR.DataAccess.Mappings;
 
-namespace WebSignalR.DataAccess
+namespace WebSignalR.DataAccess.DB
 {
-	public class DatabaseContext : DbContext, IContext, IUnityOfWork
+	public class DatabaseContext : DbContext, IContext
 	{
 		public DatabaseContext()
 			: base("ConnectionSettings")
@@ -26,9 +26,23 @@ namespace WebSignalR.DataAccess
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
-			modelBuilder.Configurations.Add(new UserMap());
+			//var typesToRegister = Assembly.GetExecutingAssembly().GetTypes()
+			//					.Where(type => !String.IsNullOrEmpty(type.Namespace))
+			//					.Where(type => type.BaseType != null && !type.BaseType.IsGenericType &&
+			//									type.BaseType.GetGenericTypeDefinition() == typeof(Mappings.MapBase<>));
+			//foreach (var type in typesToRegister)
+			//{
+			//	dynamic configurationInstance = Activator.CreateInstance(type);
+			//	modelBuilder.Configurations.Add(configurationInstance);
+			//}
+
 			modelBuilder.Configurations.Add(new RoomMap());
-			
+			modelBuilder.Configurations.Add(new UserMap());
+			modelBuilder.Configurations.Add(new UserSessionMap());
+			modelBuilder.Configurations.Add(new VoteItemMap());
+			modelBuilder.Configurations.Add(new UserVoteMap());
+			modelBuilder.Configurations.Add(new PrivilegesMap());
+
 			base.OnModelCreating(modelBuilder);
 		}
 
@@ -57,7 +71,7 @@ namespace WebSignalR.DataAccess
 
 		public bool IsAuditEnabled { get; set; }
 
-		public IDbSet<T> GetEntitySet<T>() where T : class
+		public IDbSet<T> GetEntitySet<T>() where T : Common.Entities.EntityBase
 		{
 			return Set<T>();
 		}

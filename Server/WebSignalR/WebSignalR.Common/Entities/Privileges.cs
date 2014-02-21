@@ -1,8 +1,16 @@
 ﻿
+using System.Collections.Generic;
+using WebSignalR.Common.Infrastructure;
+
 namespace WebSignalR.Common.Entities
 {
 	public class Privileges : EntityBase
 	{
+		public Privileges()
+		{
+			Users = new SafeCollection<User>();
+		}
+
 		private string name;
 		public string Name
 		{
@@ -17,5 +25,7 @@ namespace WebSignalR.Common.Entities
 			set { description = value; OnPropChanged("Description"); }
 		}
 
+
+		public ICollection<User> Users { get; set; }
 	}
 }

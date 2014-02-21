@@ -7,19 +7,16 @@ using System.Web;
 
 namespace WebSignalR.Common.Interfaces
 {
-	public interface IDbContext
-	{
-		IDbSet<TEntity> Set<TEntity>() where TEntity : Entities.EntityBase;
-		int SaveChanges();
-		void Dispose();
-	}
-
 	public interface IContext : IDisposable
 	{
 		bool IsAuditEnabled { get; set; }
-		IDbSet<T> GetEntitySet<T>() where T : class;
-		void ChangeState<T>(T entity, EntityState state) where T : Entities.EntityBase;
+
 		DbTransaction BeginTransaction();
 		int Commit();
+
+		IDbSet<T> GetEntitySet<T>() where T : Common.Entities.EntityBase;
+		void ChangeState<T>(T entity, EntityState state) where T : Entities.EntityBase;
+		
+		
 	}
 }

@@ -120,6 +120,7 @@ public class MainActivity extends Activity implements
 		};
 
 		List<String> args = new ArrayList<String>(1);
+		args.add("12");
 		hub.Invoke("hello", args, callback);
 	}
 }

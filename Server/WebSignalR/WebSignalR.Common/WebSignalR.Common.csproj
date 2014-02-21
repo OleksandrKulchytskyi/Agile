@@ -70,7 +70,6 @@
     <Compile Include="Entities\Privileges.cs" />
     <Compile Include="Entities\Room.cs" />
     <Compile Include="Entities\User.cs" />
-    <Compile Include="Entities\UserPrivileges.cs" />
     <Compile Include="Entities\UserSession.cs" />
     <Compile Include="Entities\UserVote.cs" />
     <Compile Include="Entities\VoteItem.cs" />
@@ -83,11 +82,12 @@
     <Compile Include="Interfaces\IEntityValidator.cs" />
     <Compile Include="Infrastructure\SafeCollection.cs" />
     <Compile Include="Interfaces\ICryptoService.cs" />
-    <Compile Include="Interfaces\IDbContext.cs" />
+    <Compile Include="Interfaces\IContext.cs" />
     <Compile Include="Interfaces\IEntity.cs" />
     <Compile Include="Interfaces\IKeyProvider.cs" />
     <Compile Include="Interfaces\IReadOnlyRepository.cs" />
     <Compile Include="Interfaces\IUnityOfWork.cs" />
+    <Compile Include="Interfaces\IVotesProvider.cs" />
     <Compile Include="IObjectState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

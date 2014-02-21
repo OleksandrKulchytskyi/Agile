@@ -15,6 +15,9 @@ namespace WebSignalR.DataAccess.Mappings
 			this.ToTable("UserVotes");
 
 			this.Property(x => x.Mark).HasColumnName("Mark").IsRequired();
+
+			this.HasRequired(uv => uv.User).WithMany(x => x.UserVotes).HasForeignKey(x => x.UserId);
+			this.HasRequired(uv => uv.VoteItem).WithMany(x => x.VotedUsers).HasForeignKey(x => x.VoteId);
 		}
 	}
 }

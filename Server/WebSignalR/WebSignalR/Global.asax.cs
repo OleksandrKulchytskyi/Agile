@@ -11,7 +11,8 @@ namespace WebSignalR
 {
 	public class Global : System.Web.HttpApplication
 	{
-
+		private static List<string> _sessionInfo;
+		private static readonly object padlock = new object();
 		public static log4net.ILog Logger = null;
 
 		protected void Application_Start(object sender, EventArgs e)
@@ -21,9 +22,29 @@ namespace WebSignalR
 			Logger.Info("Application_Start()");
 		}
 
+		public static List<string> Sessions
+		{
+			get
+			{
+				lock (padlock)
+				{
+					if (_sessionInfo == null)
+					{
+						_sessionInfo = new List<string>();
+					}
+					return _sessionInfo;
+				}
+			}
+		}
+
 		protected void Session_Start(object sender, EventArgs e)
 		{
+			Sessions.Add(Session.SessionID);
+		}
 
+		protected void Session_End(object sender, EventArgs e)
+		{
+			Sessions.Remove(Session.SessionID);
 		}
 
 		protected void Application_BeginRequest(object sender, EventArgs e)
@@ -52,10 +73,7 @@ namespace WebSignalR
 				Logger.Error("Application_Error", exception);
 		}
 
-		protected void Session_End(object sender, EventArgs e)
-		{
-
-		}
+		
 
 		protected void Application_End(object sender, EventArgs e)
 		{

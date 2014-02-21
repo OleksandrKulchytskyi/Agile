@@ -6,7 +6,7 @@ using System.Web;
 
 namespace WebSignalR.Common.Interfaces
 {
-	public interface IUnityOfWork : IDisposable
+	public interface IUnityOfWork : IRepositoryContainer, IDisposable
 	{
 		bool EnableAuditLog { get; set; }
 
@@ -29,5 +29,11 @@ namespace WebSignalR.Common.Interfaces
 		/// Rollback tracked changes. See references of UnitOfWork pattern
 		/// </summary>
 		void RollbackChanges();
+	}
+
+	public interface IRepositoryContainer
+	{
+		IRepository<TSet> GetRepository<TSet>() where TSet : Entities.EntityBase;
+		void AddRepository<TSet>(object repository) where TSet : Entities.EntityBase;
 	}
 }
