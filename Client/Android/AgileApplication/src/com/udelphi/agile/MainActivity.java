@@ -47,17 +47,20 @@ public class MainActivity extends Activity implements
 
 		con = new HubConnection(address.toString(), this,
 				new LongPollingTransport()) {
-			
+
 			@Override
 			public void OnStateChanged(StateBase oldState, StateBase newState) {
-				Log.d("State",oldState.getState() + " -> " + newState.getState());
+				Log.d("State",
+						oldState.getState() + " -> " + newState.getState());
 
 				switch (newState.getState()) {
 				case Connected:
-					Toast.makeText(MainActivity.this,"Connected", Toast.LENGTH_SHORT).show();
+					Toast.makeText(MainActivity.this, "Connected",
+							Toast.LENGTH_SHORT).show();
 					break;
 				case Disconnected:
-					Toast.makeText(MainActivity.this,"Dissconnected", Toast.LENGTH_SHORT).show();
+					Toast.makeText(MainActivity.this, "Dissconnected",
+							Toast.LENGTH_SHORT).show();
 					break;
 				default:
 					break;
@@ -66,7 +69,7 @@ public class MainActivity extends Activity implements
 
 			@Override
 			public void OnError(Exception exception) {
-				Log.e("OnError",exception.getMessage());
+				Log.e("OnError", exception.getMessage());
 				Toast.makeText(MainActivity.this,
 						"On error: " + exception.getMessage(),
 						Toast.LENGTH_LONG).show();
@@ -75,11 +78,12 @@ public class MainActivity extends Activity implements
 		};
 
 		try {
-			con.addHeader("Cookie", 
-			".ASPXAUTH=950F52188875FD314DE694A029885FDADF0A4B3567219DC750EC9A322A09E8C76534E90F6ADE42156169B994B82AE44FCDA0D487CF7EBE318FC40E4F026FC5689075D3AD36E61ADFEA1C169FF948C9340A173FA4000B3D29147A1931F1DF400EEA62D65FBC90E1ACF16BB78C875D20CDE0515D4BC5CF580D0BFC55FB477651DF; path=/");
+			String aspxauth = (String) AgileApplication.container
+					.get(".ASPXAUTH");
+			con.addHeader("Cookie", ".ASPXAUTH=" + aspxauth);
 			hub = con.CreateHubProxy("testhub");
 		} catch (OperationApplicationException e) {
-			Log.e("OperationApplicationException",e.getMessage());
+			Log.e("OperationApplicationException", e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -107,17 +111,19 @@ public class MainActivity extends Activity implements
 			con.Stop();
 		}
 	}
-	
-	public void onPush(View v){
+
+	public void onPush(View v) {
 		HubInvokeCallback callback = new HubInvokeCallback() {
 			@Override
 			public void OnResult(boolean succeeded, String response) {
-				Toast.makeText(MainActivity.this, response, Toast.LENGTH_SHORT).show();
+				Toast.makeText(MainActivity.this, response, Toast.LENGTH_SHORT)
+						.show();
 			}
 
 			@Override
 			public void OnError(Exception ex) {
-				Toast.makeText(MainActivity.this, "Error: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
+				Toast.makeText(MainActivity.this, "Error: " + ex.getMessage(),
+						Toast.LENGTH_SHORT).show();
 			}
 		};
 

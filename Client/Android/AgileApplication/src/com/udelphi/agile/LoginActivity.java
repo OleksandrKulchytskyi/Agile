@@ -1,13 +1,29 @@
 package com.udelphi.agile;
 
+import java.util.List;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.client.CookieStore;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.cookie.Cookie;
+import org.apache.http.impl.client.AbstractHttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Base64;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -16,17 +32,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 /**
- * Activity which displays a login screen to the user, offering registration as
- * well.
- */
+ * Activity which displays a login screen to the user
+ **/
 public class LoginActivity extends Activity {
-	/**
-	 * A dummy authentication store containing known user names and passwords.
-	 * TODO: remove after connecting to a real authentication system.
-	 */
-	private static final String[] DUMMY_CREDENTIALS = new String[] {
-			"foo@example.com:hello", "bar@example.com:world" };
-
 	/**
 	 * The default email to populate the email field with.
 	 */
@@ -60,7 +68,8 @@ public class LoginActivity extends Activity {
 		mEmailView.setText(mEmail);
 
 		mPasswordView = (EditText) findViewById(R.id.password);
-		mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+		mPasswordView
+				.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 					@Override
 					public boolean onEditorAction(TextView textView, int id,
 							KeyEvent keyEvent) {
@@ -98,9 +107,8 @@ public class LoginActivity extends Activity {
 	 * errors are presented and no actual login attempt is made.
 	 */
 	public void attemptLogin() {
-		if (mAuthTask != null) {
+		if (mAuthTask != null)
 			return;
-		}
 
 		// Reset errors.
 		mEmailView.setError(null);
@@ -129,10 +137,6 @@ public class LoginActivity extends Activity {
 			mEmailView.setError(getString(R.string.error_field_required));
 			focusView = mEmailView;
 			cancel = true;
-		} else if (!mEmail.contains("@")) {
-			mEmailView.setError(getString(R.string.error_invalid_email));
-			focusView = mEmailView;
-			cancel = true;
 		}
 
 		if (cancel) {
@@ -145,7 +149,7 @@ public class LoginActivity extends Activity {
 			mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
 			showProgress(true);
 			mAuthTask = new UserLoginTask();
-			mAuthTask.execute((Void) null);
+			mAuthTask.execute(mEmail + ":" + mPassword);
 		}
 	}
 
@@ -188,33 +192,70 @@ public class LoginActivity extends Activity {
 			mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
 			mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
 		}
+
+		boolean isLogged = ((String) AgileApplication.container.get("IsLogged"))=="1";
+		Log.d("Logged", isLogged == true ? "Logged" : "Not logged");
+		if (!show && isLogged) {
+			Intent nav = new Intent(getBaseContext(), MainActivity.class);
+			startActivity(nav);
+		}
 	}
 
 	/**
 	 * Represents an asynchronous login/registration task used to authenticate
 	 * the user.
 	 */
-	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+	public class UserLoginTask extends AsyncTask<String, Void, Boolean> {
 		@Override
-		protected Boolean doInBackground(Void... params) {
-			// TODO: attempt authentication against a network service.
-
+		protected Boolean doInBackground(String... params) {
+			CookieStore sCookieStore;
 			try {
-				// Simulate network access.
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
+				String logInformation = "";
+				for (String logInfo : params) {
+					logInformation = logInfo;
+					break;
+				}
+				if (logInformation.isEmpty())
+					return false;
+
+				HttpClient client = new DefaultHttpClient();
+				String getURL = "http://10.0.2.2:6404/handlers/loginhandler.ashx";
+				HttpGet get = new HttpGet(getURL);
+				String data = Base64.encodeToString(logInformation.getBytes(),
+						Base64.DEFAULT);
+				Log.d("Basic", data);
+				get.setHeader("Authorization", "Basic " + data);
+				HttpResponse responseGet = client.execute(get);
+
+				sCookieStore = ((AbstractHttpClient) client).getCookieStore();
+				if (sCookieStore != null) {
+					List<Cookie> cookies = sCookieStore.getCookies();
+					for (Cookie c : cookies) {
+						Log.d("Cookie", c.toString());
+						Log.d("Cookie value", c.getValue());
+						AgileApplication.container.put(".ASPXAUTH",
+								c.getValue());
+					}
+				}
+				HttpEntity resEntityGet = responseGet.getEntity();
+				if (resEntityGet != null) {
+					StatusLine status = responseGet.getStatusLine();
+					Log.d("Status", status.toString());
+					Log.d("Status Code", String.valueOf(status.getStatusCode()));
+					if (status.getStatusCode() == 200) {
+						Log.d("Statuscode",
+								String.valueOf(status.getStatusCode()));
+						AgileApplication.container.put("IsLogged", "1");
+					} else {
+						AgileApplication.container.put("IsLogged", "0");
+					}
+					responseGet.getHeaders(".ASPXAUTH");
+					Log.i("GET ", EntityUtils.toString(resEntityGet));
+				}
+			} catch (Exception e) {
+				Log.i("GET ", e.getMessage());
 				return false;
 			}
-
-			for (String credential : DUMMY_CREDENTIALS) {
-				String[] pieces = credential.split(":");
-				if (pieces[0].equals(mEmail)) {
-					// Account exists, return true if the password matches.
-					return pieces[1].equals(mPassword);
-				}
-			}
-
-			// TODO: register the new account here.
 			return true;
 		}
 
@@ -223,9 +264,7 @@ public class LoginActivity extends Activity {
 			mAuthTask = null;
 			showProgress(false);
 
-			if (success) {
-				finish();
-			} else {
+			if (!success) {
 				mPasswordView
 						.setError(getString(R.string.error_incorrect_password));
 				mPasswordView.requestFocus();
