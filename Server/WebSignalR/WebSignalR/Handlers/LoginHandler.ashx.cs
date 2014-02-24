@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Web;
 using System.Web.Security;
-
+using Ninject;
+using WebSignalR.Common.Interfaces;
+using WebSignalR.Common.Entities;
 namespace WebSignalR.Handlers
 {
 	/// <summary>
@@ -19,8 +19,11 @@ namespace WebSignalR.Handlers
 		private const string BasicAuthResponseHeaderValue = "Basic";
 		private const string BasicAuthResponseHeader = "WWW-Authenticate";
 		private const string BasicAuthHeader = "Authorization";
-		private const string httpAuth = "HTTP_AUTH";
+		private const string httpContentType = "text/plain";
 
+		public LoginHandler()
+		{
+		}
 
 		public bool IsReusable
 		{
@@ -32,24 +35,21 @@ namespace WebSignalR.Handlers
 
 		public void ProcessRequest(HttpContext context)
 		{
-			if (context.Request.IsAuthenticated)
-			{
-			} 
-			string authorization = context.Request.Headers["Authorization"];
-			if (!string.IsNullOrEmpty(authorization) && authorization.IndexOf("Basic", StringComparison.OrdinalIgnoreCase) != -1)
+			string authorization = context.Request.Headers[BasicAuthHeader];
+			if (!string.IsNullOrEmpty(authorization) && authorization.IndexOf(BasicAuthResponseHeaderValue, StringComparison.OrdinalIgnoreCase) != -1)
 			{
 
-				bool result = AuthenticateUser(authorization.Replace("Basic ", "").Trim(), context);
+				bool result = AuthenticateUser(authorization.Replace(BasicAuthResponseHeaderValue, string.Empty).Trim(), context);
 				if (!result)
 				{
 					context.Response.Headers.Add(BasicAuthResponseHeader, "Basic realm=\"Test\"");
-					context.Response.ContentType = "text/plain";
+					context.Response.ContentType = httpContentType;
 					context.Response.Write("You must authenticate");
 					context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
 				}
 				else
 				{
-					context.Response.ContentType = "text/plain";
+					context.Response.ContentType = httpContentType;
 					context.Response.StatusDescription = "Authorized.";
 					context.Response.StatusCode = (int)HttpStatusCode.OK;
 				}
@@ -86,10 +86,15 @@ namespace WebSignalR.Handlers
 			return validated;
 		}
 
-		// TODO: validate the username and password.
 		private bool CheckPassword(string username, string password)
 		{
-			return username == "user" && password == "password";
+			//return username == "user" && password == "password";
+			IEntityValidator validator = Infrastructure.BootStrapper.Kernel.Get<IEntityValidator>("Credentials");
+			if (validator != null)
+			{
+				return validator.IsValid<User>(new User() { Name = username, Password = password });
+			}
+			return false;
 		}
 
 		private bool Login(HttpContext context, string strUser, string strPwd)
@@ -102,7 +107,7 @@ namespace WebSignalR.Handlers
 				   DateTime.Now,                 // create time
 				   DateTime.Now.AddMinutes(30),  // expire time
 				   false,                        // persistent
-				   string.Empty);                          // user data
+				   string.Empty);                // user data
 
 				string strEncryptedTicket = FormsAuthentication.Encrypt(ticket);
 				HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, strEncryptedTicket);

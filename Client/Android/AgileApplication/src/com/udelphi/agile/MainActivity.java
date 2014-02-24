@@ -2,9 +2,13 @@ package com.udelphi.agile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import com.udelphi.agile.common.*;
 import android.app.Activity;
 import android.content.OperationApplicationException;
 import android.net.Uri;
@@ -25,8 +29,8 @@ public class MainActivity extends Activity implements
 		OnConnectionRequestedListener, OnDisconnectionRequestedListener {
 
 	private Boolean mShowAll = true;
-	protected HubConnection con = null;
-	protected IHubProxy hub = null;
+	protected HubConnection hubCon = null;
+	protected IHubProxy hubProxy = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +49,7 @@ public class MainActivity extends Activity implements
 	@Override
 	public void ConnectionRequested(Uri address) {
 
-		con = new HubConnection(address.toString(), this,
+		hubCon = new HubConnection(address.toString(), this,
 				new LongPollingTransport()) {
 
 			@Override
@@ -75,40 +79,86 @@ public class MainActivity extends Activity implements
 						Toast.LENGTH_LONG).show();
 			}
 
+			@Override
+			public void SetNewState(StateBase state) {
+				// TODO Auto-generated method stub
+				super.SetNewState(state);
+			}
+
 		};
 
 		try {
 			String aspxauth = (String) AgileApplication.container
 					.get(".ASPXAUTH");
-			con.addHeader("Cookie", ".ASPXAUTH=" + aspxauth);
-			hub = con.CreateHubProxy("testhub");
+			hubCon.addHeader("Cookie", ".ASPXAUTH=" + aspxauth);
+			hubProxy = hubCon.CreateHubProxy("testhub");
 		} catch (OperationApplicationException e) {
 			Log.e("OperationApplicationException", e.getMessage());
 			e.printStackTrace();
 		}
 
-		hub.On("hello", new HubOnDataCallback() {
+		hubProxy.On("hello", new HubOnDataCallback() {
 			@Override
 			public void OnReceived(JSONArray args) {
-				Log.d("hello", args.toString());
-				if (mShowAll) {
-					for (int i = 0; i < args.length(); i++) {
-						Toast.makeText(MainActivity.this,
-								args.opt(i).toString(), Toast.LENGTH_SHORT)
-								.show();
-					}
+				Log.d("On hello callback", args.toString());
+				Log.d("HubState: StateBase", hubCon.getCurrentState()
+						.toString());
+				Log.d("HubState: ConnectionState", hubCon.getCurrentState()
+						.getState().toString());
+
+				for (Map.Entry<String, String> e : hubCon.getHeaders()
+						.entrySet()) {
+					Log.d("Header entry:", e.toString());
+				}
+
+				if (!mShowAll)
+					return;
+				for (int i = 0; i < args.length(); i++) {
+					Toast.makeText(MainActivity.this, args.opt(i).toString(),
+							Toast.LENGTH_SHORT).show();
 				}
 			}
 		});
 
-		con.Start();
+		hubProxy.On("onState", new HubOnDataCallback() {
+			@Override
+			public void OnReceived(JSONArray args) {
+				Log.d("On hello callback", args.toString());
+				Log.d("HubState: StateBase", hubCon.getCurrentState()
+						.toString());
+				Log.d("HubState: ConnectionState", hubCon.getCurrentState()
+						.getState().toString());
+
+				for (Map.Entry<String, String> e : hubCon.getHeaders()
+						.entrySet()) {
+					Log.d("Header entry:", e.toString());
+				}
+
+				JSONObject obj;
+				try {
+					obj = args.getJSONObject(0);
+					Map<String, Object> map = JsonHelper.toMap(obj);
+					SessionState state = new SessionState();
+					state.UserId = (Integer) map.get("UserId");
+					state.SessionId = (String) map.get("SessionId");
+					AgileApplication.container.put("SessionStae", state);
+
+				} catch (JSONException ex) {
+					// TODO Auto-generated catch block
+					ex.printStackTrace();
+				}
+
+			}
+		});
+
+		hubCon.Start();// initialize hub proxy for listening
 	}
 
 	@Override
 	public void DisconnectionRequested() {
 		// TODO Auto-generated method stub
-		if (con != null) {
-			con.Stop();
+		if (hubCon != null) {
+			hubCon.Stop();
 		}
 	}
 
@@ -128,6 +178,6 @@ public class MainActivity extends Activity implements
 		};
 
 		List<String> args = new ArrayList<String>(1);
-		hub.Invoke("hello", args, callback);
+		hubProxy.Invoke("hello", args, callback);
 	}
 }

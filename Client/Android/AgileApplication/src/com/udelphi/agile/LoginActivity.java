@@ -193,11 +193,14 @@ public class LoginActivity extends Activity {
 			mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
 		}
 
-		boolean isLogged = ((String) AgileApplication.container.get("IsLogged"))=="1";
-		Log.d("Logged", isLogged == true ? "Logged" : "Not logged");
-		if (!show && isLogged) {
-			Intent nav = new Intent(getBaseContext(), MainActivity.class);
-			startActivity(nav);
+		if (AgileApplication.container.containsKey("IsLogged")) {
+			boolean isLogged = ((Boolean) AgileApplication.container
+					.get("IsLogged"));
+			Log.d("Logged", isLogged == true ? "Logged" : "Not logged");
+			if (!show && isLogged) {
+				Intent nav = new Intent(getBaseContext(), MainActivity.class);
+				startActivity(nav);
+			}
 		}
 	}
 
@@ -245,9 +248,9 @@ public class LoginActivity extends Activity {
 					if (status.getStatusCode() == 200) {
 						Log.d("Statuscode",
 								String.valueOf(status.getStatusCode()));
-						AgileApplication.container.put("IsLogged", "1");
+						AgileApplication.container.put("IsLogged", true);
 					} else {
-						AgileApplication.container.put("IsLogged", "0");
+						AgileApplication.container.put("IsLogged", false);
 					}
 					responseGet.getHeaders(".ASPXAUTH");
 					Log.i("GET ", EntityUtils.toString(resEntityGet));

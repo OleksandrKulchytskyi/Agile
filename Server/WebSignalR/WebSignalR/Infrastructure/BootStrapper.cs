@@ -50,6 +50,7 @@ namespace WebSignalR.Infrastructure
 			kernel.Bind<IRepository<Privileges>>().To<GenericRepository<Privileges>>();
 			kernel.Bind<IRepository<VoteItem>>().To<GenericRepository<VoteItem>>();
 			kernel.Bind<IRepository<UserVote>>().To<GenericRepository<UserVote>>();
+			kernel.Bind<IEntityValidator>().To<UserCredentialsValidator>().Named("Credentials");
 
 			kernel.Bind<IUnityOfWork>().ToMethod(context =>
 			{

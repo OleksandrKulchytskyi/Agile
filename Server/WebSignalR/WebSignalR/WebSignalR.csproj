@@ -127,6 +127,7 @@
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\SignalRConfig.cs" />
     <Compile Include="App_Start\NInjectResolver.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="DependencyResolvers\NijectDependncyResolver.cs" />
     <Compile Include="DependencyResolvers\WebApiDependencyResolver.cs" />
     <Compile Include="Global.asax.cs">
@@ -140,6 +141,7 @@
     <Compile Include="Infrastructure\BootStrapper.cs" />
     <Compile Include="Infrastructure\CustomPrincipal.cs" />
     <Compile Include="Infrastructure\FileBasedVotesProvider.cs" />
+    <Compile Include="Infrastructure\SessionState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Hubs\TestHub.cs" />
