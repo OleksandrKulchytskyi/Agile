@@ -127,6 +127,7 @@
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\SignalRConfig.cs" />
     <Compile Include="App_Start\NInjectResolver.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="DependencyResolvers\NijectDependncyResolver.cs" />
     <Compile Include="DependencyResolvers\WebApiDependencyResolver.cs" />

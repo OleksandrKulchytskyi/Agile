@@ -1,31 +1,37 @@
 namespace WebSignalR.DataAccess.Migrations
 {
-    using System;
-    using System.Data.Entity;
-    using System.Data.Entity.Migrations;
-    using System.Linq;
+	using System;
+	using System.Data.Entity;
+	using System.Data.Entity.Migrations;
+	using System.Linq;
+	using WebSignalR.Common.Entities;
 
-    public sealed class Configuration : DbMigrationsConfiguration<WebSignalR.DataAccess.DB.DatabaseContext>
-    {
-        public Configuration()
-        {
-            AutomaticMigrationsEnabled = true;
-        }
+	public sealed class Configuration : DbMigrationsConfiguration<WebSignalR.DataAccess.DB.DatabaseContext>
+	{
+		public Configuration()
+		{
+			AutomaticMigrationsEnabled = true;
+			//AutomaticMigrationDataLossAllowed = true;
+		}
 
-        protected override void Seed(WebSignalR.DataAccess.DB.DatabaseContext context)
-        {
-            //  This method will be called after migrating to the latest version.
+		protected override void Seed(WebSignalR.DataAccess.DB.DatabaseContext context)
+		{
+			User usrAdmin = new User();
+			usrAdmin.IsAdmin = true;
+			usrAdmin.Name = "Admin";
+			usrAdmin.Password = "admin1234";
+			usrAdmin.UserPrivileges.Add(new Privileges() { Name = "Admin", Description = "Administrator role." });
+			usrAdmin.UserPrivileges.Add(new Privileges() { Name = "ScrumMaster", Description = "Scrum master role." });
 
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
-        }
-    }
+			context.Set<User>().Add(usrAdmin);
+			context.Set<Privileges>().Add(new Privileges { Name = "User", Description = "Default system user" });
+			context.Set<Room>().Add(new Room() { Active = true, Description = "DEBUG room for testing purposes", Name = "TestRoom" });
+			
+			context.SaveChanges();
+
+			//  This method will be called after migrating to the latest version.
+			//  You can use the DbSet<T>.AddOrUpdate() helper extension method 
+			//  to avoid creating duplicate seed data. E.g.
+		}
+	}
 }

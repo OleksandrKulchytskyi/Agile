@@ -149,7 +149,11 @@ public class LoginActivity extends Activity {
 			mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
 			showProgress(true);
 			mAuthTask = new UserLoginTask();
-			mAuthTask.execute(mEmail + ":" + mPassword);
+			Base64.encodeToString(mPassword.getBytes(), Base64.DEFAULT);
+			mAuthTask.execute(mEmail
+					+ ":"
+					+ Base64.encodeToString(mPassword.getBytes(),
+							Base64.DEFAULT).replaceAll("\n", ""));
 		}
 	}
 

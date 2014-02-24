@@ -1,6 +1,7 @@
 package com.udelphi.agile;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -101,11 +102,6 @@ public class MainActivity extends Activity implements
 			@Override
 			public void OnReceived(JSONArray args) {
 				Log.d("On hello callback", args.toString());
-				Log.d("HubState: StateBase", hubCon.getCurrentState()
-						.toString());
-				Log.d("HubState: ConnectionState", hubCon.getCurrentState()
-						.getState().toString());
-
 				for (Map.Entry<String, String> e : hubCon.getHeaders()
 						.entrySet()) {
 					Log.d("Header entry:", e.toString());
@@ -123,31 +119,28 @@ public class MainActivity extends Activity implements
 		hubProxy.On("onState", new HubOnDataCallback() {
 			@Override
 			public void OnReceived(JSONArray args) {
-				Log.d("On hello callback", args.toString());
-				Log.d("HubState: StateBase", hubCon.getCurrentState()
-						.toString());
-				Log.d("HubState: ConnectionState", hubCon.getCurrentState()
-						.getState().toString());
+				Log.d("OnState callback", args.toString());
 
 				for (Map.Entry<String, String> e : hubCon.getHeaders()
 						.entrySet()) {
 					Log.d("Header entry:", e.toString());
 				}
 
-				JSONObject obj;
 				try {
-					obj = args.getJSONObject(0);
-					Map<String, Object> map = JsonHelper.toMap(obj);
-					SessionState state = new SessionState();
-					state.UserId = (Integer) map.get("UserId");
-					state.SessionId = (String) map.get("SessionId");
+					SessionState state = null;
+					for (int i = 0; i < args.length(); i++) {
+						String json = (String)args.get(i);
+						JSONObject jsObj=new JSONObject(json);
+						state = new SessionState();
+						state.UserId = jsObj.getInt("UserId");
+						state.SessionId = jsObj.getString("SessionId");
+					}
+
 					AgileApplication.container.put("SessionStae", state);
 
-				} catch (JSONException ex) {
-					// TODO Auto-generated catch block
+				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
-
 			}
 		});
 

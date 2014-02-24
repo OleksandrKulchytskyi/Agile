@@ -42,7 +42,7 @@ namespace WebSignalR.DataAccess.DB
 			modelBuilder.Configurations.Add(new VoteItemMap());
 			modelBuilder.Configurations.Add(new UserVoteMap());
 			modelBuilder.Configurations.Add(new PrivilegesMap());
-
+			Database.SetInitializer(new MigrateDatabaseToLatestVersion<DatabaseContext, Migrations.Configuration>());
 			base.OnModelCreating(modelBuilder);
 		}
 

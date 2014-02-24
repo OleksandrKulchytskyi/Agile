@@ -113,7 +113,7 @@ namespace WebSignalR.Hubs
 		}
 
 		private SessionState GetSessionState()
-		{	// New client state
+		{
 			var userState = GetCookieValue("user.state");
 			SessionState clientState = null;
 
