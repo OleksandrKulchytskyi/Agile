@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNet.SignalR;
+﻿using AutoMapper;
+using Microsoft.AspNet.SignalR;
 using Ninject;
 using System;
 using System.Configuration;
 using System.Data.Entity.Migrations;
+using WebSignalR.Common.DTO;
 using WebSignalR.Common.Entities;
 using WebSignalR.Common.Infrastructure;
 using WebSignalR.Common.Interfaces;
@@ -28,7 +30,7 @@ namespace WebSignalR.Infrastructure
 		{
 			var kernel = new StandardKernel();
 
-			IniDIMappings(kernel);
+			IniDIContainer(kernel);
 
 			var serializer = new Microsoft.AspNet.SignalR.Json.JsonNetSerializer(new Newtonsoft.Json.JsonSerializerSettings
 			{
@@ -40,7 +42,7 @@ namespace WebSignalR.Infrastructure
 			App_Start.SignalRConfig.Register(_resolver);
 		}
 
-		private static void IniDIMappings(StandardKernel kernel)
+		private static void IniDIContainer(StandardKernel kernel)
 		{
 			kernel.Bind<DatabaseContext>().To<DatabaseContext>();
 			kernel.Bind<IContext>().To<DatabaseContext>();
@@ -80,8 +82,7 @@ namespace WebSignalR.Infrastructure
 			});
 		}
 
-
-		public static void DoMigrations(string conStrName)
+		internal static void DoMigrations(string conStrName)
 		{
 			var conString = ConfigurationManager.ConnectionStrings[conStrName];
 
@@ -90,8 +91,18 @@ namespace WebSignalR.Infrastructure
 				return;
 			// Only run migrations for SQL server (Sql ce not supported as yet)
 			var settings = new WebSignalR.DataAccess.Migrations.Configuration();
+
 			var migrator = new DbMigrator(settings);
+
 			migrator.Update();
+		}
+
+		internal static void InitMapperMaps()
+		{
+			Mapper.CreateMap<User, UserDto>()
+				   .ForMember(dest => dest.Privileges, opt => opt.MapFrom(src => src.UserPrivileges));
+			Mapper.CreateMap<Privileges, PrivilegeDto>();
+			Mapper.AssertConfigurationIsValid();
 		}
 	}
 }

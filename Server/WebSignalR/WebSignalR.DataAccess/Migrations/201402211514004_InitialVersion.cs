@@ -96,7 +96,6 @@ namespace WebSignalR.DataAccess.Migrations
 				.ForeignKey("dbo.Users", t => t.UserId, cascadeDelete: true)
 				.Index(t => t.PrivilegeId)
 				.Index(t => t.UserId);
-
 		}
 
 		public override void Down()

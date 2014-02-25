@@ -11,6 +11,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.AbstractHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 
 import android.animation.Animator;
@@ -46,10 +49,12 @@ public class LoginActivity extends Activity {
 	private UserLoginTask mAuthTask = null;
 
 	// Values for email and password at the time of the login attempt.
+	private String mUrl;
 	private String mEmail;
 	private String mPassword;
 
 	// UI references.
+	private EditText mUrlView;
 	private EditText mEmailView;
 	private EditText mPasswordView;
 	private View mLoginFormView;
@@ -61,6 +66,9 @@ public class LoginActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_login);
+
+		mUrlView = (EditText) findViewById(R.id.serverUrl);
+		mUrl = mUrlView.getEditableText().toString();
 
 		// Set up the login form.
 		mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
@@ -111,16 +119,28 @@ public class LoginActivity extends Activity {
 			return;
 
 		// Reset errors.
+		mUrlView.setError(null);
 		mEmailView.setError(null);
 		mPasswordView.setError(null);
 
 		// Store values at the time of the login attempt.
+		mUrl = mUrlView.getText().toString();
+		if (mUrl.isEmpty()){
+			mUrl = mUrlView.getHint().toString();
+			mUrlView.setText(mUrl);
+		}
 		mEmail = mEmailView.getText().toString();
 		mPassword = mPasswordView.getText().toString();
 
 		boolean cancel = false;
 		View focusView = null;
 
+		// check for the server address
+		if (TextUtils.isEmpty(mUrl)) {
+			mUrlView.setError("Server address cannot be empty.");
+			focusView = mUrlView;
+			cancel = true;
+		}
 		// Check for a valid password.
 		if (TextUtils.isEmpty(mPassword)) {
 			mPasswordView.setError(getString(R.string.error_field_required));
@@ -225,8 +245,17 @@ public class LoginActivity extends Activity {
 				if (logInformation.isEmpty())
 					return false;
 
-				HttpClient client = new DefaultHttpClient();
-				String getURL = "http://10.0.2.2:6404/handlers/loginhandler.ashx";
+				AgileApplication.container.put("ServerUrl", mUrl);
+
+				String getURL = mUrl + "/handlers/loginhandler.ashx";
+				HttpParams httpParameters = new BasicHttpParams();
+				int timeoutConnection = 30000;
+				HttpConnectionParams.setConnectionTimeout(httpParameters,
+						timeoutConnection);
+				int timeoutSocket = 30000;
+				HttpConnectionParams
+						.setSoTimeout(httpParameters, timeoutSocket);
+				HttpClient client = new DefaultHttpClient(httpParameters);
 				HttpGet get = new HttpGet(getURL);
 				String data = Base64.encodeToString(logInformation.getBytes(),
 						Base64.DEFAULT);

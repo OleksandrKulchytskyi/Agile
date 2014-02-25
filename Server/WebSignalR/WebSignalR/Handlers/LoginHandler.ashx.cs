@@ -1,13 +1,14 @@
-﻿using System;
+﻿using Ninject;
+using System;
 using System.Net;
 using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Web;
 using System.Web.Security;
-using Ninject;
-using WebSignalR.Common.Interfaces;
 using WebSignalR.Common.Entities;
+using WebSignalR.Common.Interfaces;
+
 namespace WebSignalR.Handlers
 {
 	/// <summary>
@@ -73,15 +74,12 @@ namespace WebSignalR.Handlers
 				{
 					WebSignalR.Infrastructure.CustomPrincipal principal = new Infrastructure.CustomPrincipal(name);
 					SetPrincipal(principal);
-					//var identity = new GenericIdentity(name);
-					//SetPrincipal(new GenericPrincipal(identity, null));
 				}
 			}
-			catch (FormatException)
+			catch (FormatException ex)
 			{
-				// Credentials were not formatted correctly.
+				Global.Logger.Error(ex);
 				validated = false;
-
 			}
 			return validated;
 		}

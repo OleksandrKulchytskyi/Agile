@@ -22,7 +22,10 @@ namespace WebSignalR.Common.Infrastructure
 				return false;
 
 			IRepository<User> repo = _unity.GetRepository<User>();
-			User usr = item as User;
+			User usr = (item as User);
+			if (usr == null)
+				return false;
+
 			isValid = (repo.Get(x => x.Name == usr.Name && x.Password == usr.Password).FirstOrDefault() != null);
 			return isValid;
 		}

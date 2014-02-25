@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -13,12 +11,14 @@ namespace WebSignalR.Controllers
 	[AllowAnonymous]
 	public class UserController : BaseController
 	{
-		IUnityOfWork _unity;
+		private IUnityOfWork _unity;
+		
 		public UserController(IUnityOfWork unity)
 		{
 			_unity = unity;
 		}
 
+		[Authorize(Roles = "Admin")]
 		public HttpResponseMessage RegisterUser(RegisterViewModel model)
 		{
 			IRepository<User> repo = _unity.GetRepository<User>();
@@ -46,7 +46,7 @@ namespace WebSignalR.Controllers
 			}
 
 			HttpResponseMessage msg = new HttpResponseMessage(HttpStatusCode.Created);
-			msg.Headers.Add("UID", repo.Get(x => x.Name == model.Username).First().Id.ToString());
+			msg.Headers.Add("Id", repo.Get(x => x.Name == model.Username).First().Id.ToString());
 			return msg;
 		}
 

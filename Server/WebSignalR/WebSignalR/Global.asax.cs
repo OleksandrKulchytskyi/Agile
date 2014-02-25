@@ -3,24 +3,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Http;
 using System.Web.Routing;
 using System.Web.Security;
 using System.Web.SessionState;
 
 namespace WebSignalR
 {
-	public class Global : System.Web.HttpApplication
+	public class Global : HttpApplication
 	{
 		private static List<string> _sessionInfo;
 		private static readonly object padlock = new object();
 		public static log4net.ILog Logger = null;
-
-		protected void Application_Start(object sender, EventArgs e)
-		{
-			Logger = LogManager.GetLogger(typeof(Global).FullName);
-			log4net.Config.XmlConfigurator.Configure();
-			Logger.Info("Application_Start()");
-		}
 
 		public static List<string> Sessions
 		{
@@ -37,6 +31,24 @@ namespace WebSignalR
 			}
 		}
 
+		protected void Application_Start(object sender, EventArgs e)
+		{
+			Logger = LogManager.GetLogger(typeof(Global).FullName);
+			log4net.Config.XmlConfigurator.Configure();
+			Logger.Info("Application_Start()");
+
+			//Infrastructure.BootStrapper.DoMigrations("ConnectionSettings");
+			Infrastructure.BootStrapper.InitMapperMaps();
+			WebApiConfig.Register(GlobalConfiguration.Configuration);
+
+			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+		}
+
+		private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+		{
+			Logger.Error("UnhandledException", e.ExceptionObject as Exception);
+		}
+
 		protected void Session_Start(object sender, EventArgs e)
 		{
 			Sessions.Add(Session.SessionID);
@@ -49,12 +61,10 @@ namespace WebSignalR
 
 		protected void Application_BeginRequest(object sender, EventArgs e)
 		{
-
 		}
 
 		protected void Application_AuthenticateRequest(object sender, EventArgs e)
 		{
-
 		}
 
 		protected void Application_Error(object sender, EventArgs e)
@@ -72,8 +82,6 @@ namespace WebSignalR
 			else
 				Logger.Error("Application_Error", exception);
 		}
-
-		
 
 		protected void Application_End(object sender, EventArgs e)
 		{

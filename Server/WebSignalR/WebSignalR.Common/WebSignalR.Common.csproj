@@ -66,6 +66,9 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTO\DtoBase.cs" />
+    <Compile Include="DTO\PrivilegeDto.cs" />
+    <Compile Include="DTO\UserDto.cs" />
     <Compile Include="Entities\EntityBase.cs" />
     <Compile Include="Entities\Privileges.cs" />
     <Compile Include="Entities\Room.cs" />
@@ -73,6 +76,7 @@
     <Compile Include="Entities\UserSession.cs" />
     <Compile Include="Entities\UserVote.cs" />
     <Compile Include="Entities\VoteItem.cs" />
+    <Compile Include="Extension\Common.cs" />
     <Compile Include="Infrastructure\AnnotationsEntityValidator.cs" />
     <Compile Include="Infrastructure\AnnotationsEntityValidatorFactory.cs" />
     <Compile Include="Infrastructure\CryptoHelper.cs" />

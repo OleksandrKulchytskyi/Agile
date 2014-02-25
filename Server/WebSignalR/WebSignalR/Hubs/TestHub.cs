@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNet.SignalR;
+﻿using AutoMapper;
+using Microsoft.AspNet.SignalR;
+using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using WebSignalR.Common.Interfaces;
+using WebSignalR.Common.DTO;
 using WebSignalR.Common.Entities;
+using WebSignalR.Common.Interfaces;
 using WebSignalR.Infrastructure;
-using Newtonsoft.Json;
 
 namespace WebSignalR.Hubs
 {
@@ -43,11 +44,6 @@ namespace WebSignalR.Hubs
 			_cryptoService = crypto;
 		}
 
-		public void Hello()
-		{
-			Clients.All.hello(new TestData() { Id = 1, Name = "Test" });
-		}
-
 		public override System.Threading.Tasks.Task OnConnected()
 		{
 			if (Context.User.Identity.IsAuthenticated)
@@ -57,7 +53,8 @@ namespace WebSignalR.Hubs
 				if (usr != null)
 				{
 					IRepository<UserSession> repoSession = _unity.GetRepository<UserSession>();
-
+					UserDto dto = Mapper.Map<UserDto>(usr);
+					Clients.Caller.onUserLogged(dto);
 					UserSession us = new UserSession();
 					us.User = usr;
 					us.SessionId = this.Context.ConnectionId;
@@ -177,11 +174,5 @@ namespace WebSignalR.Hubs
 
 			base.Dispose(disposing);
 		}
-	}
-
-	public class TestData
-	{
-		public int Id { get; set; }
-		public string Name { get; set; }
 	}
 }

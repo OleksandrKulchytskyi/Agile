@@ -1,7 +1,6 @@
 package com.udelphi.agile;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -9,16 +8,20 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.udelphi.agile.common.*;
 import android.app.Activity;
 import android.content.OperationApplicationException;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.udelphi.agile.common.*;
 import com.zsoft.signala.hubs.HubConnection;
 import com.zsoft.signala.hubs.HubInvokeCallback;
 import com.zsoft.signala.hubs.HubOnDataCallback;
@@ -33,11 +36,80 @@ public class MainActivity extends Activity implements
 	protected HubConnection hubCon = null;
 	protected IHubProxy hubProxy = null;
 
+	private RoomAdapter _adapter;
+	private Spinner roomSpinner;
+	private List<Room> rooms;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		rooms = new ArrayList<Room>();
+		_adapter = new RoomAdapter(getBaseContext(), R.layout.room_item, rooms);
+		roomSpinner = (Spinner) findViewById(R.id.roomSpinner);
+		roomSpinner.setAdapter(_adapter);
+
+		roomSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> adapterView, View view,
+					int position, long id) {
+				Room room = _adapter.getItem(position);
+				if (room != null) {
+					AgileApplication.container.put("SelectedRoom", room);
+				}
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> adapter) {
+			}
+		});
+
 		ConnectionRequested(Uri.parse("http://10.0.2.2:6404/"));
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		new RetreiveRoomTask().execute((String) AgileApplication.container
+				.get("ServerUrl") + "/api/room/getrooms/");
+	}
+
+	public class RetreiveRoomTask extends AsyncTask<String, Void, JSONArray> {
+
+		private Exception exception;
+
+		protected JSONArray doInBackground(String... urls) {
+			JSONArray data = null;
+
+			try {
+				String url = urls[0];
+				data = JsonHelper.GetFromRequest(url);
+			} catch (Exception e) {
+				this.exception = e;
+				exception.printStackTrace();
+			}
+
+			return data;
+		}
+
+		protected void onPostExecute(JSONArray data) {
+			if (exception == null && data != null) {
+				int len = data.length();
+				for (int i = 0; i < len; i++) {
+					try {
+						JSONObject jsObj = (JSONObject) data.get(i);
+						Room room = new Room();
+						room.Id = jsObj.getInt("Id");
+						room.Name = jsObj.getString("Name");
+						rooms.add(room);
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				}
+				_adapter.notifyDataSetChanged();
+			}
+		}
 	}
 
 	@Override
@@ -85,7 +157,6 @@ public class MainActivity extends Activity implements
 				// TODO Auto-generated method stub
 				super.SetNewState(state);
 			}
-
 		};
 
 		try {
@@ -98,21 +169,42 @@ public class MainActivity extends Activity implements
 			e.printStackTrace();
 		}
 
-		hubProxy.On("hello", new HubOnDataCallback() {
+		hubProxy.On("onUserLogged", new HubOnDataCallback() {
 			@Override
 			public void OnReceived(JSONArray args) {
-				Log.d("On hello callback", args.toString());
-				for (Map.Entry<String, String> e : hubCon.getHeaders()
-						.entrySet()) {
-					Log.d("Header entry:", e.toString());
+				User loggedUser = parseLoggedUser(args);
+				if (loggedUser != null)
+					AgileApplication.container.put("LoggedUser", loggedUser);
+			}
+
+			private User parseLoggedUser(JSONArray args) {
+				User usr = null;
+				try {
+					if (args.length() == 1) {
+						JSONObject jsObj = ((JSONObject) args.get(0));
+						usr = new User();
+						usr.Privileges=new ArrayList<Privilege>();
+						usr.Id = jsObj.getInt("Id");
+						usr.Name = jsObj.getString("Name");
+						// usr.Password = jsObj.getString("Password");
+						// usr.IsAdmin = jsObj.getBoolean("IsAdmin");
+						JSONArray priviligies = jsObj
+								.getJSONArray("Privileges");
+						for (int i = 0; i < priviligies.length(); i++) {
+							JSONObject obj2 = (JSONObject) args.get(i);
+							Privilege p = new Privilege();
+							p.Id = obj2.getInt("Id");
+							p.Name = obj2.getString("Name");
+							p.Description = obj2.optString("Description", "");
+							usr.Privileges.add(p);
+						}
+					}
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					Log.e("Parsing error", ex.getMessage());
 				}
 
-				if (!mShowAll)
-					return;
-				for (int i = 0; i < args.length(); i++) {
-					Toast.makeText(MainActivity.this, args.opt(i).toString(),
-							Toast.LENGTH_SHORT).show();
-				}
+				return usr;
 			}
 		});
 
@@ -129,8 +221,8 @@ public class MainActivity extends Activity implements
 				try {
 					SessionState state = null;
 					for (int i = 0; i < args.length(); i++) {
-						String json = (String)args.get(i);
-						JSONObject jsObj=new JSONObject(json);
+						String json = (String) args.get(i);
+						JSONObject jsObj = new JSONObject(json);
 						state = new SessionState();
 						state.UserId = jsObj.getInt("UserId");
 						state.SessionId = jsObj.getString("SessionId");
@@ -155,7 +247,7 @@ public class MainActivity extends Activity implements
 		}
 	}
 
-	public void onPush(View v) {
+	public void onStartSession(View v) {
 		HubInvokeCallback callback = new HubInvokeCallback() {
 			@Override
 			public void OnResult(boolean succeeded, String response) {
