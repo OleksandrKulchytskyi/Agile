@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Web;
+using System.Web.Hosting;
 using WebSignalR.Common.Interfaces;
 
 namespace WebSignalR.Common.Infrastructure
@@ -34,11 +35,18 @@ namespace WebSignalR.Common.Infrastructure
 
 		private static string GetDefaultPath()
 		{
-			string path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-			path = Path.Combine(path, "Secure");
+			string path = string.Empty;
+			try
+			{
+				path = HostingEnvironment.MapPath("App_Data");
+				if (!string.IsNullOrEmpty(path))
+					return path;
 
-			Directory.CreateDirectory(path);
-
+				path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+				path = Path.Combine(path, "Secure");
+				Directory.CreateDirectory(path);
+			}
+			catch (Exception ex) { }
 			return path;
 		}
 
