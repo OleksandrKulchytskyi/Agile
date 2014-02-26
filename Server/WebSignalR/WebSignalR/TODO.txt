@@ -1,0 +1,10 @@
+﻿http://xsockets.net/blog/building-real-time-spa-using-knockoutjs-codefirst-and-xsocketsnet
+http://xsockets.net/blog/a-realtime-architecture
+
+https://github.com/codeplanner/FunWithT4/blob/master/FunWithT4.Core/Interfaces/Paging/IPage.cs
+https://github.com/rniemeyer/SamplePresentation
+http://habrahabr.ru/post/154003/
+
+http://cgeers.com/2012/10/06/single-page-application-with-knockout-js-part-1/
+http://daniel.wertheim.se/2013/05/10/super-simple-spa-sample/
+https://gist.github.com/danielwertheim/5557938
