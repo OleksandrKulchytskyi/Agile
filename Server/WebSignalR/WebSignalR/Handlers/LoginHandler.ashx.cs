@@ -1,6 +1,7 @@
 ﻿using Ninject;
 using System;
 using System.Net;
+using System.Linq;
 using System.Security.Principal;
 using System.Text;
 using System.Threading;
@@ -14,7 +15,7 @@ namespace WebSignalR.Handlers
 	/// <summary>
 	/// Summary description for LoginHandler1
 	/// </summary>
-	public class LoginHandler : IHttpHandler
+	public class LoginHandler : IHttpHandler, System.Web.SessionState.IRequiresSessionState
 	{
 		private const string Realm = "My Realm";
 		private const string BasicAuthResponseHeaderValue = "Basic";
@@ -72,7 +73,7 @@ namespace WebSignalR.Handlers
 				validated = Login(context, name, password);
 				if (validated)
 				{
-					WebSignalR.Infrastructure.CustomPrincipal principal = new Infrastructure.CustomPrincipal(name);
+					Infrastructure.CustomPrincipal principal = new Infrastructure.CustomPrincipal(name, true);
 					SetPrincipal(principal);
 				}
 			}
@@ -99,16 +100,10 @@ namespace WebSignalR.Handlers
 		{
 			if (CheckPassword(strUser, strPwd))
 			{
-				FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(
-				   1,                            // version
-				   strUser,                      // user name
-				   DateTime.Now,                 // create time
-				   DateTime.Now.AddMinutes(30),  // expire time
-				   false,                        // persistent
-				   string.Empty);                // user data
+				FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, strUser, DateTime.Now, DateTime.Now.AddMinutes(30), /*expire time*/ false,/*persistent*/ string.Empty /*user data*/);
 
 				string strEncryptedTicket = FormsAuthentication.Encrypt(ticket);
-				HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, strEncryptedTicket);
+				HttpCookie cookie = new HttpCookie(Infrastructure.Constants.FormsAuthKey, strEncryptedTicket);
 				context.Response.Cookies.Add(cookie);
 				return true;
 			}
@@ -116,13 +111,22 @@ namespace WebSignalR.Handlers
 				return false;
 		}
 
-		private void SetPrincipal(IPrincipal principal)
+		private void SetPrincipal(Infrastructure.CustomPrincipal principal)
 		{
 			Thread.CurrentPrincipal = principal;
-			if (HttpContext.Current != null)
+			IUnityOfWork unity = Infrastructure.BootStrapper.Kernel.Get<IUnityOfWork>();
+			using (unity)
 			{
-				HttpContext.Current.User = principal;
+				IReadOnlyRepository<User> repo = unity.GetRepository<User>();
+				User usr = repo.Get(x => x.Name == principal.Identity.Name).FirstOrDefault();
+				if (usr != null)
+				{
+					principal.UserId = usr.Id;
+					principal.Roles = usr.UserPrivileges.Select(x => x.Name).ToList();
+				}
 			}
+			if (HttpContext.Current != null)
+				HttpContext.Current.User = principal;
 		}
 
 		private void LogOut()

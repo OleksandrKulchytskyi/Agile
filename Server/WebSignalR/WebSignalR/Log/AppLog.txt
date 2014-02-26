@@ -1,23 +1,480 @@
-INFO  2014-02-25 17:26:55,685   430ms Global                 Application_Start  - Application_Start()
-WARN  2014-02-25 17:26:58,253  2998ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
-ERROR 2014-02-25 17:26:58,255  3000ms Global                 Application_Error  - Application_Error
+INFO  2014-02-26 16:20:57,233   313ms Global                 Application_Start  - Application_Start()
+WARN  2014-02-26 16:21:02,163  5242ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-02-26 16:21:02,165  5244ms Global                 Application_Error  - Application_Error
 System.Web.HttpException (0x80004005): File does not exist.
    at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
    at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
    at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
    at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
    at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
-INFO  2014-02-25 17:45:42,972   353ms Global                 Application_Start  - Application_Start()
-WARN  2014-02-25 17:46:01,362 18743ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
-ERROR 2014-02-25 17:46:01,364 18745ms Global                 Application_Error  - Application_Error
+WARN  2014-02-26 16:21:23,383 26462ms Global                 Application_Error  - URL: http://localhost:6404/favicon.ico; FilePath: /favicon.ico
+ERROR 2014-02-26 16:21:23,386 26465ms Global                 Application_Error  - Application_Error
 System.Web.HttpException (0x80004005): File does not exist.
    at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
    at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
    at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
    at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
    at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
-WARN  2014-02-25 17:46:01,803 19184ms Global                 Application_Error  - URL: http://localhost:6404/favicon.ico; FilePath: /favicon.ico
-ERROR 2014-02-25 17:46:01,805 19186ms Global                 Application_Error  - Application_Error
+INFO  2014-02-26 16:29:08,486   215ms Global                 Application_Start  - Application_Start()
+WARN  2014-02-26 16:29:12,793  4522ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-02-26 16:29:12,795  4524ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-02-26 16:30:58,385   247ms Global                 Application_Start  - Application_Start()
+INFO  2014-02-26 16:33:43,569   229ms Global                 Application_Start  - Application_Start()
+WARN  2014-02-26 16:33:49,580  6239ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-02-26 16:33:49,581  6240ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+WARN  2014-02-26 16:33:49,932  6591ms Global                 Application_Error  - URL: http://localhost:6404/favicon.ico; FilePath: /favicon.ico
+ERROR 2014-02-26 16:33:49,933  6592ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-02-26 16:44:05,526   199ms Global                 Application_Start  - Application_Start()
+WARN  2014-02-26 16:44:07,334  2007ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-02-26 16:44:07,336  2009ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-02-26 16:45:00,392   212ms Global                 Application_Start  - Application_Start()
+WARN  2014-02-26 16:45:02,465  2285ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-02-26 16:45:02,467  2287ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+WARN  2014-02-26 16:45:11,490 11310ms Global                 Application_Error  - URL: http://localhost:6404/favicon.ico; FilePath: /favicon.ico
+ERROR 2014-02-26 16:45:11,492 11312ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+ERROR 2014-02-26 16:45:41,749 41569ms Global                 OnIncomingError    - System.AggregateException: One or more errors occurred. ---> System.InvalidOperationException: 'joinGroup' method could not be resolved.
+   at Microsoft.AspNet.SignalR.Hubs.NullMethodDescriptor.<get_Invoker>b__0(IHub emptyHub, Object[] emptyParameters)
+   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)
+   --- End of inner exception stack trace ---
+---> (Inner Exception #0) System.InvalidOperationException: 'joinGroup' method could not be resolved.
+   at Microsoft.AspNet.SignalR.Hubs.NullMethodDescriptor.<get_Invoker>b__0(IHub emptyHub, Object[] emptyParameters)
+   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)<---
+
+INFO  2014-02-26 16:50:46,552   211ms Global                 Application_Start  - Application_Start()
+WARN  2014-02-26 16:50:48,534  2192ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-02-26 16:50:48,535  2193ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+WARN  2014-02-26 16:50:48,698  2356ms Global                 Application_Error  - URL: http://localhost:6404/favicon.ico; FilePath: /favicon.ico
+ERROR 2014-02-26 16:50:48,700  2358ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+ERROR 2014-02-26 16:51:36,121 49779ms Global                 OnIncomingError    - System.AggregateException: One or more errors occurred. ---> System.InvalidOperationException: 'joinGroup' method could not be resolved.
+   at Microsoft.AspNet.SignalR.Hubs.NullMethodDescriptor.<get_Invoker>b__0(IHub emptyHub, Object[] emptyParameters)
+   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)
+   --- End of inner exception stack trace ---
+---> (Inner Exception #0) System.InvalidOperationException: 'joinGroup' method could not be resolved.
+   at Microsoft.AspNet.SignalR.Hubs.NullMethodDescriptor.<get_Invoker>b__0(IHub emptyHub, Object[] emptyParameters)
+   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)<---
+
+ERROR 2014-02-26 16:54:40,823 234481ms Global                 OnIncomingError    - System.AggregateException: One or more errors occurred. ---> AutoMapper.AutoMapperMappingException: Missing type map configuration or unsupported mapping.
+
+Mapping types:
+String -> RoomDto
+System.String -> WebSignalR.Common.DTO.RoomDto
+
+Destination path:
+RoomDto
+
+Source value:
+Project
+   at AutoMapper.MappingEngine.AutoMapper.IMappingEngineRunner.Map(ResolutionContext context)
+   at AutoMapper.MappingEngine.Map(Object source, Type sourceType, Type destinationType, Action`1 opts)
+   at AutoMapper.MappingEngine.Map[TDestination](Object source, Action`1 opts)
+   at AutoMapper.MappingEngine.Map[TDestination](Object source)
+   at AutoMapper.Mapper.Map[TDestination](Object source)
+   at WebSignalR.Hubs.TestHub.JoinRoom(String room, String sessionId) in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Hubs\TestHub.cs:line 189
+   at lambda_method(Closure , IHub , Object[] )
+   at Microsoft.AspNet.SignalR.Hubs.HubMethodDispatcher.Execute(IHub hub, Object[] parameters)
+   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)
+   --- End of inner exception stack trace ---
+---> (Inner Exception #0) AutoMapper.AutoMapperMappingException: Missing type map configuration or unsupported mapping.
+
+Mapping types:
+String -> RoomDto
+System.String -> WebSignalR.Common.DTO.RoomDto
+
+Destination path:
+RoomDto
+
+Source value:
+Project
+   at AutoMapper.MappingEngine.AutoMapper.IMappingEngineRunner.Map(ResolutionContext context)
+   at AutoMapper.MappingEngine.Map(Object source, Type sourceType, Type destinationType, Action`1 opts)
+   at AutoMapper.MappingEngine.Map[TDestination](Object source, Action`1 opts)
+   at AutoMapper.MappingEngine.Map[TDestination](Object source)
+   at AutoMapper.Mapper.Map[TDestination](Object source)
+   at WebSignalR.Hubs.TestHub.JoinRoom(String room, String sessionId) in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Hubs\TestHub.cs:line 189
+   at lambda_method(Closure , IHub , Object[] )
+   at Microsoft.AspNet.SignalR.Hubs.HubMethodDispatcher.Execute(IHub hub, Object[] parameters)
+   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)<---
+
+INFO  2014-02-26 17:02:14,281   202ms Global                 Application_Start  - Application_Start()
+WARN  2014-02-26 17:02:16,662  2583ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-02-26 17:02:16,664  2585ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+WARN  2014-02-26 17:02:16,789  2710ms Global                 Application_Error  - URL: http://localhost:6404/favicon.ico; FilePath: /favicon.ico
+ERROR 2014-02-26 17:02:16,792  2713ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+ERROR 2014-02-26 17:03:34,328 80249ms Global                 OnIncomingError    - System.AggregateException: One or more errors occurred. ---> AutoMapper.AutoMapperMappingException: Missing type map configuration or unsupported mapping.
+
+Mapping types:
+String -> RoomDto
+System.String -> WebSignalR.Common.DTO.RoomDto
+
+Destination path:
+RoomDto
+
+Source value:
+Project
+   at AutoMapper.MappingEngine.AutoMapper.IMappingEngineRunner.Map(ResolutionContext context)
+   at AutoMapper.MappingEngine.Map(Object source, Type sourceType, Type destinationType, Action`1 opts)
+   at AutoMapper.MappingEngine.Map[TDestination](Object source, Action`1 opts)
+   at AutoMapper.MappingEngine.Map[TDestination](Object source)
+   at AutoMapper.Mapper.Map[TDestination](Object source)
+   at WebSignalR.Hubs.TestHub.JoinRoom(String room, String sessionId) in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Hubs\TestHub.cs:line 189
+   at lambda_method(Closure , IHub , Object[] )
+   at Microsoft.AspNet.SignalR.Hubs.HubMethodDispatcher.Execute(IHub hub, Object[] parameters)
+   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)
+   --- End of inner exception stack trace ---
+---> (Inner Exception #0) AutoMapper.AutoMapperMappingException: Missing type map configuration or unsupported mapping.
+
+Mapping types:
+String -> RoomDto
+System.String -> WebSignalR.Common.DTO.RoomDto
+
+Destination path:
+RoomDto
+
+Source value:
+Project
+   at AutoMapper.MappingEngine.AutoMapper.IMappingEngineRunner.Map(ResolutionContext context)
+   at AutoMapper.MappingEngine.Map(Object source, Type sourceType, Type destinationType, Action`1 opts)
+   at AutoMapper.MappingEngine.Map[TDestination](Object source, Action`1 opts)
+   at AutoMapper.MappingEngine.Map[TDestination](Object source)
+   at AutoMapper.Mapper.Map[TDestination](Object source)
+   at WebSignalR.Hubs.TestHub.JoinRoom(String room, String sessionId) in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Hubs\TestHub.cs:line 189
+   at lambda_method(Closure , IHub , Object[] )
+   at Microsoft.AspNet.SignalR.Hubs.HubMethodDispatcher.Execute(IHub hub, Object[] parameters)
+   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)<---
+
+ERROR 2014-02-26 17:03:47,974 93895ms Global                 OnIncomingError    - System.AggregateException: One or more errors occurred. ---> AutoMapper.AutoMapperMappingException: Missing type map configuration or unsupported mapping.
+
+Mapping types:
+String -> RoomDto
+System.String -> WebSignalR.Common.DTO.RoomDto
+
+Destination path:
+RoomDto
+
+Source value:
+Project
+   at AutoMapper.MappingEngine.AutoMapper.IMappingEngineRunner.Map(ResolutionContext context)
+   at AutoMapper.MappingEngine.Map(Object source, Type sourceType, Type destinationType, Action`1 opts)
+   at AutoMapper.MappingEngine.Map[TDestination](Object source, Action`1 opts)
+   at AutoMapper.MappingEngine.Map[TDestination](Object source)
+   at AutoMapper.Mapper.Map[TDestination](Object source)
+   at WebSignalR.Hubs.TestHub.JoinRoom(String room, String sessionId) in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Hubs\TestHub.cs:line 189
+   at lambda_method(Closure , IHub , Object[] )
+   at Microsoft.AspNet.SignalR.Hubs.HubMethodDispatcher.Execute(IHub hub, Object[] parameters)
+   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)
+   --- End of inner exception stack trace ---
+---> (Inner Exception #0) AutoMapper.AutoMapperMappingException: Missing type map configuration or unsupported mapping.
+
+Mapping types:
+String -> RoomDto
+System.String -> WebSignalR.Common.DTO.RoomDto
+
+Destination path:
+RoomDto
+
+Source value:
+Project
+   at AutoMapper.MappingEngine.AutoMapper.IMappingEngineRunner.Map(ResolutionContext context)
+   at AutoMapper.MappingEngine.Map(Object source, Type sourceType, Type destinationType, Action`1 opts)
+   at AutoMapper.MappingEngine.Map[TDestination](Object source, Action`1 opts)
+   at AutoMapper.MappingEngine.Map[TDestination](Object source)
+   at AutoMapper.Mapper.Map[TDestination](Object source)
+   at WebSignalR.Hubs.TestHub.JoinRoom(String room, String sessionId) in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Hubs\TestHub.cs:line 189
+   at lambda_method(Closure , IHub , Object[] )
+   at Microsoft.AspNet.SignalR.Hubs.HubMethodDispatcher.Execute(IHub hub, Object[] parameters)
+   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)<---
+
+ERROR 2014-02-26 17:04:25,614 131535ms Global                 OnIncomingError    - System.AggregateException: One or more errors occurred. ---> AutoMapper.AutoMapperMappingException: Missing type map configuration or unsupported mapping.
+
+Mapping types:
+String -> RoomDto
+System.String -> WebSignalR.Common.DTO.RoomDto
+
+Destination path:
+RoomDto
+
+Source value:
+Project
+   at AutoMapper.MappingEngine.AutoMapper.IMappingEngineRunner.Map(ResolutionContext context)
+   at AutoMapper.MappingEngine.Map(Object source, Type sourceType, Type destinationType, Action`1 opts)
+   at AutoMapper.MappingEngine.Map[TDestination](Object source, Action`1 opts)
+   at AutoMapper.MappingEngine.Map[TDestination](Object source)
+   at AutoMapper.Mapper.Map[TDestination](Object source)
+   at WebSignalR.Hubs.TestHub.JoinRoom(String room, String sessionId) in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Hubs\TestHub.cs:line 189
+   at lambda_method(Closure , IHub , Object[] )
+   at Microsoft.AspNet.SignalR.Hubs.HubMethodDispatcher.Execute(IHub hub, Object[] parameters)
+   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)
+   --- End of inner exception stack trace ---
+---> (Inner Exception #0) AutoMapper.AutoMapperMappingException: Missing type map configuration or unsupported mapping.
+
+Mapping types:
+String -> RoomDto
+System.String -> WebSignalR.Common.DTO.RoomDto
+
+Destination path:
+RoomDto
+
+Source value:
+Project
+   at AutoMapper.MappingEngine.AutoMapper.IMappingEngineRunner.Map(ResolutionContext context)
+   at AutoMapper.MappingEngine.Map(Object source, Type sourceType, Type destinationType, Action`1 opts)
+   at AutoMapper.MappingEngine.Map[TDestination](Object source, Action`1 opts)
+   at AutoMapper.MappingEngine.Map[TDestination](Object source)
+   at AutoMapper.Mapper.Map[TDestination](Object source)
+   at WebSignalR.Hubs.TestHub.JoinRoom(String room, String sessionId) in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Hubs\TestHub.cs:line 189
+   at lambda_method(Closure , IHub , Object[] )
+   at Microsoft.AspNet.SignalR.Hubs.HubMethodDispatcher.Execute(IHub hub, Object[] parameters)
+   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)<---
+
+ERROR 2014-02-26 17:04:48,161 154082ms Global                 OnIncomingError    - System.AggregateException: One or more errors occurred. ---> AutoMapper.AutoMapperMappingException: Missing type map configuration or unsupported mapping.
+
+Mapping types:
+String -> RoomDto
+System.String -> WebSignalR.Common.DTO.RoomDto
+
+Destination path:
+RoomDto
+
+Source value:
+Project
+   at AutoMapper.MappingEngine.AutoMapper.IMappingEngineRunner.Map(ResolutionContext context)
+   at AutoMapper.MappingEngine.Map(Object source, Type sourceType, Type destinationType, Action`1 opts)
+   at AutoMapper.MappingEngine.Map[TDestination](Object source, Action`1 opts)
+   at AutoMapper.MappingEngine.Map[TDestination](Object source)
+   at AutoMapper.Mapper.Map[TDestination](Object source)
+   at WebSignalR.Hubs.TestHub.JoinRoom(String room, String sessionId) in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Hubs\TestHub.cs:line 189
+   at lambda_method(Closure , IHub , Object[] )
+   at Microsoft.AspNet.SignalR.Hubs.HubMethodDispatcher.Execute(IHub hub, Object[] parameters)
+   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)
+   --- End of inner exception stack trace ---
+---> (Inner Exception #0) AutoMapper.AutoMapperMappingException: Missing type map configuration or unsupported mapping.
+
+Mapping types:
+String -> RoomDto
+System.String -> WebSignalR.Common.DTO.RoomDto
+
+Destination path:
+RoomDto
+
+Source value:
+Project
+   at AutoMapper.MappingEngine.AutoMapper.IMappingEngineRunner.Map(ResolutionContext context)
+   at AutoMapper.MappingEngine.Map(Object source, Type sourceType, Type destinationType, Action`1 opts)
+   at AutoMapper.MappingEngine.Map[TDestination](Object source, Action`1 opts)
+   at AutoMapper.MappingEngine.Map[TDestination](Object source)
+   at AutoMapper.Mapper.Map[TDestination](Object source)
+   at WebSignalR.Hubs.TestHub.JoinRoom(String room, String sessionId) in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Hubs\TestHub.cs:line 189
+   at lambda_method(Closure , IHub , Object[] )
+   at Microsoft.AspNet.SignalR.Hubs.HubMethodDispatcher.Execute(IHub hub, Object[] parameters)
+   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)<---
+
+ERROR 2014-02-26 17:05:41,966 207886ms Global                 OnIncomingError    - System.AggregateException: One or more errors occurred. ---> AutoMapper.AutoMapperMappingException: Missing type map configuration or unsupported mapping.
+
+Mapping types:
+String -> RoomDto
+System.String -> WebSignalR.Common.DTO.RoomDto
+
+Destination path:
+RoomDto
+
+Source value:
+Project
+   at AutoMapper.MappingEngine.AutoMapper.IMappingEngineRunner.Map(ResolutionContext context)
+   at AutoMapper.MappingEngine.Map(Object source, Type sourceType, Type destinationType, Action`1 opts)
+   at AutoMapper.MappingEngine.Map[TDestination](Object source, Action`1 opts)
+   at AutoMapper.MappingEngine.Map[TDestination](Object source)
+   at AutoMapper.Mapper.Map[TDestination](Object source)
+   at WebSignalR.Hubs.TestHub.JoinRoom(String room, String sessionId) in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Hubs\TestHub.cs:line 189
+   at lambda_method(Closure , IHub , Object[] )
+   at Microsoft.AspNet.SignalR.Hubs.HubMethodDispatcher.Execute(IHub hub, Object[] parameters)
+   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)
+   --- End of inner exception stack trace ---
+---> (Inner Exception #0) AutoMapper.AutoMapperMappingException: Missing type map configuration or unsupported mapping.
+
+Mapping types:
+String -> RoomDto
+System.String -> WebSignalR.Common.DTO.RoomDto
+
+Destination path:
+RoomDto
+
+Source value:
+Project
+   at AutoMapper.MappingEngine.AutoMapper.IMappingEngineRunner.Map(ResolutionContext context)
+   at AutoMapper.MappingEngine.Map(Object source, Type sourceType, Type destinationType, Action`1 opts)
+   at AutoMapper.MappingEngine.Map[TDestination](Object source, Action`1 opts)
+   at AutoMapper.MappingEngine.Map[TDestination](Object source)
+   at AutoMapper.Mapper.Map[TDestination](Object source)
+   at WebSignalR.Hubs.TestHub.JoinRoom(String room, String sessionId) in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Hubs\TestHub.cs:line 189
+   at lambda_method(Closure , IHub , Object[] )
+   at Microsoft.AspNet.SignalR.Hubs.HubMethodDispatcher.Execute(IHub hub, Object[] parameters)
+   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)<---
+
+ERROR 2014-02-26 17:05:57,736 223657ms Global                 OnIncomingError    - System.AggregateException: One or more errors occurred. ---> AutoMapper.AutoMapperMappingException: Missing type map configuration or unsupported mapping.
+
+Mapping types:
+String -> RoomDto
+System.String -> WebSignalR.Common.DTO.RoomDto
+
+Destination path:
+RoomDto
+
+Source value:
+Project
+   at AutoMapper.MappingEngine.AutoMapper.IMappingEngineRunner.Map(ResolutionContext context)
+   at AutoMapper.MappingEngine.Map(Object source, Type sourceType, Type destinationType, Action`1 opts)
+   at AutoMapper.MappingEngine.Map[TDestination](Object source, Action`1 opts)
+   at AutoMapper.MappingEngine.Map[TDestination](Object source)
+   at AutoMapper.Mapper.Map[TDestination](Object source)
+   at WebSignalR.Hubs.TestHub.JoinRoom(String room, String sessionId) in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Hubs\TestHub.cs:line 189
+   at lambda_method(Closure , IHub , Object[] )
+   at Microsoft.AspNet.SignalR.Hubs.HubMethodDispatcher.Execute(IHub hub, Object[] parameters)
+   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)
+   --- End of inner exception stack trace ---
+---> (Inner Exception #0) AutoMapper.AutoMapperMappingException: Missing type map configuration or unsupported mapping.
+
+Mapping types:
+String -> RoomDto
+System.String -> WebSignalR.Common.DTO.RoomDto
+
+Destination path:
+RoomDto
+
+Source value:
+Project
+   at AutoMapper.MappingEngine.AutoMapper.IMappingEngineRunner.Map(ResolutionContext context)
+   at AutoMapper.MappingEngine.Map(Object source, Type sourceType, Type destinationType, Action`1 opts)
+   at AutoMapper.MappingEngine.Map[TDestination](Object source, Action`1 opts)
+   at AutoMapper.MappingEngine.Map[TDestination](Object source)
+   at AutoMapper.Mapper.Map[TDestination](Object source)
+   at WebSignalR.Hubs.TestHub.JoinRoom(String room, String sessionId) in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Hubs\TestHub.cs:line 189
+   at lambda_method(Closure , IHub , Object[] )
+   at Microsoft.AspNet.SignalR.Hubs.HubMethodDispatcher.Execute(IHub hub, Object[] parameters)
+   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)<---
+
+INFO  2014-02-26 17:11:22,459   202ms Global                 Application_Start  - Application_Start()
+WARN  2014-02-26 17:11:24,142  1885ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-02-26 17:11:24,144  1887ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+WARN  2014-02-26 17:11:24,543  2286ms Global                 Application_Error  - URL: http://localhost:6404/favicon.ico; FilePath: /favicon.ico
+ERROR 2014-02-26 17:11:24,545  2288ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-02-26 17:17:23,485   215ms Global                 Application_Start  - Application_Start()
+WARN  2014-02-26 17:17:26,207  2937ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-02-26 17:17:26,209  2939ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-02-26 17:18:07,443   229ms Global                 Application_Start  - Application_Start()
+WARN  2014-02-26 17:18:11,243  4028ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-02-26 17:18:11,245  4030ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-02-26 18:07:06,876   225ms Global                 Application_Start  - Application_Start()
+WARN  2014-02-26 18:07:08,696  2045ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-02-26 18:07:08,698  2047ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+WARN  2014-02-26 18:07:09,030  2379ms Global                 Application_Error  - URL: http://localhost:6404/favicon.ico; FilePath: /favicon.ico
+ERROR 2014-02-26 18:07:09,032  2381ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-02-26 18:53:02,689   202ms Global                 Application_Start  - Application_Start()
+WARN  2014-02-26 18:53:06,675  4188ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-02-26 18:53:06,677  4190ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+WARN  2014-02-26 18:53:06,887  4400ms Global                 Application_Error  - URL: http://localhost:6404/favicon.ico; FilePath: /favicon.ico
+ERROR 2014-02-26 18:53:06,888  4401ms Global                 Application_Error  - Application_Error
 System.Web.HttpException (0x80004005): File does not exist.
    at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
    at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)

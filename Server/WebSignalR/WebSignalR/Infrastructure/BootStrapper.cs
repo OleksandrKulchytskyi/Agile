@@ -2,6 +2,7 @@
 using Microsoft.AspNet.SignalR;
 using Ninject;
 using System;
+using System.Linq;
 using System.Configuration;
 using System.Data.Entity.Migrations;
 using WebSignalR.Common.DTO;
@@ -16,8 +17,8 @@ namespace WebSignalR.Infrastructure
 {
 	public static class BootStrapper
 	{
-		private static bool _sweeping;
-		private static bool _broadcasting;
+		//private static bool _sweeping;
+		//private static bool _broadcasting;
 
 		private static readonly TimeSpan _sweepInterval = TimeSpan.FromMinutes(10);
 		private static readonly TimeSpan _broadcatsInterval = TimeSpan.FromMinutes(int.Parse(ConfigurationManager.AppSettings["broadcastTime"]));
@@ -99,10 +100,35 @@ namespace WebSignalR.Infrastructure
 
 		internal static void InitMapperMaps()
 		{
+			Mapper.CreateMap<UserVote, UserVoteDto>()
+				.ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.User.Id))
+				.ForMember(dest => dest.VoteItemId, opt => opt.MapFrom(src => src.VoteItem.Id));
+
+			Mapper.CreateMap<VoteItem, VoteItemDto>()
+				.ForMember(dest => dest.VotedUsers, opt => opt.MapFrom(src => src.VotedUsers.Select(x => x.UserId).ToList()))
+				.IgnoreAllNonExisting();
+
+			Mapper.CreateMap<Room, RoomDto>()
+				.ForMember(dest => dest.Active, opt => opt.MapFrom(src => src.Active))
+				.ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+				.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+				.ForMember(dest => dest.ItemsToVote, opt => opt.MapFrom(src => src.ItemsToVote))
+				.ForMember(dest => dest.ConnectedUsers, opt => opt.MapFrom(src => src.ConnectedUsers));
+
+			Mapper.CreateMap<Privileges, PrivilegeDto>().IgnoreAllNonExisting();
+
 			Mapper.CreateMap<User, UserDto>()
-				   .ForMember(dest => dest.Privileges, opt => opt.MapFrom(src => src.UserPrivileges));
-			Mapper.CreateMap<Privileges, PrivilegeDto>();
-			Mapper.AssertConfigurationIsValid();
+				   .ForMember(dest => dest.Privileges, opt => opt.MapFrom(src => src.UserPrivileges))
+				   .IgnoreAllNonExisting();
+
+			try
+			{
+				Mapper.AssertConfigurationIsValid();
+			}
+			catch (Exception ex)
+			{
+				Global.Logger.Error(ex);
+			}
 		}
 	}
 }

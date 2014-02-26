@@ -160,7 +160,10 @@
     <Compile Include="Hubs\Pipelines\LogPipelineModule.cs" />
     <Compile Include="Hubs\SignalRBase.cs" />
     <Compile Include="Hubs\TraceHub.cs" />
+    <Compile Include="Infrastructure\Authorization\SignalRAuth.cs" />
+    <Compile Include="Infrastructure\AutomapperExtnsions.cs" />
     <Compile Include="Infrastructure\BootStrapper.cs" />
+    <Compile Include="Infrastructure\Constants.cs" />
     <Compile Include="Infrastructure\CustomPrincipal.cs" />
     <Compile Include="Infrastructure\DynamicTrace.cs" />
     <Compile Include="Infrastructure\FileBasedVotesProvider.cs" />

@@ -25,8 +25,11 @@ namespace WebSignalR.App_Start
 			IHubPipeline pipeline = resolver.Resolve<IHubPipeline>();
 			configuration.ConnectionTimeout = TimeSpan.FromSeconds(30);
 			configuration.DisconnectTimeout = TimeSpan.FromSeconds(30);
-			pipeline.AddModule(new Hubs.Pipelines.LoggingPipelineModule());
-
+			pipeline.AddModule(new Hubs.Pipelines.LogErrorPipelineModule());
+			
+			System.Web.Http.GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling =
+				Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+			
 			//this was disappear since v 1.0,this feature is turned on by defult in v1.0 >
 			//pipeline.EnableAutoRejoiningGroups();
 			//RouteTable.Routes.MapHubs();

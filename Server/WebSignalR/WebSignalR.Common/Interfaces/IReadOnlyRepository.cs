@@ -8,8 +8,6 @@ namespace WebSignalR.Common.Interfaces
 {
 	public interface IReadOnlyRepository<E> where E : Entities.EntityBase
 	{
-		//int Count { get; }
-
 		IContext DbContext { get; set; }
 
 		bool Contains(E id);
@@ -19,6 +17,8 @@ namespace WebSignalR.Common.Interfaces
 
 		bool Exist(Expression<Func<E, bool>> predicate = null);
 		int Count(Expression<Func<E, bool>> predicate = null);
+
+		IPage<E> Page(int page = 1, int pageSize = 10);
 	}
 
 	public interface IRepository<E> : IReadOnlyRepository<E> where E : Entities.EntityBase

@@ -14,8 +14,6 @@ namespace WebSignalR.DataAccess.Mappings
 			this.Property(u => u.Id).HasColumnName("Id");
 			this.Property(u => u.Name).HasColumnName("Name").IsRequired().HasMaxLength(50); ;
 			this.Property(u => u.Password).HasColumnName("Password").IsRequired();
-
-
 		}
 	}
 }

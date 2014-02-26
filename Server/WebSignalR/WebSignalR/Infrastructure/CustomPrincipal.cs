@@ -10,26 +10,28 @@ namespace WebSignalR.Infrastructure
 	{
 		public IIdentity Identity { get; private set; }
 
-		public bool IsInRole(string role)
-		{
-			if (roles.Any(r => role.Contains(r)))
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-
 		public CustomPrincipal(string Username)
 		{
 			this.Identity = new GenericIdentity(Username);
 		}
 
+		public CustomPrincipal(string Username, bool isAuthenticated)
+			: this(Username)
+		{
+			Authenticated = isAuthenticated;
+		}
+
+		public bool IsInRole(string role)
+		{
+			if (Roles == null)
+				return false;
+			return Roles.Any(r => role.Contains(r));
+		}
+
+		public bool Authenticated { get; set; }
 		public int UserId { get; set; }
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
-		public string[] roles { get; set; }
+		public List<string> Roles { get; set; }
 	}
 }

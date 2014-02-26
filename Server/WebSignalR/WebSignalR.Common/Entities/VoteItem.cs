@@ -26,6 +26,13 @@ namespace WebSignalR.Common.Entities
 			set { overallMark = value; OnPropChanged("OverallMark"); }
 		}
 
+		private bool closed;
+		public bool Closed
+		{
+			get { return closed; }
+			set { closed = value; OnPropChanged("Closed"); }
+		}
+
 		public int? RoomId { get; set; }
 		public virtual Room HostRoom { get; set; }
 

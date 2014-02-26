@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebSignalR.Common.Infrastructure;
 using WebSignalR.Common.Interfaces;
 
 namespace WebSignalR.DataAccess.Repositories
@@ -36,6 +37,12 @@ namespace WebSignalR.DataAccess.Repositories
 			return (entity == null) ? set.Any() : set.Any(x => x.Id == entity.Id);
 		}
 
+		public bool Exist(System.Linq.Expressions.Expression<Func<T, bool>> predicate = null)
+		{
+			var set = GetSet<T>();
+			return (predicate == null) ? set.Any() : set.Any(predicate);
+		}
+
 		public void Update(T entity)
 		{
 			this.DbContext.ChangeState(entity, System.Data.Entity.EntityState.Modified);
@@ -60,12 +67,6 @@ namespace WebSignalR.DataAccess.Repositories
 				   set.Count(predicate);
 		}
 
-		public bool Exist(System.Linq.Expressions.Expression<Func<T, bool>> predicate = null)
-		{
-			var set = GetSet<T>();
-			return (predicate == null) ? set.Any() : set.Any(predicate);
-		}
-
 		public T Get(T entity)
 		{
 			return GetSet<T>().FirstOrDefault(x => x.Id == entity.Id);
@@ -79,6 +80,19 @@ namespace WebSignalR.DataAccess.Repositories
 		public IEnumerable<T> GetAll()
 		{
 			return GetSet<T>().AsEnumerable();
+		}
+
+		/// <summary>
+		/// Provides paging possibilites
+		/// </summary>
+		/// <param name="page"></param>
+		/// <param name="pageSize"></param>
+		/// <returns></returns>
+		public IPage<T> Page(int page = 1, int pageSize = 10)
+		{
+			var internalPage = page - 1;
+			var data = this.GetSet<T>().OrderBy(k => k.Id).Skip(pageSize * internalPage).Take(pageSize).AsEnumerable();
+			return new Page<T>(data, this.GetSet<T>().Count(), pageSize, page);
 		}
 	}
 }

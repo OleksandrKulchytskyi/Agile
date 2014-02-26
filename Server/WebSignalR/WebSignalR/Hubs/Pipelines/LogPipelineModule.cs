@@ -7,7 +7,7 @@ using System.Web;
 
 namespace WebSignalR.Hubs.Pipelines
 {
-	public class LoggingPipelineModule : HubPipelineModule
+	public class LogErrorPipelineModule : HubPipelineModule
 	{
 		protected override bool OnBeforeIncoming(IHubIncomingInvokerContext context)
 		{
@@ -24,6 +24,17 @@ namespace WebSignalR.Hubs.Pipelines
 			Debug.WriteLine("<= Invoking " + context.Invocation.Method + " on client hub " + context.Invocation.Hub);
 #endif
 			return base.OnBeforeOutgoing(context);
+		}
+
+		protected override void OnIncomingError(Exception ex, IHubIncomingInvokerContext context)
+		{
+			Global.Logger.Error(ex);
+			Debug.WriteLine("HUB => Exception " + ex.Message);
+			if (ex.InnerException != null)
+			{
+				Debug.WriteLine("HUB => Inner Exception " + ex.InnerException.Message);
+			}
+			base.OnIncomingError(ex, context);
 		}
 	}
 }
