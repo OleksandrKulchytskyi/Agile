@@ -2,11 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
+using System.Threading;
 using System.Web;
 using System.Web.Http;
 using System.Web.Routing;
 using System.Web.Security;
 using System.Web.SessionState;
+using WebSignalR.Infrastructure;
 
 namespace WebSignalR
 {
@@ -63,8 +66,33 @@ namespace WebSignalR
 		{
 		}
 
+		protected void Application_EndRequest(object sender, EventArgs e)
+		{
+			if (this.Request.Path.ToLower().StartsWith("/handlers/loginhandler.ashx")
+			  && this.Response.StatusCode == 302
+			  && this.Response.RedirectLocation.ToLower().Contains("login.aspx"))
+			{
+				this.Response.RedirectLocation = "/handlers/loginhandler.ashx";
+				this.Response.StatusCode = 401;
+			}
+		}
+
 		protected void Application_AuthenticateRequest(object sender, EventArgs e)
 		{
+		}
+
+		protected void Application_OnPostAuthenticateRequest(object sender, EventArgs e)
+		{
+			IPrincipal usr = HttpContext.Current.User; // Create the CustomPrincipal
+			// If we are dealing with an authenticated forms authentication request
+			if (usr.Identity.IsAuthenticated && usr.Identity.AuthenticationType == "Forms")
+			{
+				FormsIdentity fIdent = usr.Identity as FormsIdentity;
+				CustomIdentity ci = new CustomIdentity(fIdent.Ticket); // Create a CustomIdentity based on the FormsAuthenticationTicket  
+				CustomPrincipal p = new CustomPrincipal(ci); // Create the CustomPrincipal
+				HttpContext.Current.User = p;
+				Thread.CurrentPrincipal = p;
+			}
 		}
 
 		protected void Application_Error(object sender, EventArgs e)

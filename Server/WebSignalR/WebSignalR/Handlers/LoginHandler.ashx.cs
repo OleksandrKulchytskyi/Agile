@@ -1,14 +1,14 @@
 ﻿using Ninject;
 using System;
-using System.Net;
 using System.Linq;
-using System.Security.Principal;
+using System.Net;
 using System.Text;
-using System.Threading;
 using System.Web;
 using System.Web.Security;
+using WebSignalR.Common.DTO;
 using WebSignalR.Common.Entities;
 using WebSignalR.Common.Interfaces;
+using WebSignalR.Infrastructure;
 
 namespace WebSignalR.Handlers
 {
@@ -44,9 +44,10 @@ namespace WebSignalR.Handlers
 				bool result = AuthenticateUser(authorization.Replace(BasicAuthResponseHeaderValue, string.Empty).Trim(), context);
 				if (!result)
 				{
-					context.Response.Headers.Add(BasicAuthResponseHeader, "Basic realm=\"Test\"");
+					//context.Response.Headers.Add(BasicAuthResponseHeader, "Basic realm=\"Test\"");
 					context.Response.ContentType = httpContentType;
-					context.Response.Write("You must authenticate");
+					context.Response.StatusDescription = "Not authorized.";
+					context.Response.Write("User wasn't authenticated. Bad authorization data.");
 					context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
 				}
 				else
@@ -54,8 +55,14 @@ namespace WebSignalR.Handlers
 					context.Response.ContentType = httpContentType;
 					context.Response.StatusDescription = "Authorized.";
 					context.Response.StatusCode = (int)HttpStatusCode.OK;
+					context.Response.Write("User has been authorized.");
 				}
+				return;
 			}
+			context.Response.ContentType = httpContentType;
+			context.Response.StatusDescription = "Authorizaztion header wasn't specified.";
+			context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+			context.Response.Write("Authorization header wasn't specified.");
 		}
 
 		private bool AuthenticateUser(string credentials, HttpContext context)
@@ -71,13 +78,18 @@ namespace WebSignalR.Handlers
 				string password = credentials.Substring(separator + 1);
 
 				validated = Login(context, name, password);
-				if (validated)
-				{
-					Infrastructure.CustomPrincipal principal = new Infrastructure.CustomPrincipal(name, true);
-					SetPrincipal(principal);
-				}
+				//if (validated)
+				//{
+				//	Infrastructure.CustomPrincipal principal = new Infrastructure.CustomPrincipal(name, true);
+				//	SetPrincipal(principal);
+				//}
 			}
 			catch (FormatException ex)
+			{
+				Global.Logger.Error(ex);
+				validated = false;
+			}
+			catch (Exception ex)
 			{
 				Global.Logger.Error(ex);
 				validated = false;
@@ -85,9 +97,38 @@ namespace WebSignalR.Handlers
 			return validated;
 		}
 
+		private bool Login(HttpContext context, string strUser, string strPwd)
+		{
+			if (CheckPassword(strUser, strPwd))
+			{
+				FormsAuthenticationTicket ticket;
+				UserDto userDto = null;
+
+				using (IUnityOfWork unity = Infrastructure.BootStrapper.Kernel.Get<IUnityOfWork>())
+				{
+					IReadOnlyRepository<User> repo = unity.GetRepository<User>();
+					User validatedUser = repo.Get(x => x.Name == strUser).FirstOrDefault();
+					if (validatedUser != null)
+						userDto = AutoMapper.Mapper.Map<UserDto>(validatedUser);
+				}
+
+				string ticketData = string.Concat("Udelphi|", string.Join(",", userDto.Privileges.Select(p => p.Name)));
+				ticket = new FormsAuthenticationTicket(1, strUser, DateTime.Now, DateTime.Now.AddMinutes(30), /*expire time*/ false,/*persistent*/ ticketData /*user data*/);
+				string strEncryptedTicket = FormsAuthentication.Encrypt(ticket);
+				HttpCookie cookie = new HttpCookie(Infrastructure.Constants.FormsAuthKey, strEncryptedTicket);
+				context.Response.Cookies.Add(cookie);
+				CustomIdentity identity = new CustomIdentity(ticket);
+				CustomPrincipal principal = new CustomPrincipal(identity);
+				principal.UserId = userDto.Id;
+				SetPrincipal(principal);
+				return true;
+			}
+			else
+				return false;
+		}
+
 		private bool CheckPassword(string username, string password)
 		{
-			//return username == "user" && password == "password";
 			IEntityValidator validator = Infrastructure.BootStrapper.Kernel.Get<IEntityValidator>("Credentials");
 			if (validator != null)
 			{
@@ -96,43 +137,11 @@ namespace WebSignalR.Handlers
 			return false;
 		}
 
-		private bool Login(HttpContext context, string strUser, string strPwd)
-		{
-			if (CheckPassword(strUser, strPwd))
-			{
-				FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, strUser, DateTime.Now, DateTime.Now.AddMinutes(30), /*expire time*/ false,/*persistent*/ string.Empty /*user data*/);
-
-				string strEncryptedTicket = FormsAuthentication.Encrypt(ticket);
-				HttpCookie cookie = new HttpCookie(Infrastructure.Constants.FormsAuthKey, strEncryptedTicket);
-				context.Response.Cookies.Add(cookie);
-				return true;
-			}
-			else
-				return false;
-		}
-
 		private void SetPrincipal(Infrastructure.CustomPrincipal principal)
 		{
-			Thread.CurrentPrincipal = principal;
-			IUnityOfWork unity = Infrastructure.BootStrapper.Kernel.Get<IUnityOfWork>();
-			using (unity)
-			{
-				IReadOnlyRepository<User> repo = unity.GetRepository<User>();
-				User usr = repo.Get(x => x.Name == principal.Identity.Name).FirstOrDefault();
-				if (usr != null)
-				{
-					principal.UserId = usr.Id;
-					principal.Roles = usr.UserPrivileges.Select(x => x.Name).ToList();
-				}
-			}
 			if (HttpContext.Current != null)
 				HttpContext.Current.User = principal;
-		}
-
-		private void LogOut()
-		{
-			// Deprive client of the authentication key
-			FormsAuthentication.SignOut();
+			System.Threading.Thread.CurrentPrincipal = principal;
 		}
 	}
 }

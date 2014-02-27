@@ -15,12 +15,23 @@ namespace WebSignalR.Infrastructure.Authorization
 			if (user == null)
 				throw new ArgumentNullException("user parameter cannot be a null.");
 
-			System.Security.Principal.GenericPrincipal principal = (System.Security.Principal.GenericPrincipal)user;
-			if (principal != null)
+			CustomPrincipal principal = (CustomPrincipal)user;
+			if (principal == null)
+				return false;
+
+			if (Roles != null)
 			{
-				return principal.Identity.IsAuthenticated;
+				string[] inputRoles = Roles.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+				bool notFound = false;
+				foreach (string role in inputRoles)
+				{
+					notFound = !principal.Roles.Any(x => x.Equals(role, StringComparison.OrdinalIgnoreCase));
+					if (notFound)
+						break;
+				}
+				return !notFound;
 			}
-			return false;
+			return principal.Identity.IsAuthenticated;
 		}
 	}
 }

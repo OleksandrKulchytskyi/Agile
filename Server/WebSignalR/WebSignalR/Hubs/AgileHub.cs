@@ -10,13 +10,14 @@ using WebSignalR.Common.Entities;
 using WebSignalR.Common.Interfaces;
 using WebSignalR.Common.Services;
 using WebSignalR.Infrastructure;
+using WebSignalR.Infrastructure.Authorization;
 
 namespace WebSignalR.Hubs
 {
-	[Microsoft.AspNet.SignalR.Hubs.HubName("testhub")]
-	public class TestHub : Hub, IRoomService, IVoteService
+	[Microsoft.AspNet.SignalR.Hubs.HubName("agileHub")]
+	public class AgileHub : Hub, IRoomService, IVoteService
 	{
-		private static readonly Version _version = typeof(TestHub).Assembly.GetName().Version;
+		private static readonly Version _version = typeof(AgileHub).Assembly.GetName().Version;
 		private static readonly string _versionString = _version.ToString();
 		private readonly IUnityOfWork _unity;
 		private readonly ICryptoService _cryptoService;
@@ -40,7 +41,7 @@ namespace WebSignalR.Hubs
 			}
 		}
 
-		public TestHub(IUnityOfWork unity, ICryptoService crypto)
+		public AgileHub(IUnityOfWork unity, ICryptoService crypto)
 		{
 			_unity = unity;
 			_cryptoService = crypto;
@@ -60,15 +61,15 @@ namespace WebSignalR.Hubs
 					UserSession us = new UserSession();
 					us.User = usr;
 					us.SessionId = this.Context.ConnectionId;
+					SessionState state = new SessionState() { UserId = usr.Id, SessionId = us.SessionId };
+					string jsonState = JsonConvert.SerializeObject(state);
+					SetStateData(jsonState);
+					Clients.Caller.onState(jsonState);
 					us.UserAgent = UserAgent;
 					us.UserId = usr.Id;
 					us.SetLastActivityNow();
 					repoSession.Add(us);
 					_unity.Commit();
-					SessionState state = new SessionState() { UserId = usr.Id, SessionId = us.SessionId };
-					string jsonState = JsonConvert.SerializeObject(state);
-					SetStateData(jsonState);
-					Clients.Caller.onState(jsonState);
 				}
 			}
 
@@ -86,8 +87,8 @@ namespace WebSignalR.Hubs
 		{
 			if (!Context.User.Identity.IsAuthenticated)
 				return null;
+	
 			Clients.Caller.onStatus("Reconnecting...").Wait();
-
 			return base.OnReconnected();
 		}
 
@@ -172,7 +173,7 @@ namespace WebSignalR.Hubs
 			#endregion
 		}
 
-		[Infrastructure.Authorization.SignalRAuth(Roles = "User")]
+		[SignalRAuth(Roles = "User")]
 		public JoinRoomResult JoinRoom(string roomName, string sessionId)
 		{
 			JoinRoomResult result = new JoinRoomResult();
@@ -193,7 +194,7 @@ namespace WebSignalR.Hubs
 			return result;
 		}
 
-		[Infrastructure.Authorization.SignalRAuth(Roles = "User")]
+		[SignalRAuth(Roles = "User")]
 		public Task LeaveRoom(string roomName, string sessionId)
 		{
 			Task addTask = Groups.Remove(Context.ConnectionId, roomName);
@@ -212,7 +213,7 @@ namespace WebSignalR.Hubs
 			return addTask;
 		}
 
-		[Infrastructure.Authorization.SignalRAuth(Roles = "ScrumMaster")]
+		[SignalRAuth(Roles = "ScrumMaster")]
 		public Task ChangeRoomState(string roomName, bool state)
 		{
 			IRepository<Room> repo = _unity.GetRepository<Room>();
@@ -225,7 +226,7 @@ namespace WebSignalR.Hubs
 			return Clients.Group(roomName).onRoomStateChanged(roomName, state);
 		}
 
-		[Infrastructure.Authorization.SignalRAuth(Roles = "User")]
+		[SignalRAuth(Roles = "User")]
 		public Task VoteForItem(string room, int voteItemId, int userId, int mark)
 		{
 			IRepository<VoteItem> repo = _unity.GetRepository<VoteItem>();
@@ -251,7 +252,7 @@ namespace WebSignalR.Hubs
 			return Clients.Group(room).onUserVoted(dto);
 		}
 
-		[Infrastructure.Authorization.SignalRAuth(Roles = "ScrumMaster")]
+		[SignalRAuth(Roles = "ScrumMaster")]
 		public Task CloseVote(string room, int voteItemId, int mark)
 		{
 			IRepository<VoteItem> repo = _unity.GetRepository<VoteItem>();

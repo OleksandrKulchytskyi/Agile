@@ -1,0 +1,28 @@
+﻿<Window x:Class="WebSignalR.TestHarness.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+		<StackPanel Grid.Row="0">
+			<TextBlock Text="Username:"/>
+			<TextBox x:Name="txtUser" Width="160" HorizontalAlignment="Left"/>
+			<TextBlock Text="Password:"/>
+			<TextBox x:Name="txtPass" Width="160" HorizontalAlignment="Left"/>
+
+			<TextBlock Text="Server url:"/>
+			<TextBox x:Name="txtUrl" Width="160" HorizontalAlignment="Left"/>
+
+			<Button x:Name="btnLogin" Click="btnLogin_Click"  Content="Login"/>
+		</StackPanel>
+
+		<StackPanel Grid.Row="1" x:Name="container2">
+			<TextBox x:Name="txtLog" AcceptsReturn="True" AcceptsTab="True" 
+					 IsReadOnly="True" VerticalScrollBarVisibility="Visible" VerticalAlignment="Stretch"
+					 Height="{Binding ElementName=container2, Path=ActualHeight}" Width="{Binding ElementName=container2, Path=ActualWidth}"/>
+		</StackPanel>
+	</Grid>
+</Window>

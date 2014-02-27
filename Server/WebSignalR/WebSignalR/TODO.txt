@@ -8,3 +8,25 @@ http://habrahabr.ru/post/154003/
 http://cgeers.com/2012/10/06/single-page-application-with-knockout-js-part-1/
 http://daniel.wertheim.se/2013/05/10/super-simple-spa-sample/
 https://gist.github.com/danielwertheim/5557938
+
+Admin
+Authorization: Basic QWRtaW46WVdSdGFXNHhNak0w
+
+-User1
+Authorization: Basic VXNlcjE6ZFhObGNqRT0=
+
+-User2
+Authorization: Basic VXNlcjI6ZFhObGNqST0=
+
+
+http://localhost:6404/handlers/loginhandler.ashx
+http://localhost/WebSignalR/handlers/loginhandler.ashx
+
+http://localhost:6404/signalr/negotiate?_=4326123543558
+http://localhost/WebSignalR/signalr/negotiate?_=4326123543558
+
+
+http://localhost:6404/signalr/signalr/connect?transport=serverSentEvents&amp;ConnectionId=09e50559-d6f0-476b-8df8-8a5c6abda241&amp;connectionData=%5B%7B%22name%22%3A%22agileHub%22%7D%5D&amp;tid=9;ConnectionToken=yW2Lo_QxE7ITOsWHhteqjjlYCvUjzGq2P2tjtuZPxA1Qze0OGC0QpyyZSLBHa7FhdbBJXQwjAVkXV3fEJ2Ql_2sFuEwVt-bstApoCogc1uX4U_SOMtCvpuF1myN9qcJOuMH7xngFoa5eAlcQcKUOl2oJOVymAKwUrNi79c0pX4wGdGQQ4NjcMBchwkrv-XA20
+
+
+http://localhost/WebSignalR/signalr/connect?transport=serverSentEvents&amp;ConnectionId=6918ea2d-28aa-4b00-8ecb-916bd722c9c5&amp;connectionData=%5B%7B%22name%22%3A%22agileHub%22%7D%5D&amp;tid=9;ConnectionToken=PPzEGVr3c8MYZ8VdQ0RzgKyoEuzqY5s40E0QShe9xpmTqipFixIzdGEiNB0pzTbm3hSH-crnYmEgHbW_7-H6ikwNd-JX1ZzvnZrmSqH78yiSxCfc4nPPtLUmLXRcrNR5jp15KZxfUkTJkBQeBz6P-PIGewkPw4E4S2WYglCWwcPQb3aoRVw4P2kW3hRsxqSq0

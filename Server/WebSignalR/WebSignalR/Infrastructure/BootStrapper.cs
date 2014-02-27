@@ -72,14 +72,14 @@ namespace WebSignalR.Infrastructure
 			kernel.Bind<IKeyProvider>().ToConstant(new FileBasedKeyProvider());
 			kernel.Bind<IVotesProvider>().ToConstant(new FileBasedVotesProvider());
 
-			kernel.Bind<Hubs.TestHub>().ToMethod(context =>
+			kernel.Bind<Hubs.AgileHub>().ToMethod(context =>
 			{
 				// I'm doing this manually, since we want the repository instance to be shared between the messanger service and the messanger hub itself
 				var unity = context.Kernel.Get<IUnityOfWork>();
 				var crypto = context.Kernel.Get<ICryptoService>();
 
 				//var service = new MessangerService(cache, crypto, repository);
-				return new Hubs.TestHub(unity, crypto);
+				return new Hubs.AgileHub(unity, crypto);
 			});
 		}
 

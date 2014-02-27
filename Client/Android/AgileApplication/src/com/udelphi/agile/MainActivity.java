@@ -89,6 +89,16 @@ public class MainActivity extends Activity implements
 		super.onStart();
 		new RetreiveRoomTask().execute((String) AgileApplication.container
 				.get("ServerUrl") + "/api/room/getrooms/");
+
+		// initialize hub proxy for listening
+		if (hubCon != null)
+			hubCon.Start();
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		DisconnectionRequested();
 	}
 
 	public class RetreiveRoomTask extends AsyncTask<String, Void, JSONArray> {
@@ -158,6 +168,7 @@ public class MainActivity extends Activity implements
 				default:
 					break;
 				}
+				super.OnStateChanged(oldState, newState);
 			}
 
 			@Override
@@ -166,11 +177,12 @@ public class MainActivity extends Activity implements
 				Toast.makeText(MainActivity.this,
 						"On error: " + exception.getMessage(),
 						Toast.LENGTH_LONG).show();
+
+				super.OnError(exception);
 			}
 
 			@Override
 			public void SetNewState(StateBase state) {
-				// TODO Auto-generated method stub
 				super.SetNewState(state);
 			}
 		};
@@ -179,7 +191,7 @@ public class MainActivity extends Activity implements
 			String aspxauth = (String) AgileApplication.container
 					.get(".ASPXAUTH");
 			hubCon.addHeader("Cookie", ".ASPXAUTH=" + aspxauth);
-			hubProxy = hubCon.CreateHubProxy("testhub");
+			hubProxy = hubCon.CreateHubProxy("agileHub");
 		} catch (OperationApplicationException e) {
 			Log.e("OperationApplicationException", e.getMessage());
 			e.printStackTrace();
@@ -192,8 +204,10 @@ public class MainActivity extends Activity implements
 				if (loggedUser != null)
 					AgileApplication.container.put("LoggedUser", loggedUser);
 				for (Privilege p : loggedUser.Privileges) {
-					if (p.Name.equalsIgnoreCase("ScrumMaster"))
+					if (p.Name.equalsIgnoreCase("ScrumMaster")) {
 						chckMaster.setVisibility(View.VISIBLE);
+						break;
+					}
 				}
 			}
 
@@ -210,11 +224,12 @@ public class MainActivity extends Activity implements
 						// usr.IsAdmin = jsObj.getBoolean("IsAdmin");
 						JSONArray priviligies = jsObj
 								.getJSONArray("Privileges");
-						for (int i = 0; i < priviligies.length(); i++) {
-							JSONObject obj2 = (JSONObject) args.get(i);
+						int len = priviligies.length();
+						for (int i = 0; i < len; i++) {
+							JSONObject obj2 = (JSONObject) priviligies.get(i);
 							Privilege p = new Privilege();
 							p.Id = obj2.getInt("Id");
-							p.Name = obj2.getString("Name");							
+							p.Name = obj2.getString("Name");
 							p.Description = obj2.optString("Description", "");
 							usr.Privileges.add(p);
 						}
@@ -233,20 +248,11 @@ public class MainActivity extends Activity implements
 			public void OnReceived(JSONArray args) {
 				Log.d("OnState callback", args.toString());
 
-				for (Map.Entry<String, String> e : hubCon.getHeaders()
-						.entrySet()) {
-					Log.d("Header entry:", e.toString());
-				}
-
 				try {
-					SessionState state = null;
-					for (int i = 0; i < args.length(); i++) {
-						String json = (String) args.get(i);
-						JSONObject jsObj = new JSONObject(json);
-						state = new SessionState();
-						state.UserId = jsObj.getInt("UserId");
-						state.SessionId = jsObj.getString("SessionId");
-					}
+					JSONObject jsObj = new JSONObject((String) args.get(0));
+					SessionState state = new SessionState();
+					state.UserId = jsObj.getInt("UserId");
+					state.SessionId = jsObj.getString("SessionId");
 
 					AgileApplication.container.put(
 							SessionState.class.getName(), state);
@@ -257,7 +263,15 @@ public class MainActivity extends Activity implements
 			}
 		});
 
-		hubCon.Start();// initialize hub proxy for listening
+		hubProxy.On("onRoomStateChanged", new HubOnDataCallback() {
+			@Override
+			public void OnReceived(JSONArray args) {
+				Log.d("onRoomStateChanged callback", args.toString());
+				showProgress(false);
+				Intent nav=new Intent(getBaseContext(), RoomActivity.class);
+				startActivity(nav);
+			}
+		});
 	}
 
 	@Override
@@ -295,6 +309,13 @@ public class MainActivity extends Activity implements
 		Room room = (Room) AgileApplication.container.get("SelectedRoom");
 		SessionState state = (SessionState) AgileApplication.container
 				.get(SessionState.class.getName());
+
+		if (room == null || state == null) {
+			Toast.makeText(getBaseContext(), "Please select room.",
+					Toast.LENGTH_SHORT).show();
+			return;
+		}
+
 		List<String> args = new ArrayList<String>();
 		args.add(room.Name);
 		args.add(state.SessionId);
@@ -328,9 +349,7 @@ public class MainActivity extends Activity implements
 	}
 
 	private void showProgress(final boolean show) {
-		// On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-		// for very easy animations. If available, use these APIs to fade-in
-		// the progress spinner.
+
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
 			int shortAnimTime = getResources().getInteger(
 					android.R.integer.config_shortAnimTime);
@@ -356,8 +375,6 @@ public class MainActivity extends Activity implements
 						}
 					});
 		} else {
-			// The ViewPropertyAnimator APIs are not available, so simply show
-			// and hide the relevant UI components.
 			mWaitView.setVisibility(show ? View.VISIBLE : View.GONE);
 			mChooseRoomForm.setVisibility(show ? View.GONE : View.VISIBLE);
 		}

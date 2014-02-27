@@ -8,17 +8,17 @@ namespace WebSignalR.Infrastructure
 {
 	public class CustomPrincipal : IPrincipal
 	{
-		public IIdentity Identity { get; private set; }
+		private CustomIdentity _identity;
 
-		public CustomPrincipal(string Username)
+		public CustomPrincipal(CustomIdentity identity)
 		{
-			this.Identity = new GenericIdentity(Username);
+			_identity = identity;
+			Roles = _identity.Roles;
 		}
 
-		public CustomPrincipal(string Username, bool isAuthenticated)
-			: this(Username)
+		public System.Security.Principal.IIdentity Identity
 		{
-			Authenticated = isAuthenticated;
+			get { return _identity; }
 		}
 
 		public bool IsInRole(string role)

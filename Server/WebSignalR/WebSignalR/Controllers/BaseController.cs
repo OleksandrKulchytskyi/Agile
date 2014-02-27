@@ -19,7 +19,7 @@ namespace WebSignalR.Controllers
 		{
 			get
 			{
-				return GetHub<TestHub>();
+				return GetHub<AgileHub>();
 			}
 		}
 	}
