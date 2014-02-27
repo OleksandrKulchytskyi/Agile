@@ -1,9 +1,7 @@
 package com.udelphi.agile;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,7 +12,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.OperationApplicationException;
-import android.graphics.Paint.Join;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -26,7 +23,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.CheckBox;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.udelphi.agile.common.*;

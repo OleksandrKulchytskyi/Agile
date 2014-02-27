@@ -17,6 +17,7 @@
 			<TextBox x:Name="txtUrl" Width="160" HorizontalAlignment="Left"/>
 
 			<Button x:Name="btnLogin" Click="btnLogin_Click"  Content="Login"/>
+			<Button x:Name="btnIvoke" Click="btnIvoke_Click"  Content="Invoke method"/>
 		</StackPanel>
 
 		<StackPanel Grid.Row="1" x:Name="container2">

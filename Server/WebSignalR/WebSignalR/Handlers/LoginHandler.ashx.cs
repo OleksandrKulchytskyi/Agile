@@ -40,7 +40,6 @@ namespace WebSignalR.Handlers
 			string authorization = context.Request.Headers[BasicAuthHeader];
 			if (!string.IsNullOrEmpty(authorization) && authorization.IndexOf(BasicAuthResponseHeaderValue, StringComparison.OrdinalIgnoreCase) != -1)
 			{
-
 				bool result = AuthenticateUser(authorization.Replace(BasicAuthResponseHeaderValue, string.Empty).Trim(), context);
 				if (!result)
 				{

@@ -43,7 +43,8 @@ namespace WebSignalR.TestHarness
 
 		void MainWindow_Loaded(object sender, RoutedEventArgs e)
 		{
-			txtUrl.Text = "http://localhost/websignalr/handlers/loginhandler.ashx";
+			txtUser.Text = "Admin";
+			txtUrl.Text = "http://localhost:6404/handlers/loginhandler.ashx";
 		}
 
 		private void btnLogin_Click(object sender, RoutedEventArgs e)
@@ -110,6 +111,19 @@ namespace WebSignalR.TestHarness
 			byte[] byt = System.Text.Encoding.UTF8.GetBytes(strOriginal);
 			// convert the byte array to a Base64 string
 			return Convert.ToBase64String(byt);
+		}
+
+		private void btnIvoke_Click(object sender, RoutedEventArgs e)
+		{
+			if (regCookie == null)
+			{
+				MessageBox.Show(this, "Not logged in.");
+				return;
+			}
+
+			MethodInvokeView view = new MethodInvokeView(hubProxy);
+			view.Owner = this;
+			view.ShowDialog();
 		}
 	}
 }

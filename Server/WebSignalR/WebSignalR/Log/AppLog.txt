@@ -87,3 +87,110 @@ System.Web.HttpException (0x80004005): File does not exist.
    at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
    at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
    at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-02-27 21:40:43,922    95ms Global                 Application_Start  - Application_Start()
+WARN  2014-02-27 21:40:45,654  1826ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-02-27 21:40:45,655  1827ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-02-27 21:40:54,475 10647ms Global                 Application_End    - Application_End()
+INFO  2014-02-27 22:28:41,702   106ms Global                 Application_Start  - Application_Start()
+WARN  2014-02-27 22:28:42,972  1376ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-02-27 22:28:42,972  1376ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+WARN  2014-02-27 22:28:43,174  1578ms Global                 Application_Error  - URL: http://localhost:6404/favicon.ico; FilePath: /favicon.ico
+ERROR 2014-02-27 22:28:43,175  1579ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-02-27 22:31:56,268 194671ms Global                 Application_End    - Application_End()
+INFO  2014-02-27 22:32:15,231   116ms Global                 Application_Start  - Application_Start()
+WARN  2014-02-27 22:32:16,671  1556ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-02-27 22:32:16,672  1557ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+WARN  2014-02-27 22:32:17,656  2541ms Global                 Application_Error  - URL: http://localhost:6404/favicon.ico; FilePath: /favicon.ico
+ERROR 2014-02-27 22:32:17,656  2541ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+ERROR 2014-02-27 22:33:12,651 57536ms Global                 OnIncomingError    - System.AggregateException: One or more errors occurred. ---> System.ArgumentNullException: Value cannot be null.
+Parameter name: key
+   at System.Collections.Concurrent.ConcurrentDictionary`2.TryAdd(TKey key, TValue value)
+   at WebSignalR.Common.Infrastructure.SafeCollection`1.Add(T item) in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR.Common\Infrastructure\SafeCollection.cs:line 16
+   at WebSignalR.Hubs.AgileHub.JoinRoom(String roomName, String sessionId) in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Hubs\AgileHub.cs:line 189
+   at lambda_method(Closure , IHub , Object[] )
+   at Microsoft.AspNet.SignalR.Hubs.HubMethodDispatcher.Execute(IHub hub, Object[] parameters)
+   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)
+   --- End of inner exception stack trace ---
+---> (Inner Exception #0) System.ArgumentNullException: Value cannot be null.
+Parameter name: key
+   at System.Collections.Concurrent.ConcurrentDictionary`2.TryAdd(TKey key, TValue value)
+   at WebSignalR.Common.Infrastructure.SafeCollection`1.Add(T item) in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR.Common\Infrastructure\SafeCollection.cs:line 16
+   at WebSignalR.Hubs.AgileHub.JoinRoom(String roomName, String sessionId) in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Hubs\AgileHub.cs:line 189
+   at lambda_method(Closure , IHub , Object[] )
+   at Microsoft.AspNet.SignalR.Hubs.HubMethodDispatcher.Execute(IHub hub, Object[] parameters)
+   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)<---
+
+INFO  2014-02-27 22:38:05,902    97ms Global                 Application_Start  - Application_Start()
+WARN  2014-02-27 22:38:06,884  1078ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-02-27 22:38:06,885  1079ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+WARN  2014-02-27 22:38:07,030  1225ms Global                 Application_Error  - URL: http://localhost:6404/favicon.ico; FilePath: /favicon.ico
+ERROR 2014-02-27 22:38:07,030  1225ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-02-27 22:41:52,341    46ms Global                 Application_Start  - Application_Start()
+WARN  2014-02-27 22:41:53,044   750ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-02-27 22:41:53,044   750ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-02-27 22:42:22,582 30288ms Global                 Application_End    - Application_End()
+INFO  2014-02-27 22:42:27,924    73ms Global                 Application_Start  - Application_Start()
+WARN  2014-02-27 22:42:28,834   982ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-02-27 22:42:28,834   982ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+WARN  2014-02-27 22:42:28,965  1114ms Global                 Application_Error  - URL: http://localhost:6404/favicon.ico; FilePath: /favicon.ico
+ERROR 2014-02-27 22:42:28,965  1114ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
