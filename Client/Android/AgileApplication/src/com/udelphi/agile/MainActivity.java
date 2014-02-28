@@ -24,19 +24,17 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.udelphi.agile.common.*;
-import com.zsoft.signala.hubs.HubConnection;
+import com.udelphi.agile.common.IOnUserStateLoggedListener;
+import com.udelphi.agile.common.JoinRoomResponse;
+import com.udelphi.agile.common.JsonHelper;
+import com.udelphi.agile.common.Privilege;
+import com.udelphi.agile.common.Room;
+import com.udelphi.agile.common.SessionState;
+import com.udelphi.agile.common.User;
 import com.zsoft.signala.hubs.HubInvokeCallback;
-import com.zsoft.signala.hubs.HubOnDataCallback;
-import com.zsoft.signala.hubs.IHubProxy;
-import com.zsoft.signala.transport.StateBase;
-import com.zsoft.signala.transport.longpolling.LongPollingTransport;
 
 public class MainActivity extends BaseActivity implements
-		OnConnectionRequestedListener, OnDisconnectionRequestedListener {
-
-	protected HubConnection hubCon = null;
-	protected IHubProxy hubProxy = null;
+		OnConnectionRequestedListener, IOnUserStateLoggedListener {
 
 	private RoomAdapter roomAdapter;
 	private Spinner roomSpinner;
@@ -61,7 +59,6 @@ public class MainActivity extends BaseActivity implements
 		roomSpinner = (Spinner) findViewById(R.id.roomSpinner);
 		roomSpinner.setAdapter(roomAdapter);
 		roomSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-
 			@Override
 			public void onItemSelected(AdapterView<?> adapterView, View view,
 					int position, long id) {
@@ -76,7 +73,10 @@ public class MainActivity extends BaseActivity implements
 			}
 		});
 
-		ConnectionRequested(Uri.parse("http://10.0.2.2:6404/"));
+		hubService.SetAddress((String) AgileApplication.container
+				.get("ServerUrl"));
+		ConnectionRequested(Uri.parse((String) AgileApplication.container
+				.get("ServerUrl")));
 	}
 
 	@Override
@@ -85,15 +85,33 @@ public class MainActivity extends BaseActivity implements
 		new RetreiveRoomTask().execute((String) AgileApplication.container
 				.get("ServerUrl") + "/api/room/getrooms/");
 
-		// initialize hub proxy for listening
-		if (hubCon != null)
-			hubCon.Start();
+		if (!hubService.isStarted())
+			hubService.Start();
+	}
+
+	@Override
+	public void ConnectionRequested(Uri address) {
+
+		try {
+			String aspxauth = (String) AgileApplication.container
+					.get(".ASPXAUTH");
+			hubService.CreateProxy("agileHub", aspxauth);
+		} catch (OperationApplicationException e) {
+			Log.e("OperationApplicationException", e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		hubService.SubcribeOnUserState(this);
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
-		DisconnectionRequested();
+		hubService.UnsubcribeOnUserState(this);
 	}
 
 	public class RetreiveRoomTask extends AsyncTask<String, Void, JSONArray> {
@@ -140,143 +158,6 @@ public class MainActivity extends BaseActivity implements
 		return true;
 	}
 
-	@Override
-	public void ConnectionRequested(Uri address) {
-
-		LongPollingTransport transport = new LongPollingTransport();
-		hubCon = new HubConnection(address.toString(), this, transport) {
-
-			@Override
-			public void OnStateChanged(StateBase oldState, StateBase newState) {
-				Log.d("State",
-						oldState.getState() + " -> " + newState.getState());
-
-				switch (newState.getState()) {
-				case Connected:
-					Toast.makeText(MainActivity.this, "Connected",
-							Toast.LENGTH_SHORT).show();
-					break;
-				case Disconnected:
-					Toast.makeText(MainActivity.this, "Dissconnected",
-							Toast.LENGTH_SHORT).show();
-					break;
-				default:
-					break;
-				}
-				super.OnStateChanged(oldState, newState);
-			}
-
-			@Override
-			public void OnError(Exception exception) {
-				Log.e("OnError", exception.getMessage());
-				Toast.makeText(MainActivity.this,
-						"On error: " + exception.getMessage(),
-						Toast.LENGTH_LONG).show();
-
-				super.OnError(exception);
-			}
-
-			@Override
-			public void SetNewState(StateBase state) {
-				super.SetNewState(state);
-			}
-		};
-
-		try {
-			String aspxauth = (String) AgileApplication.container
-					.get(".ASPXAUTH");
-			hubCon.addHeader("Cookie", ".ASPXAUTH=" + aspxauth);
-			hubProxy = hubCon.CreateHubProxy("agileHub");
-		} catch (OperationApplicationException e) {
-			Log.e("OperationApplicationException", e.getMessage());
-			e.printStackTrace();
-		}
-
-		hubProxy.On("onUserLogged", new HubOnDataCallback() {
-			@Override
-			public void OnReceived(JSONArray args) {
-				User loggedUser = parseLoggedUser(args);
-				if (loggedUser != null)
-					AgileApplication.container.put("LoggedUser", loggedUser);
-				for (Privilege p : loggedUser.Privileges) {
-					if (p.Name.equalsIgnoreCase("ScrumMaster")) {
-						chckMaster.setVisibility(View.VISIBLE);
-						break;
-					}
-				}
-			}
-
-			private User parseLoggedUser(JSONArray args) {
-				User usr = null;
-				try {
-					if (args.length() == 1) {
-						JSONObject jsObj = ((JSONObject) args.get(0));
-						usr = new User();
-						usr.Privileges = new ArrayList<Privilege>();
-						usr.Id = jsObj.getInt("Id");
-						usr.Name = jsObj.getString("Name");
-						// usr.Password = jsObj.getString("Password");
-						// usr.IsAdmin = jsObj.getBoolean("IsAdmin");
-						JSONArray priviligies = jsObj
-								.getJSONArray("Privileges");
-						int len = priviligies.length();
-						for (int i = 0; i < len; i++) {
-							JSONObject obj2 = (JSONObject) priviligies.get(i);
-							Privilege p = new Privilege();
-							p.Id = obj2.getInt("Id");
-							p.Name = obj2.getString("Name");
-							p.Description = obj2.optString("Description", "");
-							usr.Privileges.add(p);
-						}
-					}
-				} catch (Exception ex) {
-					ex.printStackTrace();
-					Log.e("Parsing error", ex.getMessage());
-				}
-
-				return usr;
-			}
-		});
-
-		hubProxy.On("onState", new HubOnDataCallback() {
-			@Override
-			public void OnReceived(JSONArray args) {
-				Log.d("OnState callback", args.toString());
-
-				try {
-					JSONObject jsObj = new JSONObject((String) args.get(0));
-					SessionState state = new SessionState();
-					state.UserId = jsObj.getInt("UserId");
-					state.SessionId = jsObj.getString("SessionId");
-
-					AgileApplication.container.put(
-							SessionState.class.getName(), state);
-
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-		});
-
-		hubProxy.On("onRoomStateChanged", new HubOnDataCallback() {
-			@Override
-			public void OnReceived(JSONArray args) {
-				Log.d("onRoomStateChanged callback", args.toString());
-				showProgress(false);
-				Intent nav=new Intent(getBaseContext(), RoomActivity.class);
-				startActivity(nav);
-			}
-		});
-	}
-
-	@Override
-	public void DisconnectionRequested() {
-		// TODO Auto-generated method stub
-		if (hubCon != null) {
-			hubCon.Stop();
-		}
-	}
-
 	public void onStartSession(View v) {
 		HubInvokeCallback callback = new HubInvokeCallback() {
 			@Override
@@ -289,6 +170,7 @@ public class MainActivity extends BaseActivity implements
 					if (!resp.Active) {
 						showProgress(true);
 					}
+
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
@@ -306,6 +188,9 @@ public class MainActivity extends BaseActivity implements
 				.get(SessionState.class.getName());
 
 		if (room == null || state == null) {
+			Log.d("onStartSession",
+					"Is room null:" + String.valueOf(room == null)
+							+ ",is state null:" + String.valueOf(state == null));
 			Toast.makeText(getBaseContext(), "Please select room.",
 					Toast.LENGTH_SHORT).show();
 			return;
@@ -314,11 +199,11 @@ public class MainActivity extends BaseActivity implements
 		List<String> args = new ArrayList<String>();
 		args.add(room.Name);
 		args.add(state.SessionId);
-		hubProxy.Invoke("joinRoom", args, callback);
+		hubService.getHubProxy().Invoke("joinRoom", args, callback);
 
 		if (chckMaster.getVisibility() == View.VISIBLE
 				&& chckMaster.isChecked()) {
-			HubInvokeCallback callback2 = new HubInvokeCallback() {
+			HubInvokeCallback changeRoomStateCallback = new HubInvokeCallback() {
 				@Override
 				public void OnResult(boolean succeeded, String response) {
 					Log.d("ChangeRoomState success", String.valueOf(succeeded));
@@ -336,10 +221,11 @@ public class MainActivity extends BaseActivity implements
 				}
 			};
 
-			List<String> args2 = new ArrayList<String>();
-			args.add(room.Name);
-			args.add(String.valueOf(true));
-			hubProxy.Invoke("changeRoomState", args2, callback2);
+			List<String> changeRoomStateArgs= new ArrayList<String>();
+			changeRoomStateArgs.add(room.Name);
+			changeRoomStateArgs.add(String.valueOf(true));
+			hubService.getHubProxy()
+					.Invoke("changeRoomState", changeRoomStateArgs, changeRoomStateCallback);
 		}
 	}
 
@@ -381,6 +267,28 @@ public class MainActivity extends BaseActivity implements
 			if (!show && isLogged) {
 				Intent nav = new Intent(getBaseContext(), MainActivity.class);
 				startActivity(nav);
+			}
+		}
+	}
+
+	@Override
+	public void onStateCallback(SessionState state) {
+		Log.d("onStateCallback",
+				"Is state null:" + String.valueOf(state == null));
+		AgileApplication.container.put(SessionState.class.getName(), state);
+	}
+
+	@Override
+	public void onUserLoggedCallback(User loggedUser) {
+		Log.d("onUserLoggedCallback",
+				"Is user null:" + String.valueOf(loggedUser == null));
+		if (loggedUser != null) {
+			AgileApplication.container.put("LoggedUser", loggedUser);
+			for (Privilege p : loggedUser.Privileges) {
+				if (p.Name.equalsIgnoreCase("ScrumMaster")) {
+					chckMaster.setVisibility(View.VISIBLE);
+					break;
+				}
 			}
 		}
 	}

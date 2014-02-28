@@ -23,6 +23,18 @@ namespace WebSignalR.Infrastructure
 			_unity = unity;
 		}
 
+		public bool IsRoomActive(int roomId)
+		{
+			IReadOnlyRepository<Room> repo = _unity.GetRepository<Room>();
+			Room room = repo.Get(x => x.Id == roomId).FirstOrDefault();
+			if (room != null)
+			{
+				return room.Active;
+			}
+			else
+				throw new InvalidOperationException("Room with such id doesn't exist.");
+		}
+
 		public void DisconnectAllUsers(string roomName)
 		{
 			IRepository<Room> repo = _unity.GetRepository<Room>();

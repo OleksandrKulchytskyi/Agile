@@ -28,4 +28,8 @@ public class AgileApplication extends Application {
 	public void setCurrentActivity(Activity mCurrentActivity) {
 		this.mCurrentActivity = mCurrentActivity;
 	}
+	
+	public HubService getHubService(){
+		return HubService.getInstance();
+	}
 }

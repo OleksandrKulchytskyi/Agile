@@ -95,6 +95,20 @@ namespace WebSignalR.Controllers
 		}
 
 		[HttpGet]
+		public bool IsRoomActive([FromUri]int roomId)
+		{
+			try
+			{
+				return _userRoomService.IsRoomActive(roomId);
+			}
+			catch (System.Exception ex)
+			{
+				Global.Logger.Error(ex);
+				throw ex;
+			}
+		}
+
+		[HttpGet]
 		public HttpResponseMessage LeaveRoom([FromUri]int roomName, [FromUri] int userId)
 		{
 			IRepository<User> repoUser = _unity.GetRepository<User>();

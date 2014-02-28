@@ -10,7 +10,10 @@ namespace WebSignalR.Common.Services
 	{
 		Room DisconnecFromRoomBySessionId(string room, string sessionId);
 		Room JoinToRoomBySessionId(string roomName, string sessionId);
+
 		void ChangeRoomState(string roomName, bool active);
+
+		bool IsRoomActive(int roomId);
 
 		void DisconnectAllUsers(string roomName);
 	}

@@ -53,20 +53,19 @@ namespace WebSignalR.Hubs
 		{
 			if (Context.User.Identity.IsAuthenticated)
 			{
-				IRepository<User> repo = _unity.GetRepository<User>();
+				IRepository<User> repo = GetRepository<User>();
 				User usr = repo.Get(x => x.Name == Context.User.Identity.Name).FirstOrDefault();
 				if (usr != null)
 				{
-					IRepository<UserSession> repoSession = _unity.GetRepository<UserSession>();
+					IRepository<UserSession> repoSession = GetRepository<UserSession>();
 					UserDto dto = Mapper.Map<UserDto>(usr);
 					Clients.Caller.onUserLogged(dto);
 					UserSession us = new UserSession();
 					us.User = usr;
 					us.SessionId = this.Context.ConnectionId;
 					SessionState state = new SessionState() { UserId = usr.Id, SessionId = us.SessionId };
-					string jsonState = JsonConvert.SerializeObject(state);
-					SetStateData(jsonState);
-					Clients.Caller.onState(jsonState);
+					SetStateData(JsonConvert.SerializeObject(state));
+					Clients.Caller.onState(state);
 					us.UserAgent = UserAgent;
 					us.UserId = usr.Id;
 					us.SetLastActivityNow();
@@ -140,11 +139,11 @@ namespace WebSignalR.Hubs
 		{
 			if (Context.User.Identity.IsAuthenticated)
 			{
-				IRepository<User> repo = _unity.GetRepository<User>();
+				IRepository<User> repo = GetRepository<User>();
 				User usr = repo.Get(x => x.Name == Context.User.Identity.Name).FirstOrDefault();
 				if (usr != null)
 				{
-					IRepository<UserSession> repoSession = _unity.GetRepository<UserSession>();
+					IRepository<UserSession> repoSession = GetRepository<UserSession>();
 					UserSession us = repoSession.Get(x => x.SessionId == clientId).FirstOrDefault();
 					if (us != null)
 					{
@@ -217,15 +216,17 @@ namespace WebSignalR.Hubs
 		public Task ChangeRoomState(string roomName, bool state)
 		{
 			_roomService.ChangeRoomState(roomName, state);
-			return Clients.Group(roomName).onRoomStateChanged(roomName, state);
+			Room room=GetRepository<Room>().Get(x => x.Name == roomName).FirstOrDefault();
+			RoomDto dto = Mapper.Map<RoomDto>(room);
+			return Clients.Group(roomName).onRoomStateChanged(dto);
 		}
 
 		[SignalRAuth(Roles = "User")]
 		public Task VoteForItem(string room, int voteItemId, int userId, int mark)
 		{
-			IRepository<VoteItem> repo = _unity.GetRepository<VoteItem>();
-			IRepository<User> repoUser = _unity.GetRepository<User>();
-			IRepository<UserVote> userVorePero = _unity.GetRepository<UserVote>();
+			IRepository<VoteItem> repo = GetRepository<VoteItem>();
+			IRepository<User> repoUser = GetRepository<User>();
+			IRepository<UserVote> userVorePero = GetRepository<UserVote>();
 
 			VoteItem vote = repo.Get(x => x.Id == voteItemId).FirstOrDefault();
 			User usr = repoUser.Get(x => x.Id == userId).FirstOrDefault();
@@ -241,15 +242,19 @@ namespace WebSignalR.Hubs
 				vote.VotedUsers.Add(uv);
 				dto = Mapper.Map<UserVoteDto>(uv);
 			}
-
 			//VoteItemDto voteDto = Mapper.Map<VoteItemDto>(vote);
 			return Clients.Group(room).onUserVoted(dto);
 		}
 
-		[SignalRAuth(Roles = "ScrumMaster")]
-		public Task CloseVote(string room, int voteItemId, int mark)
+		private IRepository<TEntity> GetRepository<TEntity>() where TEntity : EntityBase
 		{
-			IRepository<VoteItem> repo = _unity.GetRepository<VoteItem>();
+			return _unity.GetRepository<TEntity>();
+		}
+
+		[SignalRAuth(Roles = "ScrumMaster")]
+		public Task CloseVoteItem(string room, int voteItemId, int mark)
+		{
+			IRepository<VoteItem> repo = GetRepository<VoteItem>();
 			VoteItem vote = repo.Get(x => x.Id == voteItemId).FirstOrDefault();
 			if (vote != null)
 			{
@@ -259,7 +264,6 @@ namespace WebSignalR.Hubs
 				_unity.Commit();
 			}
 			VoteItemDto voteDto = Mapper.Map<VoteItemDto>(vote);
-
 			return Clients.Group(room).onVoteItemClosed(voteDto);
 		}
 

@@ -9,7 +9,7 @@ namespace WebSignalR.Common.Services
 	public interface IVoteService
 	{
 		Task VoteForItem(string room, int voteItemId, int userId, int mark);
-		Task CloseVote(string room, int voteItemId, int mark);
+		Task CloseVoteItem(string room, int voteItemId, int mark);
 
 	}
 }
