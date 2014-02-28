@@ -11,6 +11,7 @@ using WebSignalR.Common.Infrastructure;
 using WebSignalR.Common.Interfaces;
 using WebSignalR.DataAccess.DB;
 using WebSignalR.DataAccess.Repositories;
+using WebSignalR.Common.Services;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(WebSignalR.Infrastructure.BootStrapper), "PreAppStart")]
 namespace WebSignalR.Infrastructure
@@ -71,15 +72,17 @@ namespace WebSignalR.Infrastructure
 			kernel.Bind<ICryptoService>().To<CryptoService>().InSingletonScope();
 			kernel.Bind<IKeyProvider>().ToConstant(new FileBasedKeyProvider());
 			kernel.Bind<IVotesProvider>().ToConstant(new FileBasedVotesProvider());
+			kernel.Bind<IUserRoomService>().To<UserRoomService>();
 
 			kernel.Bind<Hubs.AgileHub>().ToMethod(context =>
 			{
 				// I'm doing this manually, since we want the repository instance to be shared between the messanger service and the messanger hub itself
-				var unity = context.Kernel.Get<IUnityOfWork>();
-				var crypto = context.Kernel.Get<ICryptoService>();
+				IUnityOfWork unity = context.Kernel.Get<IUnityOfWork>();
+				ICryptoService crypto = context.Kernel.Get<ICryptoService>();
+				IUserRoomService userRoomSrv = context.Kernel.Get<IUserRoomService>();
 
 				//var service = new MessangerService(cache, crypto, repository);
-				return new Hubs.AgileHub(unity, crypto);
+				return new Hubs.AgileHub(unity, crypto, userRoomSrv);
 			});
 		}
 

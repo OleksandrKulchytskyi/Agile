@@ -9,7 +9,6 @@ import org.json.JSONObject;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.net.Uri;
@@ -33,7 +32,7 @@ import com.zsoft.signala.hubs.IHubProxy;
 import com.zsoft.signala.transport.StateBase;
 import com.zsoft.signala.transport.longpolling.LongPollingTransport;
 
-public class MainActivity extends Activity implements
+public class MainActivity extends BaseActivity implements
 		OnConnectionRequestedListener, OnDisconnectionRequestedListener {
 
 	protected HubConnection hubCon = null;

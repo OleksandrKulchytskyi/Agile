@@ -46,7 +46,7 @@ namespace WebSignalR.Common.Infrastructure
 				path = Path.Combine(path, "Secure");
 				Directory.CreateDirectory(path);
 			}
-			catch (Exception ex) { }
+			catch { }
 			return path;
 		}
 

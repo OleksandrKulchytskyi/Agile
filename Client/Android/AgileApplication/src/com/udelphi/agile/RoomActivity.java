@@ -1,10 +1,9 @@
 package com.udelphi.agile;
 
 import android.os.Bundle;
-import android.app.Activity;
 import android.view.Menu;
 
-public class RoomActivity extends Activity {
+public class RoomActivity extends BaseActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

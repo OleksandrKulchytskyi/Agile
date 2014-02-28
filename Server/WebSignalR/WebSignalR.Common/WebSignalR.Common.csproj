@@ -103,6 +103,7 @@
     <Compile Include="IObjectState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IRoomService.cs" />
+    <Compile Include="Services\IUserService.cs" />
     <Compile Include="Services\IVoteService.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\RegisterViewModel.cs" />

@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -17,18 +18,13 @@ using System.Windows.Shapes;
 
 namespace WebSignalR.TestHarness
 {
-	internal class ValueContainer
-	{
-		public Object Value { get; set; }
-	}
-
 	/// <summary>
 	/// Interaction logic for MethodInvokeView.xaml
 	/// </summary>
 	public partial class MethodInvokeView : Window
 	{
-		WeakReference _weak;
-		ObservableCollection<ValueContainer> parameters;
+		private WeakReference _weak;
+		private ObservableCollection<ValueContainer> parameters;
 
 		public MethodInvokeView(IHubProxy proxy)
 		{
@@ -52,10 +48,24 @@ namespace WebSignalR.TestHarness
 			}
 			else if (!_weak.IsAlive)
 				return;
-			IHubProxy proxy = _weak.Target as IHubProxy;
-			if (proxy == null) return;
 
-			proxy.Invoke(txtMethod.Text, parameters.Select(x => x.Value).ToArray());
+			try
+			{
+				IHubProxy proxy = _weak.Target as IHubProxy;
+				if (proxy == null) return;
+
+				Task<dynamic> retTask = proxy.Invoke<dynamic>(txtMethod.Text, parameters.Select(x => x.Value).ToArray());
+				retTask.Wait();
+				if (retTask.Result != null)
+				{
+
+				}
+			}
+			catch (AggregateException ex)
+			{
+				(Owner as ILog).LogMessage(ex.InnerException.Message);
+				MessageBox.Show(this, ex.InnerException.Message);
+			}
 		}
 	}
 }

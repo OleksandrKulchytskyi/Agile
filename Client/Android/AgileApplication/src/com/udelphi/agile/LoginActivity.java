@@ -14,12 +14,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
-import org.apache.http.util.EntityUtils;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -37,7 +35,7 @@ import android.widget.TextView;
 /**
  * Activity which displays a login screen to the user
  **/
-public class LoginActivity extends Activity {
+public class LoginActivity extends BaseActivity {
 	/**
 	 * The default email to populate the email field with.
 	 */
@@ -125,7 +123,7 @@ public class LoginActivity extends Activity {
 
 		// Store values at the time of the login attempt.
 		mUrl = mUrlView.getText().toString();
-		if (mUrl.isEmpty()){
+		if (mUrl.isEmpty()) {
 			mUrl = mUrlView.getHint().toString();
 			mUrlView.setText(mUrl);
 		}
@@ -248,6 +246,7 @@ public class LoginActivity extends Activity {
 				AgileApplication.container.put("ServerUrl", mUrl);
 
 				String getURL = mUrl + "/handlers/loginhandler.ashx";
+				Log.d("Concatenated URL", getURL);
 				HttpParams httpParameters = new BasicHttpParams();
 				int timeoutConnection = 30000;
 				HttpConnectionParams.setConnectionTimeout(httpParameters,
@@ -259,7 +258,6 @@ public class LoginActivity extends Activity {
 				HttpGet get = new HttpGet(getURL);
 				String data = Base64.encodeToString(logInformation.getBytes(),
 						Base64.DEFAULT);
-				Log.d("Basic", data);
 				get.setHeader("Authorization", "Basic " + data);
 				HttpResponse responseGet = client.execute(get);
 
@@ -267,8 +265,6 @@ public class LoginActivity extends Activity {
 				if (sCookieStore != null) {
 					List<Cookie> cookies = sCookieStore.getCookies();
 					for (Cookie c : cookies) {
-						Log.d("Cookie", c.toString());
-						Log.d("Cookie value", c.getValue());
 						AgileApplication.container.put(".ASPXAUTH",
 								c.getValue());
 					}
@@ -277,19 +273,19 @@ public class LoginActivity extends Activity {
 				if (resEntityGet != null) {
 					StatusLine status = responseGet.getStatusLine();
 					Log.d("Status", status.toString());
-					Log.d("Status Code", String.valueOf(status.getStatusCode()));
+
 					if (status.getStatusCode() == 200) {
-						Log.d("Statuscode",
-								String.valueOf(status.getStatusCode()));
 						AgileApplication.container.put("IsLogged", true);
 					} else {
+						Log.e("Statuscode",
+								String.valueOf(status.getStatusCode()));
+
 						AgileApplication.container.put("IsLogged", false);
 					}
 					responseGet.getHeaders(".ASPXAUTH");
-					Log.i("GET ", EntityUtils.toString(resEntityGet));
 				}
 			} catch (Exception e) {
-				Log.i("GET ", e.getMessage());
+				Log.e("GET ", e.getMessage());
 				return false;
 			}
 			return true;

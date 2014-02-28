@@ -21,6 +21,7 @@ namespace WebSignalR.Hubs
 		private static readonly string _versionString = _version.ToString();
 		private readonly IUnityOfWork _unity;
 		private readonly ICryptoService _cryptoService;
+		private readonly IUserRoomService _roomService;
 
 		private string UserAgent
 		{
@@ -41,10 +42,11 @@ namespace WebSignalR.Hubs
 			}
 		}
 
-		public AgileHub(IUnityOfWork unity, ICryptoService crypto)
+		public AgileHub(IUnityOfWork unity, ICryptoService crypto, IUserRoomService roomService)
 		{
 			_unity = unity;
 			_cryptoService = crypto;
+			_roomService = roomService;
 		}
 
 		public override Task OnConnected()
@@ -79,7 +81,6 @@ namespace WebSignalR.Hubs
 		public override Task OnDisconnected()
 		{
 			DisconnectClient(Context.ConnectionId);
-
 			return base.OnDisconnected();
 		}
 
@@ -87,9 +88,14 @@ namespace WebSignalR.Hubs
 		{
 			if (!Context.User.Identity.IsAuthenticated)
 				return null;
-	
+
 			Clients.Caller.onStatus("Reconnecting...").Wait();
 			return base.OnReconnected();
+		}
+
+		public void TestMethod(string data)
+		{
+			Clients.Caller.onTestMethod(data);
 		}
 
 		private void SetStateData(string sate)
@@ -176,18 +182,17 @@ namespace WebSignalR.Hubs
 		[SignalRAuth(Roles = "User")]
 		public JoinRoomResult JoinRoom(string roomName, string sessionId)
 		{
+			Guid sesID;
+			if (!Guid.TryParse(sessionId, out sesID))
+				sessionId = Context.ConnectionId;
+
 			JoinRoomResult result = new JoinRoomResult();
+			Room room = _roomService.JoinToRoomBySessionId(roomName, sessionId);
 			Task addTask = Groups.Add(Context.ConnectionId, roomName);
-			IReadOnlyRepository<User> userRepo = _unity.GetRepository<User>();
-			IRepository<Room> repo = _unity.GetRepository<Room>();
-			Room room = repo.Get(x => x.Name == roomName).FirstOrDefault();
-			User usr = userRepo.Get(x => x.ConnectedSessions.Any(s => s.SessionId == sessionId)).FirstOrDefault();
-			if (room != null && userRepo != null)
+			if (room != null)
 			{
 				result.Active = room.Active;
 				result.HostMaster = room.Active;
-				room.ConnectedUsers.Add(usr);
-				_unity.Commit();
 			}
 			RoomDto dto = Mapper.Map<RoomDto>(room);
 			Clients.Group(roomName, Context.ConnectionId).onJoinRoom(dto);
@@ -197,17 +202,12 @@ namespace WebSignalR.Hubs
 		[SignalRAuth(Roles = "User")]
 		public Task LeaveRoom(string roomName, string sessionId)
 		{
-			Task addTask = Groups.Remove(Context.ConnectionId, roomName);
-			IReadOnlyRepository<User> userRepo = _unity.GetRepository<User>();
-			IRepository<Room> repo = _unity.GetRepository<Room>();
-			Room room = repo.Get(x => x.Name == roomName).FirstOrDefault();
-			User usr = userRepo.Get(x => x.ConnectedSessions.Any(s => s.SessionId == sessionId)).FirstOrDefault();
-			if (room != null && userRepo != null)
-			{
-				room.ConnectedUsers.Remove(usr);
-				_unity.Commit();
-			}
+			Guid sesID;
+			if (!Guid.TryParse(sessionId, out sesID))
+				sessionId = Context.ConnectionId;
 
+			Room room = _roomService.DisconnecFromRoomBySessionId(roomName, sessionId);
+			Task addTask = Groups.Remove(Context.ConnectionId, roomName);
 			RoomDto dto = Mapper.Map<RoomDto>(room);
 			Clients.Group(roomName).onLeaveRoom(dto);
 			return addTask;
@@ -216,13 +216,7 @@ namespace WebSignalR.Hubs
 		[SignalRAuth(Roles = "ScrumMaster")]
 		public Task ChangeRoomState(string roomName, bool state)
 		{
-			IRepository<Room> repo = _unity.GetRepository<Room>();
-			Room room = repo.Get(x => x.Name == roomName).FirstOrDefault();
-			if (room != null)
-			{
-				room.Active = state;
-				_unity.Commit();
-			}
+			_roomService.ChangeRoomState(roomName, state);
 			return Clients.Group(roomName).onRoomStateChanged(roomName, state);
 		}
 

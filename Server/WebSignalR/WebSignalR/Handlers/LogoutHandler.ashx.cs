@@ -26,6 +26,10 @@ namespace WebSignalR.Handlers
 
 				context.Session.Abandon();
 				FormsAuthentication.SignOut();
+				context.Response.ContentType = "text/plain";
+				context.Response.StatusCode = (int)HttpStatusCode.OK;
+				context.Response.StatusDescription = "Successfully logged out.";
+				context.Response.Write("Successfully logged out.");
 				//context.Response.Redirect();
 			}
 			else

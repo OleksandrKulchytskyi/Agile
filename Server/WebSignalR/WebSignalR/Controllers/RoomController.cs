@@ -6,16 +6,18 @@ using System.Net.Http;
 using System.Web.Http;
 using WebSignalR.Common.Entities;
 using WebSignalR.Common.Interfaces;
+using WebSignalR.Common.Services;
 
 namespace WebSignalR.Controllers
 {
 	public class RoomController : BaseController
 	{
-		private IUnityOfWork _unity;
-
-		public RoomController(IUnityOfWork unity)
+		private readonly IUnityOfWork _unity;
+		private readonly IUserRoomService _userRoomService;
+		public RoomController(IUnityOfWork unity , IUserRoomService userRoomService)
 		{
 			_unity = unity;
+			_userRoomService = userRoomService;
 		}
 
 		[HttpGet]
@@ -93,7 +95,7 @@ namespace WebSignalR.Controllers
 		}
 
 		[HttpGet]
-		public HttpResponseMessage LeaveRoom([FromUri]int roomId, [FromUri] int userId)
+		public HttpResponseMessage LeaveRoom([FromUri]int roomName, [FromUri] int userId)
 		{
 			IRepository<User> repoUser = _unity.GetRepository<User>();
 			IRepository<Room> repoRoom = _unity.GetRepository<Room>();
@@ -101,7 +103,7 @@ namespace WebSignalR.Controllers
 			try
 			{
 				User usr = repoUser.Get(x => x.Id == userId).FirstOrDefault();
-				Room room = repoRoom.Get(x => x.Id == roomId).FirstOrDefault();
+				Room room = repoRoom.Get(x => x.Id == roomName).FirstOrDefault();
 				if (usr != null && room != null)
 				{
 					room.ConnectedUsers.Remove(usr);
@@ -111,6 +113,25 @@ namespace WebSignalR.Controllers
 				else
 					return new HttpResponseMessage(HttpStatusCode.BadRequest) { Content = new StringContent("Unable to found entities with such id's.") };
 
+			}
+			catch (System.Exception ex)
+			{
+				Global.Logger.Error(ex);
+				return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+			}
+
+			return new HttpResponseMessage(HttpStatusCode.OK);
+		}
+
+		[HttpPost]
+		public HttpResponseMessage DisconnectFromRoom([FromUri]string roomName, [FromUri] string sessionId)
+		{
+			if (string.IsNullOrEmpty(roomName) || string.IsNullOrEmpty(sessionId))
+				return new HttpResponseMessage(HttpStatusCode.BadRequest) { Content = new StringContent("Unable to found entities with such id's.") };
+
+			try
+			{
+				_userRoomService.DisconnecFromRoomBySessionId(roomName, sessionId);
 			}
 			catch (System.Exception ex)
 			{
