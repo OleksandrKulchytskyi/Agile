@@ -32,6 +32,27 @@ namespace WebSignalR.DataAccess.Migrations
 				context.Set<Room>().Add(new Room() { Active = false, Description = "Project room for testing purposes", Name = "Project" });
 
 				context.SaveChanges();
+
+				Privileges usrP = context.Set<Privileges>().FirstOrDefault(x => x.Name == "User");
+				if (usrP != null)
+				{
+					User usr1 = new User();
+					usr1.IsAdmin = false;
+					usr1.Name = "User1";
+					usr1.Password = "user1".toBase64Utf8();
+					usr1.UserPrivileges.Add(usrP);
+
+					User usr2 = new User();
+					usr2.IsAdmin = false;
+					usr2.Name = "User2";
+					usr2.Password = "user2".toBase64Utf8();
+					usr2.UserPrivileges.Add(usrP);
+
+					context.Set<User>().Add(usr1);
+					context.Set<User>().Add(usr2);
+
+					context.SaveChanges();
+				}
 			}
 		}
 	}

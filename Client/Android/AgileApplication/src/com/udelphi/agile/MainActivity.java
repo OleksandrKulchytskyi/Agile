@@ -24,13 +24,7 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.udelphi.agile.common.IOnUserStateLoggedListener;
-import com.udelphi.agile.common.JoinRoomResponse;
-import com.udelphi.agile.common.JsonHelper;
-import com.udelphi.agile.common.Privilege;
-import com.udelphi.agile.common.Room;
-import com.udelphi.agile.common.SessionState;
-import com.udelphi.agile.common.User;
+import com.udelphi.agile.common.*;
 import com.zsoft.signala.hubs.HubInvokeCallback;
 
 public class MainActivity extends BaseActivity implements
@@ -167,10 +161,12 @@ public class MainActivity extends BaseActivity implements
 					JSONObject js = new JSONObject(response);
 					resp.Active = js.optBoolean("Active", false);
 					resp.Active = js.optBoolean("HostMaster", false);
-					if (!resp.Active) {
-						showProgress(true);
+					if (!chckMaster.isChecked()
+							&& chckMaster.getVisibility() != View.VISIBLE) {
+						Intent navIntent = new Intent(getBaseContext(),
+								RoomActivity.class);
+						startActivity(navIntent);
 					}
-
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
@@ -221,11 +217,11 @@ public class MainActivity extends BaseActivity implements
 				}
 			};
 
-			List<String> changeRoomStateArgs= new ArrayList<String>();
+			List<String> changeRoomStateArgs = new ArrayList<String>();
 			changeRoomStateArgs.add(room.Name);
 			changeRoomStateArgs.add(String.valueOf(true));
-			hubService.getHubProxy()
-					.Invoke("changeRoomState", changeRoomStateArgs, changeRoomStateCallback);
+			hubService.getHubProxy().Invoke("changeRoomState",
+					changeRoomStateArgs, changeRoomStateCallback);
 		}
 	}
 
@@ -258,16 +254,6 @@ public class MainActivity extends BaseActivity implements
 		} else {
 			mWaitView.setVisibility(show ? View.VISIBLE : View.GONE);
 			mChooseRoomForm.setVisibility(show ? View.GONE : View.VISIBLE);
-		}
-
-		if (AgileApplication.container.containsKey("IsLogged")) {
-			boolean isLogged = ((Boolean) AgileApplication.container
-					.get("IsLogged"));
-			Log.d("Logged", isLogged == true ? "Logged" : "Not logged");
-			if (!show && isLogged) {
-				Intent nav = new Intent(getBaseContext(), MainActivity.class);
-				startActivity(nav);
-			}
 		}
 	}
 
