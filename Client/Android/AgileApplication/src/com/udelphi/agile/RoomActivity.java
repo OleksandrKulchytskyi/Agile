@@ -66,16 +66,16 @@ public class RoomActivity extends BaseActivity implements IOnRoomStateListener {
 			showProgress(false);
 	}
 
-	private class GerRoomStateTask extends AsyncTask<String, Void, JSONArray> {
+	private class GerRoomStateTask extends AsyncTask<String, Void, String> {
 
 		private Exception exception;
 
-		protected JSONArray doInBackground(String... urls) {
-			JSONArray data = null;
+		protected String doInBackground(String... urls) {
+			String data = null;
 			Log.d("GerRoomStateTask", "begin invoke doInBackground");
 			try {
 				String url = urls[0];
-				data = JsonHelper.GetFromRequest(url);
+				data = JsonHelper.GetStringFromRequest(url);
 			} catch (Exception e) {
 				this.exception = e;
 				exception.printStackTrace();
@@ -84,19 +84,18 @@ public class RoomActivity extends BaseActivity implements IOnRoomStateListener {
 			return data;
 		}
 
-		protected void onPostExecute(JSONArray data) {
+		protected void onPostExecute(String data) {
 			if (exception == null && data != null) {
 				Log.d("OnPostExecute", data.toString());
 				try {
-					String isActive = (String) data.get(0);
-					if (Boolean.parseBoolean(isActive) == false) {
+					Boolean isActive = Boolean.valueOf(data);
+					if (isActive == false) {
 						showProgress(true);
 					}
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					Log.e("OnPostExecute", e.getMessage());
 					e.printStackTrace();
 				}
-
 			}
 		}
 	}

@@ -99,4 +99,28 @@ public class JsonHelper {
 		}
 		return ret;
 	}
+	
+	public static String GetStringFromRequest(String url) {
+
+		String result="";
+		try {
+			URL urlws = new URL(url);
+			URLConnection tc = urlws.openConnection();
+			BufferedReader in;
+
+			in = new BufferedReader(new InputStreamReader(tc.getInputStream()));
+			String line;
+			StringBuilder sb = new StringBuilder();
+			while ((line = in.readLine()) != null) {
+				sb.append(line);
+			}
+			result=sb.toString();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 }
