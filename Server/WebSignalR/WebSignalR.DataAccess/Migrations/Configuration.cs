@@ -27,9 +27,12 @@ namespace WebSignalR.DataAccess.Migrations
 				usrAdmin.UserPrivileges.Add(new Privileges() { Name = "ScrumMaster", Description = "Scrum master role." });
 
 				context.Set<User>().Add(usrAdmin);
-				context.Set<Privileges>().Add(new Privileges { Name = "User", Description = "Default system user" });
+				Privileges userPriv = new Privileges { Name = "User", Description = "Default system user" };
+				context.Set<Privileges>().Add(userPriv);
 				context.Set<Room>().Add(new Room() { Active = true, Description = "DEBUG room for testing purposes", Name = "TestRoom" });
 				context.Set<Room>().Add(new Room() { Active = false, Description = "Project room for testing purposes", Name = "Project" });
+
+				usrAdmin.UserPrivileges.Add(userPriv);
 
 				context.SaveChanges();
 

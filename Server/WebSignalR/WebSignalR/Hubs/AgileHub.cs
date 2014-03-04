@@ -15,6 +15,7 @@ using WebSignalR.Infrastructure.Authorization;
 namespace WebSignalR.Hubs
 {
 	[Microsoft.AspNet.SignalR.Hubs.HubName("agileHub")]
+	[SignalRAuth]
 	public class AgileHub : Hub, IRoomService, IVoteService
 	{
 		private static readonly Version _version = typeof(AgileHub).Assembly.GetName().Version;
@@ -194,7 +195,7 @@ namespace WebSignalR.Hubs
 				result.HostMaster = room.Active;
 			}
 			RoomDto dto = Mapper.Map<RoomDto>(room);
-			Clients.Group(roomName, Context.ConnectionId).onJoinRoom(dto);
+			Clients.Group(roomName, Context.ConnectionId).onJoinedRoom(dto);
 			return result;
 		}
 
@@ -208,7 +209,7 @@ namespace WebSignalR.Hubs
 			Room room = _roomService.DisconnecFromRoomBySessionId(roomName, sessionId);
 			Task addTask = Groups.Remove(Context.ConnectionId, roomName);
 			RoomDto dto = Mapper.Map<RoomDto>(room);
-			Clients.Group(roomName).onLeaveRoom(dto);
+			Clients.Group(roomName).onLeftRoom(dto);
 			return addTask;
 		}
 
@@ -216,7 +217,7 @@ namespace WebSignalR.Hubs
 		public Task ChangeRoomState(string roomName, bool state)
 		{
 			_roomService.ChangeRoomState(roomName, state);
-			Room room=GetRepository<Room>().Get(x => x.Name == roomName).FirstOrDefault();
+			Room room = GetRepository<Room>().Get(x => x.Name == roomName).FirstOrDefault();
 			RoomDto dto = Mapper.Map<RoomDto>(room);
 			return Clients.Group(roomName).onRoomStateChanged(dto);
 		}
@@ -246,11 +247,6 @@ namespace WebSignalR.Hubs
 			return Clients.Group(room).onUserVoted(dto);
 		}
 
-		private IRepository<TEntity> GetRepository<TEntity>() where TEntity : EntityBase
-		{
-			return _unity.GetRepository<TEntity>();
-		}
-
 		[SignalRAuth(Roles = "ScrumMaster")]
 		public Task CloseVoteItem(string room, int voteItemId, int mark)
 		{
@@ -265,6 +261,11 @@ namespace WebSignalR.Hubs
 			}
 			VoteItemDto voteDto = Mapper.Map<VoteItemDto>(vote);
 			return Clients.Group(room).onVoteItemClosed(voteDto);
+		}
+
+		private IRepository<TEntity> GetRepository<TEntity>() where TEntity : EntityBase
+		{
+			return _unity.GetRepository<TEntity>();
 		}
 
 		protected override void Dispose(bool disposing)

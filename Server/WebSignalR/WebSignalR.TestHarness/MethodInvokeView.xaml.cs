@@ -58,7 +58,6 @@ namespace WebSignalR.TestHarness
 				retTask.Wait();
 				if (retTask.Result != null)
 				{
-
 				}
 			}
 			catch (AggregateException ex)

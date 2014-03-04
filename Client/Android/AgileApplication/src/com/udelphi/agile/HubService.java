@@ -164,6 +164,44 @@ public class HubService {
 			}
 		});
 
+		hubProxy.On("onJoinedRoom", new HubOnDataCallback() {
+
+			@Override
+			public void OnReceived(JSONArray args) {
+				Log.d("onJoinedRoom", args.toString());
+				Room room = null;
+				try {
+					JSONObject jsObj = (JSONObject) args.get(0);
+					room = parseRoomState(jsObj);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				if (room == null)
+					return;
+				for (IOnRoomStateListener listener : _onRoomState) {
+					listener.onJoinedRoom(room);
+				}
+			}
+		});
+
+		hubProxy.On("onLeftRoom", new HubOnDataCallback() {
+			@Override
+			public void OnReceived(JSONArray args) {
+				Log.d("onLeftRoom", args.toString());
+				Room room = null;
+				try {
+					JSONObject jsObj = (JSONObject) args.get(0);
+					room = parseRoomState(jsObj);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				if (room != null)
+					for (IOnRoomStateListener listener : _onRoomState) {
+						listener.onLeftRoom(room);
+					}
+			}
+		});
+		
 		hubProxy.On("onRoomStateChanged", new HubOnDataCallback() {
 			@Override
 			public void OnReceived(JSONArray args) {
@@ -171,19 +209,7 @@ public class HubService {
 				Room room = null;
 				try {
 					JSONObject jsObj = (JSONObject) args.get(0);
-					room = new Room();
-					room.Id = jsObj.optInt("Id", -1);
-					room.Active = jsObj.getBoolean("Active");
-					room.Name = jsObj.getString("Name");
-					room.Description = jsObj.optString("Description", "");
-					JSONArray userArray = jsObj.getJSONArray("ConnectedUsers");
-					for (int i = 0; i < userArray.length(); i++) {
-						User usr = parseLoggedUser((JSONObject) userArray
-								.get(i));
-						if (usr != null)
-							room.AddUser(usr);
-					}
-
+					room = parseRoomState(jsObj);
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
@@ -193,6 +219,22 @@ public class HubService {
 					}
 			}
 		});
+		
+	}
+
+	private Room parseRoomState(JSONObject jsObj) throws JSONException {
+		Room room = new Room();
+		room.Id = jsObj.optInt("Id", -1);
+		room.Active = jsObj.getBoolean("Active");
+		room.Name = jsObj.getString("Name");
+		room.Description = jsObj.optString("Description", "");
+		JSONArray userArray = jsObj.getJSONArray("ConnectedUsers");
+		for (int i = 0; i < userArray.length(); i++) {
+			User usr = parseLoggedUser((JSONObject) userArray.get(i));
+			if (usr != null)
+				room.AddUser(usr);
+		}
+		return room;
 	}
 
 	private User parseLoggedUser(JSONObject args) {

@@ -75,3 +75,57 @@ System.Web.HttpException (0x80004005): File does not exist.
    at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
    at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
    at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-03-04 15:24:23,524   169ms Global                 Application_Start  - Application_Start()
+WARN  2014-03-04 15:24:27,350  3994ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-03-04 15:24:27,351  3995ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+WARN  2014-03-04 15:24:27,825  4469ms Global                 Application_Error  - URL: http://localhost:6404/favicon.ico; FilePath: /favicon.ico
+ERROR 2014-03-04 15:24:27,825  4469ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-03-04 16:17:22,680 3179324ms Global                 Application_End    - Application_End()
+INFO  2014-03-04 16:19:23,275   466ms Global                 Application_Start  - Application_Start()
+WARN  2014-03-04 16:19:29,278  6468ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-03-04 16:19:29,278  6468ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-03-04 17:35:34,876   131ms Global                 Application_Start  - Application_Start()
+WARN  2014-03-04 17:35:36,947  2202ms Global                 Application_Error  - URL: http://localhost:6404/; FilePath: /
+ERROR 2014-03-04 17:35:36,948  2203ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): File does not exist.
+   at System.Web.StaticFileHandler.GetFileInfo(String virtualPathWithPathInfo, String physicalPath, HttpResponse response)
+   at System.Web.StaticFileHandler.ProcessRequestInternal(HttpContext context, String overrideVirtualPath)
+   at System.Web.DefaultHttpHandler.BeginProcessRequest(HttpContext context, AsyncCallback callback, Object state)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-03-04 18:34:38,393 3543648ms Global                 Application_End    - Application_End()
+INFO  2014-03-04 20:37:07,299   124ms Global                 Application_Start  - Application_Start()
+ERROR 2014-03-04 20:43:50,606 403431ms Global                 OnIncomingError    - System.AggregateException: One or more errors occurred. ---> System.InvalidOperationException: 'CahngeRoomSate' method could not be resolved.
+   at Microsoft.AspNet.SignalR.Hubs.NullMethodDescriptor.<get_Invoker>b__0(IHub emptyHub, Object[] emptyParameters)
+   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)
+   --- End of inner exception stack trace ---
+---> (Inner Exception #0) System.InvalidOperationException: 'CahngeRoomSate' method could not be resolved.
+   at Microsoft.AspNet.SignalR.Hubs.NullMethodDescriptor.<get_Invoker>b__0(IHub emptyHub, Object[] emptyParameters)
+   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)<---
+
+ERROR 2014-03-04 20:43:56,352 409177ms Global                 OnIncomingError    - System.AggregateException: One or more errors occurred. ---> System.InvalidOperationException: 'CahngeRoomState' method could not be resolved.
+   at Microsoft.AspNet.SignalR.Hubs.NullMethodDescriptor.<get_Invoker>b__0(IHub emptyHub, Object[] emptyParameters)
+   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)
+   --- End of inner exception stack trace ---
+---> (Inner Exception #0) System.InvalidOperationException: 'CahngeRoomState' method could not be resolved.
+   at Microsoft.AspNet.SignalR.Hubs.NullMethodDescriptor.<get_Invoker>b__0(IHub emptyHub, Object[] emptyParameters)
+   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)<---
+
