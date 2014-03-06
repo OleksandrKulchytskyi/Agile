@@ -54,7 +54,7 @@ namespace WebSignalR.Infrastructure
 			kernel.Bind<IRepository<Privileges>>().To<GenericRepository<Privileges>>();
 			kernel.Bind<IRepository<VoteItem>>().To<GenericRepository<VoteItem>>();
 			kernel.Bind<IRepository<UserVote>>().To<GenericRepository<UserVote>>();
-			kernel.Bind<IEntityValidator>().To<UserCredentialsValidator>().Named("Credentials");
+			kernel.Bind<IEntityValidator>().To<UserCredentialsValidator>().Named("CredentialsValidator");
 
 			kernel.Bind<IUnityOfWork>().ToMethod(context =>
 			{
@@ -71,7 +71,7 @@ namespace WebSignalR.Infrastructure
 
 			kernel.Bind<ICryptoService>().To<CryptoService>().InSingletonScope();
 			kernel.Bind<IKeyProvider>().ToConstant(new FileBasedKeyProvider());
-			kernel.Bind<IVotesProvider>().ToConstant(new FileBasedVotesProvider());
+			kernel.Bind<IVotesProvider>().ToConstant(new FileBasedVotesProvider()).Named("FileBased");
 			kernel.Bind<IUserRoomService>().To<UserRoomService>();
 
 			kernel.Bind<Hubs.AgileHub>().ToMethod(context =>

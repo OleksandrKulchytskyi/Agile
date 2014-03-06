@@ -14,7 +14,7 @@ namespace WebSignalR.Controllers
 	{
 		private readonly IUnityOfWork _unity;
 		private readonly IUserRoomService _userRoomService;
-		public RoomController(IUnityOfWork unity , IUserRoomService userRoomService)
+		public RoomController(IUnityOfWork unity, IUserRoomService userRoomService)
 		{
 			_unity = unity;
 			_userRoomService = userRoomService;
@@ -26,7 +26,7 @@ namespace WebSignalR.Controllers
 			try
 			{
 				IReadOnlyRepository<Room> repo = _unity.GetRepository<Room>();
-				IEnumerable<Room>  rooms=repo.GetAll();
+				IEnumerable<Room> rooms = repo.GetAll();
 				return rooms;
 			}
 			catch (Exception ex)
@@ -36,7 +36,27 @@ namespace WebSignalR.Controllers
 			}
 		}
 
-		[Authorize(Roles="Admin")]
+		[HttpGet]
+		public Room GetRoom([FromUri]string name)
+		{
+			try
+			{
+				IReadOnlyRepository<Room> repo = _unity.GetRepository<Room>();
+				Room room = repo.Get(x => x.Name == name).FirstOrDefault();
+				if (room != null)
+					return room;
+				else
+					throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound) { Content = new StringContent("Room with such name cannot be found.") });
+
+			}
+			catch (Exception ex)
+			{
+				Global.Logger.Error(ex);
+				throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError) { Content = new StringContent(ex.Message) });
+			}
+		}
+
+		[Authorize(Roles = "Admin")]
 		[HttpPost]
 		public HttpResponseMessage AddRoom(Room room)
 		{

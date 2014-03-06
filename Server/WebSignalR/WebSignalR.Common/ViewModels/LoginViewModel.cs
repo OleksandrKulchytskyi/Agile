@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace WebSignalR.ViewModels
+namespace WebSignalR.Common.ViewModels
 {
 	public class LoginViewModel
 	{

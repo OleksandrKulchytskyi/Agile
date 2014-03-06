@@ -128,7 +128,7 @@ namespace WebSignalR.Handlers
 
 		private bool CheckPassword(string username, string password)
 		{
-			IEntityValidator validator = Infrastructure.BootStrapper.Kernel.Get<IEntityValidator>("Credentials");
+			IEntityValidator validator = Infrastructure.BootStrapper.Kernel.Get<IEntityValidator>("CredentialsValidator");
 			if (validator != null)
 			{
 				return validator.IsValid<User>(new User() { Name = username, Password = password });

@@ -1,0 +1,30 @@
+﻿@model WebSignalR.Common.ViewModels.LoginViewModel
+
+@using (Html.BeginForm("JsonLogin", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { id = "loginForm" }))
+{
+    @Html.AntiForgeryToken()
+
+    <fieldset>
+        <legend>Log in Form</legend>
+        <ol>
+            <li>
+                @Html.LabelFor(m => m.Username)
+                @Html.TextBoxFor(m => m.Username, new { autofocus = "autofocus", id = "loginName" })
+                @Html.ValidationMessageFor(m => m.Username)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.Password)
+                @Html.PasswordFor(m => m.Password)
+                @Html.ValidationMessageFor(m => m.Password)
+            </li>
+            <li>
+                @Html.CheckBoxFor(m => m.RememberMe)
+                @Html.LabelFor(m => m.RememberMe, new { @class = "checkbox" })
+            </li>
+            <li>
+                <input type="submit" value="Log in" />
+            </li>
+        </ol>
+        @Html.ValidationSummary() 
+    </fieldset>
+}

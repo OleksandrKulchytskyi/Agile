@@ -1,14 +1,14 @@
 ﻿using log4net;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Principal;
 using System.Threading;
 using System.Web;
 using System.Web.Http;
+using System.Web.Mvc;
+using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.Security;
-using System.Web.SessionState;
 using WebSignalR.Infrastructure;
 
 namespace WebSignalR
@@ -43,6 +43,9 @@ namespace WebSignalR
 			//Infrastructure.BootStrapper.DoMigrations("ConnectionSettings");
 			Infrastructure.BootStrapper.InitMapperMaps();
 			WebApiConfig.Register(GlobalConfiguration.Configuration);
+			FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+			RouteConfig.RegisterRoutes(RouteTable.Routes);
+			BundleConfig.RegisterBundles(BundleTable.Bundles);
 
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 		}

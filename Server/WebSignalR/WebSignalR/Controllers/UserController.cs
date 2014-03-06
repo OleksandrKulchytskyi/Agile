@@ -8,7 +8,7 @@ using WebSignalR.Common.ViewModels;
 
 namespace WebSignalR.Controllers
 {
-	[AllowAnonymous]
+	[Authorize]
 	public class UserController : BaseController
 	{
 		private IUnityOfWork _unity;
@@ -18,20 +18,21 @@ namespace WebSignalR.Controllers
 			_unity = unity;
 		}
 
-		[Authorize(Roles = "Admin")]
+		[AllowAnonymous]
+		//[Authorize(Roles = "Admin")]
 		public HttpResponseMessage RegisterUser(RegisterViewModel model)
 		{
 			IRepository<User> repo = _unity.GetRepository<User>();
-			if (repo.Exist(x => x.Name == model.Username))
+			if (repo.Exist(x => x.Name == model.UserName))
 				return new HttpResponseMessage(HttpStatusCode.Conflict) { Content = new StringContent("User with such name already exists.") };
 
-			else if (model.Password != model.RetryPassword)
+			else if (model.Password != model.ConfirmPassword)
 				return new HttpResponseMessage(HttpStatusCode.BadRequest) { Content = new StringContent("Password must be the same.") };
 			try
 			{
 				User usr = new User()
 				{
-					Name = model.Username,
+					Name = model.UserName,
 					Password = System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(model.Password)),
 					IsAdmin = false
 				};
@@ -46,7 +47,7 @@ namespace WebSignalR.Controllers
 			}
 
 			HttpResponseMessage msg = new HttpResponseMessage(HttpStatusCode.Created);
-			msg.Headers.Add("Id", repo.Get(x => x.Name == model.Username).First().Id.ToString());
+			msg.Headers.Add("Id", repo.Get(x => x.Name == model.UserName).First().Id.ToString());
 			return msg;
 		}
 
