@@ -228,10 +228,14 @@
     <Content Include="Global.asax" />
     <None Include="Properties\PublishProfiles\Work.pubxml" />
     <Content Include="index.html" />
-    <Content Include="Scripts\app.js" />
     <Content Include="Scripts\app.service.js" />
+    <Content Include="Scripts\App\account.viewmodel.js" />
+    <Content Include="Scripts\App\agile.datacontext.js" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
+    <Content Include="Scripts\App\agile.model.js" />
+    <Content Include="Scripts\App\agile.viewmodel.js" />
     <Content Include="Scripts\App\ajaxlogin.js" />
+    <Content Include="Scripts\App\common.bindings.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
@@ -267,6 +271,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PriviligesController.cs" />
     <Compile Include="Controllers\RoomController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="DependencyResolvers\NijectDependncyResolver.cs" />
@@ -285,6 +290,7 @@
     <Compile Include="Hubs\TraceHub.cs" />
     <Compile Include="Infrastructure\Authorization\CustomIdentity.cs" />
     <Compile Include="Infrastructure\Authorization\SignalRAuth.cs" />
+    <Compile Include="Infrastructure\Authorization\WebApiAuth.cs" />
     <Compile Include="Infrastructure\AutomapperExtnsions.cs" />
     <Compile Include="Infrastructure\BootStrapper.cs" />
     <Compile Include="Infrastructure\Constants.cs" />
@@ -307,6 +313,8 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\_Login.cshtml" />
     <Content Include="Views\Home\_Register.cshtml" />
+    <Content Include="Views\Shared\_UserSettings.cshtml" />
+    <Content Include="Views\Account\Manage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

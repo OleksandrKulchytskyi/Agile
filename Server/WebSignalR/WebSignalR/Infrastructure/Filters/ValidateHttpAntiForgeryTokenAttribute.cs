@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Helpers;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
+using System.Web.Http.Validation;
 using System.Web.Mvc;
 
 namespace WebSignalR.Infrastructure.Filters
@@ -16,21 +17,30 @@ namespace WebSignalR.Infrastructure.Filters
 		public override void OnAuthorization(HttpActionContext actionContext)
 		{
 			HttpRequestMessage request = actionContext.ControllerContext.Request;
-
-			try
+			object httpContext;
+			if (request.Properties.TryGetValue("MS_HttpContext", out httpContext))
 			{
-				if (IsAjaxRequest(request))
-				{
-					ValidateRequestHeader(request);
-				}
-				else
-				{
-					AntiForgery.Validate();
-				}
+				HttpContextBase httpCtxtBase = httpContext as HttpContextBase;
+				if (httpCtxtBase.Request.IsLocal)
+					return;
 			}
-			catch (HttpAntiForgeryException e)
+			else if (request.Method == HttpMethod.Post || request.Method == HttpMethod.Put || request.Method == HttpMethod.Delete)
 			{
-				actionContext.Response = request.CreateErrorResponse(HttpStatusCode.Forbidden, e);
+				try
+				{
+					if (IsAjaxRequest(request))
+					{
+						ValidateRequestHeader(request);
+					}
+					else
+					{
+						AntiForgery.Validate();
+					}
+				}
+				catch (HttpAntiForgeryException e)
+				{
+					actionContext.Response = request.CreateErrorResponse(HttpStatusCode.Forbidden, e);
+				}
 			}
 		}
 

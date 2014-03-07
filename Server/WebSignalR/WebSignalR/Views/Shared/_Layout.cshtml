@@ -18,11 +18,10 @@
 		@RenderBody()
 	</div>
 
-	<footer>
+	<footer class="navbar navbar-default navbar-fixed-bottom" role="navigation">
 		<nav>
 			<ul id="menu">
-				<li>@Html.ActionLink("Agile", "Index", "Home", new { area = "" }, null)</li>
-				@*<li>@Html.ActionLink("API", "Index", "Help", new { area = "HelpPage" }, null)</li>*@
+				<li>@Html.ActionLink("Rooms", "Index", "Home", new { area = "" }, htmlAttributes: new { @class = "btn btn-primary" })</li>
 			</ul>
 		</nav>
 		<p>Learn more about <a href="http://go.microsoft.com/fwlink/?LinkId=273732">Single Page Applications</a></p>

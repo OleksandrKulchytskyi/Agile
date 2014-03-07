@@ -87,6 +87,6 @@
 		display: inline-block;
 	}
 
-.todoItemInput::-ms-clear {
+.agileItemInput::-ms-clear {
 	display: none;
 }

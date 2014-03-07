@@ -10,6 +10,7 @@ using WebSignalR.Common.Services;
 
 namespace WebSignalR.Controllers
 {
+	[WebSignalR.Infrastructure.Filters.ValidateHttpAntiForgeryToken]
 	public class RoomController : BaseController
 	{
 		private readonly IUnityOfWork _unity;
@@ -34,6 +35,22 @@ namespace WebSignalR.Controllers
 				Global.Logger.Error(ex);
 				throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError) { Content = new StringContent(ex.Message) });
 			}
+		}
+
+		[HttpPost]
+		public HttpResponseMessage CreateNewRoom(Room room)
+		{
+			if (ModelState.IsValid)
+			{
+
+			}
+			return new HttpResponseMessage(HttpStatusCode.Created);
+		}
+
+		[HttpDelete]
+		public HttpResponseMessage DeleteRoom(int id)
+		{
+			return new HttpResponseMessage(HttpStatusCode.OK);
 		}
 
 		[HttpGet]

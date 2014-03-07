@@ -23,11 +23,11 @@ namespace WebSignalR
 			bundles.Add(new ScriptBundle("~/bundles/ajaxlogin").Include(
 				"~/Scripts/app/ajaxlogin.js"));
 
-			//bundles.Add(new ScriptBundle("~/bundles/todo").Include(
-			//	"~/Scripts/app/todo.bindings.js",
-			//	"~/Scripts/app/todo.datacontext.js",
-			//	"~/Scripts/app/todo.model.js",
-			//	"~/Scripts/app/todo.viewmodel.js"));
+			bundles.Add(new ScriptBundle("~/bundles/agile").Include(
+				"~/Scripts/app/common.bindings.js",
+				"~/Scripts/app/agile.datacontext.js",
+				"~/Scripts/app/agile.model.js",
+				"~/Scripts/app/agile.viewmodel.js"));
 
 			// Use the development version of Modernizr to develop with and learn from. Then, when you're
 			// ready for production, use the build tool at http://modernizr.com to pick only the tests you need.

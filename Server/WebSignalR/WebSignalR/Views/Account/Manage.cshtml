@@ -1,0 +1,47 @@
+﻿@{
+	ViewBag.Title = "Manage account(s)";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@functions{
+	public string GetAntiForgeryToken()
+	{
+		string cookieToken, formToken;
+		AntiForgery.GetTokens(null, out cookieToken, out formToken);
+		return cookieToken + ":" + formToken;
+	}
+}
+
+<header>
+	<h1>@ViewBag.Title</h1>
+</header>
+
+<div id="main-content">
+	@if (@User.Identity.IsAuthenticated)
+ {
+		<p class="error" data-bind="text: error"></p>
+		<input id="antiForgeryToken" type="hidden" value="@GetAntiForgeryToken()" />
+	 
+		<div class="navbar navbar-default" role="navigation">
+			<div class="navbar-inner">
+				<div class="container" style="width: auto;">
+					<div class="nav-collapse">
+						<a class="btn btn-default">Change password</a>
+						@if (@User.IsInRole("Admin"))
+	  {
+							<a class="btn btn-default">Change roles</a>
+	  }
+					</div>
+				</div>
+			</div>
+		</div>
+ }
+</div>
+
+@if (@User.Identity.IsAuthenticated)
+{
+	@section scripts {
+		@Scripts.Render("~/bundles/knockout")
+		@Scripts.Render("~/bundles/jqueryval")
+	}
+}

@@ -21,6 +21,7 @@ namespace WebSignalR.Handlers
 		private const string BasicAuthResponseHeaderValue = "Basic";
 		private const string BasicAuthResponseHeader = "WWW-Authenticate";
 		private const string BasicAuthHeader = "Authorization";
+		private const string PersistantHeader = "Persistant";
 		private const string httpContentType = "text/plain";
 
 		public LoginHandler()
@@ -37,10 +38,16 @@ namespace WebSignalR.Handlers
 
 		public void ProcessRequest(HttpContext context)
 		{
+			bool isPersistent = false;
 			string authorization = context.Request.Headers[BasicAuthHeader];
+			if (context.Request.Headers.AllKeys.Contains(PersistantHeader))
+			{
+				if (context.Request.Headers[PersistantHeader] == "1")
+					isPersistent = true;
+			}
 			if (!string.IsNullOrEmpty(authorization) && authorization.IndexOf(BasicAuthResponseHeaderValue, StringComparison.OrdinalIgnoreCase) != -1)
 			{
-				bool result = AuthenticateUser(authorization.Replace(BasicAuthResponseHeaderValue, string.Empty).Trim(), context);
+				bool result = AuthenticateUser(authorization.Replace(BasicAuthResponseHeaderValue, string.Empty).Trim(), isPersistent, context);
 				if (!result)
 				{
 					//context.Response.Headers.Add(BasicAuthResponseHeader, "Basic realm=\"Test\"");
@@ -64,7 +71,7 @@ namespace WebSignalR.Handlers
 			context.Response.Write("Authorization header wasn't specified.");
 		}
 
-		private bool AuthenticateUser(string credentials, HttpContext context)
+		private bool AuthenticateUser(string credentials, bool isPersistent, HttpContext context)
 		{
 			bool validated = false;
 			try
@@ -76,12 +83,7 @@ namespace WebSignalR.Handlers
 				string name = credentials.Substring(0, separator);
 				string password = credentials.Substring(separator + 1);
 
-				validated = Login(context, name, password);
-				//if (validated)
-				//{
-				//	Infrastructure.CustomPrincipal principal = new Infrastructure.CustomPrincipal(name, true);
-				//	SetPrincipal(principal);
-				//}
+				validated = Login(context, name, password, isPersistent);
 			}
 			catch (FormatException ex)
 			{
@@ -96,7 +98,7 @@ namespace WebSignalR.Handlers
 			return validated;
 		}
 
-		private bool Login(HttpContext context, string strUser, string strPwd)
+		private bool Login(HttpContext context, string strUser, string strPwd, bool isPersistent)
 		{
 			if (CheckPassword(strUser, strPwd))
 			{
@@ -112,7 +114,7 @@ namespace WebSignalR.Handlers
 				}
 
 				string ticketData = string.Concat("Udelphi|", string.Join(",", userDto.Privileges.Select(p => p.Name)));
-				ticket = new FormsAuthenticationTicket(1, strUser, DateTime.Now, DateTime.Now.AddMinutes(30), /*expire time*/ false,/*persistent*/ ticketData /*user data*/);
+				ticket = new FormsAuthenticationTicket(1, strUser, DateTime.Now, DateTime.Now.AddMinutes(30), /*expire time*/ isPersistent,/*persistent*/ ticketData /*user data*/);
 				string strEncryptedTicket = FormsAuthentication.Encrypt(ticket);
 				HttpCookie cookie = new HttpCookie(Infrastructure.Constants.FormsAuthKey, strEncryptedTicket);
 				context.Response.Cookies.Add(cookie);
