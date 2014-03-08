@@ -25,23 +25,34 @@ namespace WebSignalR.Infrastructure.Authorization
 				var header = actionContext.Request.Headers.GetCookies(Infrastructure.Constants.FormsAuthKey);
 				if (header != null && header.Count > 0)
 				{
-					var cookie = header.First().Cookies.FirstOrDefault(one => one.Name == Infrastructure.Constants.FormsAuthKey);
+					System.Net.Http.Headers.CookieState cookie = header.First().Cookies.
+								FirstOrDefault(one => one.Name == Infrastructure.Constants.FormsAuthKey);
 
 					if (cookie != null && cookie.Value != null)
 					{
 						FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(cookie.Value);
 						if (ticket != null)
 						{
+							CustomIdentity ci = new CustomIdentity(ticket); // Create a CustomIdentity based on the FormsAuthenticationTicket  
+							CustomPrincipal p = new CustomPrincipal(ci); // Create the CustomPrincipal
 							if (this.Roles != null)
 							{
+								bool notFound = false;
 								string[] roles = Roles.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 								foreach (var item in roles)
 								{
-									
+									if (!p.IsInRole(item))
+									{
+										notFound = true; break;
+									}
 								}
+								if (notFound)
+									HandleUnauthorizedRequest(actionContext);
 							}
 						}
 					}
+					else
+						HandleUnauthorizedRequest(actionContext);
 				}
 			}
 			catch (Exception)
