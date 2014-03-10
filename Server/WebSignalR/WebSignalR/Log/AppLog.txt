@@ -783,3 +783,19 @@ System.Web.HttpException (0x80004005): The controller for path '/favicon.ico' wa
    at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
    at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
 ERROR 2014-03-08 18:48:08,735 94203ms Global                 LogToNLog          -      GET     http://localhost:6404/api/privileges/GetPrivileges     System.Web.Http.Controllers     DefaultHttpControllerSelector     SelectController  Processing of the HTTP request resulted in an exception. Please see the HTTP response returned by the 'Response' property of this exception for details.
+INFO  2014-03-08 18:50:34,811 240279ms Global                 Application_End    - Application_End()
+INFO  2014-03-10 09:50:54,917   106ms Global                 Application_Start  - Application_Start()
+WARN  2014-03-10 09:51:06,347 11536ms Global                 Application_Error  - URL: http://localhost:6404/favicon.ico; FilePath: /favicon.ico
+ERROR 2014-03-10 09:51:06,348 11537ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): The controller for path '/favicon.ico' was not found or does not implement IController.
+   at System.Web.Mvc.DefaultControllerFactory.GetControllerInstance(RequestContext requestContext, Type controllerType)
+   at System.Web.Mvc.DefaultControllerFactory.CreateController(RequestContext requestContext, String controllerName)
+   at System.Web.Mvc.MvcHandler.ProcessRequestInit(HttpContextBase httpContext, IController& controller, IControllerFactory& factory)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContext httpContext, AsyncCallback callback, Object state)
+   at System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.BeginProcessRequest(HttpContext context, AsyncCallback cb, Object extraData)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-03-10 09:52:46,450 111639ms Global                 Application_End    - Application_End()
+INFO  2014-03-10 09:53:01,027   112ms Global                 Application_Start  - Application_Start()
+ERROR 2014-03-10 09:56:14,805 193890ms Global                 LogToNLog          -      GET     http://localhost:6404/api/privileges/getprivileges     System.Web.Http.Controllers     DefaultHttpControllerSelector     SelectController  Processing of the HTTP request resulted in an exception. Please see the HTTP response returned by the 'Response' property of this exception for details.
