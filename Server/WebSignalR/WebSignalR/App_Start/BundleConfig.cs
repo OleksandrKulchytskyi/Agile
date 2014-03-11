@@ -23,6 +23,12 @@ namespace WebSignalR
 			bundles.Add(new ScriptBundle("~/bundles/ajaxlogin").Include(
 				"~/Scripts/app/ajaxlogin.js"));
 
+			bundles.Add(new ScriptBundle("~/bundles/toastr").Include(
+				"~/Scripts/app/toastr.min.js"));
+
+			bundles.Add(new ScriptBundle("~/bundles/notifyService").Include(
+				"~/Scripts/services/notifyService.js"));
+
 			bundles.Add(new ScriptBundle("~/bundles/agile").Include(
 				"~/Scripts/app/common.bindings.js",
 				"~/Scripts/app/agile.datacontext.js",
@@ -37,7 +43,8 @@ namespace WebSignalR
 			bundles.Add(new StyleBundle("~/Content/css").Include(
 				"~/Content/Site.css",
 				"~/Content/Agile.css",
-				"~/Content/bootstrap.css"));
+				"~/Content/bootstrap.css",
+				"~/Content/toastr.css"));
 
 			bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
 						"~/Content/themes/base/jquery.ui.core.css",

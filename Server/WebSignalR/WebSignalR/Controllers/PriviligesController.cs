@@ -12,11 +12,11 @@ using WebSignalR.Infrastructure.Authorization;
 namespace WebSignalR.Controllers
 {
 	[WebApiAuth(Roles = "Admin")]
-	public class PriviligesController : BaseController
+	public class PrivilegesController : BaseController
 	{
 		private readonly IUnityOfWork _unity;
 
-		public PriviligesController(IUnityOfWork unity)
+		public PrivilegesController(IUnityOfWork unity)
 		{
 			_unity = unity;
 		}
@@ -24,6 +24,10 @@ namespace WebSignalR.Controllers
 		[HttpGet]
 		public IEnumerable<PrivilegeDto> GetPrivileges()
 		{
+			if (User.Identity.IsAuthenticated)
+			{
+
+			}
 			try
 			{
 				IReadOnlyRepository<Privileges> repo = _unity.GetRepository<Privileges>();

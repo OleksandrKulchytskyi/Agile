@@ -17,7 +17,7 @@ namespace WebSignalR
 
 			config.Routes.MapHttpRoute(name: "DefaultApiAction",
 				routeTemplate: "api/{controller}/{action}",
-				defaults: new { controller = "revenue", action = "all" }
+				defaults: new { controller = "room", action = "getRooms" }
 			);
 
 			config.Routes.MapHttpRoute(name: "DefaultApiActionParam",
@@ -51,10 +51,8 @@ namespace WebSignalR
 					NullValueHandling = Newtonsoft.Json.NullValueHandling.Include,
 					Converters = new Newtonsoft.Json.JsonConverter[] { new Newtonsoft.Json.Converters.IsoDateTimeConverter() },
 					DateFormatHandling = Newtonsoft.Json.DateFormatHandling.MicrosoftDateFormat,
-
 					//fix issue with self referencing loop detection
-					ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-
+					ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore,
 					//if uncommented the line below, in KnockoutJS bindings needs to be refactored to camel case (example: 'name' instead of 'Name', TimeBefore ->timeBefore)
 					//ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
 				};

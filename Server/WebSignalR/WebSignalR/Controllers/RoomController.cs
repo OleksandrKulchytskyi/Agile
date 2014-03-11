@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using WebSignalR.Common.DTO;
 using WebSignalR.Common.Entities;
 using WebSignalR.Common.Interfaces;
 using WebSignalR.Common.Services;
@@ -15,6 +16,7 @@ namespace WebSignalR.Controllers
 	{
 		private readonly IUnityOfWork _unity;
 		private readonly IUserRoomService _userRoomService;
+
 		public RoomController(IUnityOfWork unity, IUserRoomService userRoomService)
 		{
 			_unity = unity;
@@ -22,39 +24,8 @@ namespace WebSignalR.Controllers
 		}
 
 		[HttpGet]
-		public IEnumerable<Room> GetRooms()
-		{
-			try
-			{
-				IReadOnlyRepository<Room> repo = _unity.GetRepository<Room>();
-				IEnumerable<Room> rooms = repo.GetAll();
-				return rooms;
-			}
-			catch (Exception ex)
-			{
-				Global.Logger.Error(ex);
-				throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError) { Content = new StringContent(ex.Message) });
-			}
-		}
-
-		[HttpPost]
-		public HttpResponseMessage CreateNewRoom(Room room)
-		{
-			if (ModelState.IsValid)
-			{
-
-			}
-			return new HttpResponseMessage(HttpStatusCode.Created);
-		}
-
-		[HttpDelete]
-		public HttpResponseMessage DeleteRoom(int id)
-		{
-			return new HttpResponseMessage(HttpStatusCode.OK);
-		}
-
-		[HttpGet]
-		public Room GetRoom([FromUri]string name)
+		[ActionName("ByName")]
+		public Room ByName([FromUri]string name)
 		{
 			try
 			{
@@ -73,11 +44,29 @@ namespace WebSignalR.Controllers
 			}
 		}
 
-		[Authorize(Roles = "Admin")]
-		[HttpPost]
-		public HttpResponseMessage AddRoom(Room room)
+		[HttpGet]
+		[ActionName("GetRooms")]
+		public IEnumerable<Room> GetRooms()
 		{
-			if (room == null)
+			try
+			{
+				IReadOnlyRepository<Room> repo = _unity.GetRepository<Room>();
+				IEnumerable<Room> rooms = repo.GetAll();
+				return rooms;
+			}
+			catch (Exception ex)
+			{
+				Global.Logger.Error(ex);
+				throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError) { Content = new StringContent(ex.Message) });
+			}
+		}
+
+		[HttpPost]
+		[Infrastructure.Authorization.WebApiAuth(Roles = "Admin")]
+		public HttpResponseMessage CreateRoom(RoomDto roomdto)
+		{
+			Room room = AutoMapper.Mapper.Map<Room>(roomdto);
+			if (room == null || !ModelState.IsValid)
 				return new HttpResponseMessage(HttpStatusCode.BadRequest);
 
 			IRepository<Room> repo = _unity.GetRepository<Room>();
@@ -95,11 +84,39 @@ namespace WebSignalR.Controllers
 				return new HttpResponseMessage(HttpStatusCode.InternalServerError);
 			}
 
+			// Need to detach to avoid loop reference exception during JSON serialization
 			Room repoRoom = repo.Get(x => x.Name == room.Name).First();
-			this.TestHubContext.Clients.All.onRoomAdded(repoRoom);
-			HttpResponseMessage msg = new HttpResponseMessage(HttpStatusCode.Created);
-			msg.Headers.Add("Id", repoRoom.Id.ToString());
-			return msg;
+			roomdto.Id = repoRoom.Id;
+			this.TestHubContext.Clients.All.onRoomAdded(roomdto);
+
+			HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, roomdto);
+			response.Headers.Location = new Uri(Url.Link("DefaultApi", new { id = roomdto }));
+			return response;
+		}
+
+		[HttpDelete]
+		[Infrastructure.Authorization.WebApiAuth(Roles = "Admin")]
+		public HttpResponseMessage DeleteRoom([FromUri]int id)
+		{
+			IRepository<Room> repo = _unity.GetRepository<Room>();
+			Room room;
+			if ((room = repo.Get(x => x.Id == id).FirstOrDefault()) == null)
+				return new HttpResponseMessage(HttpStatusCode.BadRequest) { Content = new StringContent("No room with such id.") };
+
+			try
+			{
+				repo.Remove(room);
+				_unity.Commit();
+			}
+			catch (Exception ex)
+			{
+				Global.Logger.Error(ex);
+				return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+			}
+			// Need to detach to avoid loop reference exception during JSON serialization
+			RoomDto dto = AutoMapper.Mapper.Map<RoomDto>(room);
+			this.TestHubContext.Clients.All.onRoomDeleted(dto);
+			return Request.CreateResponse(HttpStatusCode.OK, dto);
 		}
 
 		[HttpGet]
@@ -116,7 +133,8 @@ namespace WebSignalR.Controllers
 				{
 					room.ConnectedUsers.Add(usr);
 					_unity.Commit();
-					TestHubContext.Clients.Group(room.Name).onUserEntered(usr);
+					RoomDto dto = AutoMapper.Mapper.Map<RoomDto>(room);
+					TestHubContext.Clients.Group(room.Name).onJoinedRoom(dto);
 				}
 				else
 					return new HttpResponseMessage(HttpStatusCode.BadRequest) { Content = new StringContent("Unable to found entities with such id's.") };
@@ -145,8 +163,8 @@ namespace WebSignalR.Controllers
 			}
 		}
 
-		[HttpGet]
-		public HttpResponseMessage LeaveRoom([FromUri]int roomName, [FromUri] int userId)
+		[HttpPut]
+		public HttpResponseMessage LeaveRoom([FromUri]int roomId, [FromUri] int userId)
 		{
 			IRepository<User> repoUser = _unity.GetRepository<User>();
 			IRepository<Room> repoRoom = _unity.GetRepository<Room>();
@@ -154,12 +172,13 @@ namespace WebSignalR.Controllers
 			try
 			{
 				User usr = repoUser.Get(x => x.Id == userId).FirstOrDefault();
-				Room room = repoRoom.Get(x => x.Id == roomName).FirstOrDefault();
+				Room room = repoRoom.Get(x => x.Id == roomId).FirstOrDefault();
 				if (usr != null && room != null)
 				{
 					room.ConnectedUsers.Remove(usr);
 					_unity.Commit();
-					TestHubContext.Clients.Group(room.Name).onUserLeft(usr);
+					RoomDto dto = AutoMapper.Mapper.Map<RoomDto>(room);
+					TestHubContext.Clients.Group(room.Name).onLeftRoom(dto);
 				}
 				else
 					return new HttpResponseMessage(HttpStatusCode.BadRequest) { Content = new StringContent("Unable to found entities with such id's.") };
@@ -201,6 +220,5 @@ namespace WebSignalR.Controllers
 			}
 			base.Dispose(disposing);
 		}
-
 	}
 }

@@ -8,58 +8,69 @@ window.agileApp.datacontext = (function () {
 		saveNewRoomItem: saveNewRoomItem,
 		saveChangedRoomItem: saveChangedRoomItem,
 		deleteRoomItem: deleteRoomItem,
+		detachUserFromRoom: detachUserFromRoom,
+		jsonify: objJsonify
 	};
 
 	return datacontext;
 
 	function getRoomList(roomListsObservable, errorObservable) {
-		return ajaxRequest("get", roomItemUrl().concat("getRooms"))
+		var url = roomItemUrl().concat("getRooms")
+		console.log(url);
+		return ajaxRequest("get", url)
             .done(getSucceeded)
             .fail(getFailed);
 
 		function getSucceeded(data) {
-			var mappedTodoLists = $.map(data, function (list) { return new createRoomItem(list); });
-			roomListsObservable(mappedTodoLists);
+			var mappedRoomLists = $.map(data, function (list) {
+				var item = new createRoomItem(list);
+				item.isSaved(true);
+				return item;
+			});
+			roomListsObservable(mappedRoomLists);
 		}
 
 		function getFailed() {
-			errorObservable("Error retrieving todo lists.");
+			if (window.agileApp.notifyService !== undefined) {
+				window.agileApp.notifyService.error("Room has been saved.", null, true);
+			}
+			errorObservable("Error retrieving room lists.");
 		}
 	}
 	function createRoomItem(data) {
 		return new datacontext.roomItem(data); // roomItem is injected by agile.model.js
 	}
-	function saveNewRoomItem(roomItem) {
-		clearErrorMessage(roomItem);
-		return ajaxRequest("post", roomItemUrl())
-            .done(function (result) {
-            	roomItem.roomItemId = result.roomItemId;
-            })
-            .fail(function () {
-            	roomItem.errorMessage("Error adding a new todo item.");
-            });
+	function saveNewRoomItem(newRoom) {
+		clearErrorMessage(newRoom);
+		return ajaxRequest("post", roomItemUrl().concat("createRoom/"), newRoom, "application/json");
 	}
 	function deleteRoomItem(roomItem) {
+		clearErrorMessage(roomItem);
 		return ajaxRequest("delete", roomItemUrl(roomItem.id))
             .fail(function () {
             	roomItem.errorMessage("Error occured while removing room item.");
             });
 	}
-	function saveChangedRoomItem(roomItem) {
-		clearErrorMessage(roomItem);
-		return ajaxRequest("put", roomItemUrl(roomItem.roomItemId), roomItem, "text")
+	function saveChangedRoomItem(room) {
+		clearErrorMessage(room);
+		return ajaxRequest("put", roomItemUrl(room.id), room, "text")
             .fail(function () {
-            	roomItem.errorMessage("Error occured while updating room item.");
+            	room.errorMessage("Error occured while updating room item.");
             });
 	}
-	function saveChangedRoomList(todoList) {
-		clearErrorMessage(todoList);
-		return ajaxRequest("put", todoListUrl(todoList.todoListId), todoList, "text")
-            .fail(function () {
-            	todoList.errorMessage("Error updating the todo list title. Please make sure it is non-empty.");
-            });
+
+	function detachUserFromRoom(roomId, userId) {
+		return ajaxRequest("put", roomItemUrl() + "LeaveRoom/?roomId=" + roomId + "&userId=" + userId)
+		 .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+		 	console.log(errorThrown);
+		 });
 	}
+
 	// Private
+	function objJsonify(data) {
+		return ko.toJSON(data)
+	}
+
 	function clearErrorMessage(entity) { entity.errorMessage(null); }
 
 	function ajaxRequest(type, url, data, dataType) { // Ajax helper
@@ -81,6 +92,33 @@ window.agileApp.datacontext = (function () {
 		return $.ajax(url, options);
 	}
 	// routes
-	function roomItemUrl(id) { return "/api/room/" + (id || ""); }
+	function roomItemUrl(id) { return getBaseUrl() + "api/room/" + (id || ""); }
 
+	function getBaseUrl() {
+		try {
+
+			if (window.agileApp.baseAddress === undefined) {
+
+				if (typeof String.prototype.endsWith !== 'function') {
+					String.prototype.endsWith = function (suffix) {
+						return this.indexOf(suffix, this.length - suffix.length) !== -1;
+					};
+				}
+
+				var l = window.location;
+				var base_url = l.protocol + "//" + l.host + "/" + l.pathname.split('/')[1];
+				if (!base_url.endsWith("/")) {
+					base_url = base_url + "/"
+				}
+				window.agileApp.baseAddress = base_url;
+				console.log("Base url is:" + window.agileApp.baseAddress);
+				return base_url;
+			}
+			else
+				return window.agileApp.baseAddress
+		}
+		catch (arg) {
+			return null;
+		}
+	}
 })();

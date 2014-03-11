@@ -27,7 +27,7 @@ namespace WebSignalR.Controllers
 					client.BaseAddress = GetBaseUrl();
 					client.DefaultRequestHeaders.Add("Authorization", "Basic " + (model.Username + ":" + model.Password.toBase64Utf8()).toBase64Utf8());
 					client.DefaultRequestHeaders.Add("Persistant", model.RememberMe ? "1" : "0");
-					var task = client.GetAsync("/handlers/loginhandler.ashx");
+					var task = client.GetAsync("handlers/loginhandler.ashx");
 					try
 					{
 						task.Wait();
@@ -106,7 +106,7 @@ namespace WebSignalR.Controllers
 					System.Net.Cookie cookie = new System.Net.Cookie(Infrastructure.Constants.FormsAuthKey, strEncryptedTicket, "/", domain);
 					cookieContainer.Add(cookie);
 				}
-				var task = client.GetAsync("/handlers/LogoutHandler.ashx");
+				var task = client.GetAsync("handlers/LogoutHandler.ashx");
 				try
 				{
 					task.Wait();

@@ -4,21 +4,24 @@
 	function roomItem(data) {
 		var self = this;
 		data = data || {};
-		console.log("Initiating roomItem");
-		console.log(data);
+
 		// Persisted properties
 		self.id = data.Id;
 		self.name = ko.observable(data.Name);
 		self.description = ko.observable(data.Description);
 		self.active = ko.observable(data.Active);
+
 		self.connectedUsers = ko.observableArray(ko.utils.arrayMap(data.ConnectedUsers, function myfunction(userdata) {
-			return new user(userdata);
+			return new user(userdata, self);
 		}));
+
 		// Non-persisted properties
 		self.errorMessage = ko.observable();
+		self.isSaved = ko.observable(false);
 
 		saveChanges = function () {
-			return datacontext.saveChangedRoomItem(self);
+			if (self.isSaved)
+				return datacontext.saveChangedRoomItem(self);
 		};
 
 		// Auto-save when these properties change
@@ -26,18 +29,64 @@
 		self.description.subscribe(saveChanges);
 		self.active.subscribe(saveChanges);
 
+		self.saveNewRoom = function (room) {
+			datacontext.saveNewRoomItem(self)
+			.always(alwaysHandler);
+
+			function alwaysHandler(output, status, xhr) {
+
+				try {
+					var res = output.getResponseHeader ? output.getResponseHeader.get('Id')
+							: xhr.getResponseHeader.get('Id');
+					console.log("Result is :" + res);
+					console.log(output.getResponseHeader.get('Id'))
+				}
+				catch (error) {
+					console.log(error);
+				}
+
+				if (output.status == 201) {
+					self.id = res;
+					self.errorMessage("");
+					self.isSaved(true);
+					if (window.agileApp.notifyService !== undefined) {
+						window.agileApp.notifyService.success("Room has been saved.", null, true);
+					}
+				}
+				else {
+					self.errorMessage("Save of new room failed");
+					if (window.agileApp.notifyService !== undefined) {
+						window.agileApp.notifyService.success("Fail to save room.", null, true);
+					}
+				}
+			}
+		}
+
 		self.toJson = function () { return ko.toJSON(self) };
 	};
 
-	function user(data) {
+	function user(data, room) {
 		var self = this;
+
 		console.log("Initiating user");
 		console.log(data);
 		data = data || {};
-		self.id = ko.observable(data.Id);
+
+		self.room = room;
+		self.id = data.Id;
 		self.name = ko.observable(data.Name);
 
 		self.toJson = function () { return ko.toJSON(self) };
+
+		self.detachUser = function (user, event) {
+			console.log(user);
+			console.log(self.room);
+			var rid = self.room.id;
+			var uid = self.id;
+			datacontext.detachUserFromRoom(rid, uid);
+			self.room.connectedUsers.remove(user);
+		}
+		console.log(self.room.id);
 	}
 
 	// convert raw roomItem data objects into array of roomItems

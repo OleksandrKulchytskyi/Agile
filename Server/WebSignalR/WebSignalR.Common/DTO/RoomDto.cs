@@ -17,7 +17,6 @@ namespace WebSignalR.Common.DTO
 		public string Name { get; set; }
 		public string Description { get; set; }
 
-
 		public List<UserDto> ConnectedUsers { get; set; }
 		public List<VoteItemDto> ItemsToVote { get; set; }
 	}

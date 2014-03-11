@@ -34,11 +34,6 @@ namespace WebSignalR.Infrastructure
 
 			IniDIContainer(kernel);
 
-			var serializer = new Microsoft.AspNet.SignalR.Json.JsonNetSerializer(new Newtonsoft.Json.JsonSerializerSettings
-			{
-				DateFormatHandling = Newtonsoft.Json.DateFormatHandling.MicrosoftDateFormat,
-			});
-
 			Kernel = kernel;
 			_resolver = new DependencyResolvers.NinjectDependencyResolver(kernel);
 			App_Start.SignalRConfig.Register(_resolver);
@@ -112,6 +107,14 @@ namespace WebSignalR.Infrastructure
 				.IgnoreAllNonExisting();
 
 			Mapper.CreateMap<Room, RoomDto>()
+				.ForMember(dest => dest.Active, opt => opt.MapFrom(src => src.Active))
+				.ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+				.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+				.ForMember(dest => dest.ItemsToVote, opt => opt.MapFrom(src => src.ItemsToVote))
+				.ForMember(dest => dest.ConnectedUsers, opt => opt.MapFrom(src => src.ConnectedUsers));
+
+
+			Mapper.CreateMap<RoomDto, Room>()
 				.ForMember(dest => dest.Active, opt => opt.MapFrom(src => src.Active))
 				.ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
 				.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))

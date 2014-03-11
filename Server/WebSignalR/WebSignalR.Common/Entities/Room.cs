@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 using WebSignalR.Common.Infrastructure;
 
 namespace WebSignalR.Common.Entities
@@ -15,8 +12,18 @@ namespace WebSignalR.Common.Entities
 			ItemsToVote = new SafeCollection<VoteItem>();
 		}
 
+		private bool active;
+		[Required]
+		//[DataMember(IsRequired = true)]
+		public bool Active
+		{
+			get { return active; }
+			set { OnPropChanging("Active"); active = value; OnPropChanged("Active"); }
+		}
+
 		private string name;
 		[Required]
+		//[DataMember(IsRequired = true)]
 		public string Name
 		{
 			get { return name; }
@@ -28,14 +35,6 @@ namespace WebSignalR.Common.Entities
 		{
 			get { return descr; }
 			set { OnPropChanging("Description"); descr = value; OnPropChanged("Description"); }
-		}
-
-		private bool active;
-		[Required]
-		public bool Active
-		{
-			get { return active; }
-			set { OnPropChanging("Active"); active = value; OnPropChanged("Active"); }
 		}
 
 		public virtual ICollection<User> ConnectedUsers { get; set; }

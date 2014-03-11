@@ -44,9 +44,12 @@
 						<ul data-bind="foreach: connectedUsers">
 							<li>
 								<input class="agileItemInput" type="text" data-bind="value: name, blurOnEnter: true" />
-								<a href="#" data-bind="click: $parent.deleteTodo">X</a>
+								<a href="#" data-bind="click: detachUser">X</a>
 							</li>
 						</ul>
+					</div>
+					<div data-bind="visible: !isSaved()">
+						<button class="btn btn-primary" data-bind="click: saveNewRoom">Save changes</button>
 					</div>
 	}
 				<p class="error" data-bind="visible: errorMessage, text: errorMessage"></p>
