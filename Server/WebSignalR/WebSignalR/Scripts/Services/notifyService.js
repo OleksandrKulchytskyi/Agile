@@ -1,4 +1,5 @@
-﻿window.agileApp = window.agileApp || {};
+﻿/// <reference path="Scripts/toastr.js"
+window.agileApp = window.agileApp || {};
 
 window.agileApp.notifyService = (function () {
 
@@ -9,7 +10,18 @@ window.agileApp.notifyService = (function () {
 		warning: warning
 	};
 
+	init();
+
 	return notifyService;
+
+	function init() {
+		toastr.options.newestOnTop = true;
+		toastr.options.positionClass = 'toast-top-full-width';
+		toastr.options.extendedTimeOut = 0; //1000;
+		toastr.options.timeOut = 1000;
+		toastr.options.fadeOut = 250;
+		toastr.options.fadeIn = 250;
+	}
 
 	function error(msg, data, showToast) {
 		if (showtoast) {

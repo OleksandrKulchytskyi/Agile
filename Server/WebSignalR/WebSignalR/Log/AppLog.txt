@@ -977,3 +977,152 @@ Exception of type 'AutoMapper.AutoMapperConfigurationException' was thrown.
    at AutoMapper.ConfigurationStore.AssertConfigurationIsValid()
    at AutoMapper.Mapper.AssertConfigurationIsValid()
    at WebSignalR.Infrastructure.BootStrapper.InitMapperMaps() in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Infrastructure\BootStrapper.cs:line 132
+INFO  2014-03-11 20:27:14,508   104ms Global                 Application_Start  - Application_Start()
+ERROR 2014-03-11 20:27:14,902   498ms Global                 InitMapperMaps     - AutoMapper.AutoMapperConfigurationException: The following property on WebSignalR.Common.Entities.User cannot be mapped: 
+	ConnectedUsers
+Add a custom mapping expression, ignore, add a custom resolver, or modify the destination type WebSignalR.Common.Entities.User.
+Context:
+	Mapping to property ConnectedUsers from WebSignalR.Common.DTO.UserDto to WebSignalR.Common.Entities.User
+	Mapping to property ConnectedUsers from System.Collections.Generic.List`1[[WebSignalR.Common.DTO.UserDto, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] to System.Collections.Generic.ICollection`1[[WebSignalR.Common.Entities.User, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
+	Mapping from type WebSignalR.Common.DTO.RoomDto to WebSignalR.Common.Entities.Room
+Exception of type 'AutoMapper.AutoMapperConfigurationException' was thrown.
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.AssertConfigurationIsValid(IEnumerable`1 typeMaps)
+   at AutoMapper.ConfigurationStore.AssertConfigurationIsValid()
+   at AutoMapper.Mapper.AssertConfigurationIsValid()
+   at WebSignalR.Infrastructure.BootStrapper.InitMapperMaps() in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Infrastructure\BootStrapper.cs:line 132
+WARN  2014-03-11 20:27:23,343  8939ms Global                 Application_Error  - URL: http://localhost:6404/favicon.ico; FilePath: /favicon.ico
+ERROR 2014-03-11 20:27:23,344  8940ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): The controller for path '/favicon.ico' was not found or does not implement IController.
+   at System.Web.Mvc.DefaultControllerFactory.GetControllerInstance(RequestContext requestContext, Type controllerType)
+   at System.Web.Mvc.DefaultControllerFactory.CreateController(RequestContext requestContext, String controllerName)
+   at System.Web.Mvc.MvcHandler.ProcessRequestInit(HttpContextBase httpContext, IController& controller, IControllerFactory& factory)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContext httpContext, AsyncCallback callback, Object state)
+   at System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.BeginProcessRequest(HttpContext context, AsyncCallback cb, Object extraData)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-03-11 20:27:39,484 25080ms Global                 Application_End    - Application_End()
+INFO  2014-03-11 20:27:44,199   102ms Global                 Application_Start  - Application_Start()
+ERROR 2014-03-11 20:27:44,528   430ms Global                 InitMapperMaps     - AutoMapper.AutoMapperConfigurationException: The following property on WebSignalR.Common.Entities.User cannot be mapped: 
+	ConnectedUsers
+Add a custom mapping expression, ignore, add a custom resolver, or modify the destination type WebSignalR.Common.Entities.User.
+Context:
+	Mapping to property ConnectedUsers from WebSignalR.Common.DTO.UserDto to WebSignalR.Common.Entities.User
+	Mapping to property ConnectedUsers from System.Collections.Generic.List`1[[WebSignalR.Common.DTO.UserDto, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] to System.Collections.Generic.ICollection`1[[WebSignalR.Common.Entities.User, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
+	Mapping from type WebSignalR.Common.DTO.RoomDto to WebSignalR.Common.Entities.Room
+Exception of type 'AutoMapper.AutoMapperConfigurationException' was thrown.
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.AssertConfigurationIsValid(IEnumerable`1 typeMaps)
+   at AutoMapper.ConfigurationStore.AssertConfigurationIsValid()
+   at AutoMapper.Mapper.AssertConfigurationIsValid()
+   at WebSignalR.Infrastructure.BootStrapper.InitMapperMaps() in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Infrastructure\BootStrapper.cs:line 132
+INFO  2014-03-11 20:44:11,155 987057ms Global                 Application_End    - Application_End()
+INFO  2014-03-11 20:44:26,293   121ms Global                 Application_Start  - Application_Start()
+ERROR 2014-03-11 20:44:26,662   489ms Global                 InitMapperMaps     - AutoMapper.AutoMapperConfigurationException: The following property on WebSignalR.Common.Entities.User cannot be mapped: 
+	ConnectedUsers
+Add a custom mapping expression, ignore, add a custom resolver, or modify the destination type WebSignalR.Common.Entities.User.
+Context:
+	Mapping to property ConnectedUsers from WebSignalR.Common.DTO.UserDto to WebSignalR.Common.Entities.User
+	Mapping to property ConnectedUsers from System.Collections.Generic.List`1[[WebSignalR.Common.DTO.UserDto, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] to System.Collections.Generic.ICollection`1[[WebSignalR.Common.Entities.User, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
+	Mapping from type WebSignalR.Common.DTO.RoomDto to WebSignalR.Common.Entities.Room
+Exception of type 'AutoMapper.AutoMapperConfigurationException' was thrown.
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.AssertConfigurationIsValid(IEnumerable`1 typeMaps)
+   at AutoMapper.ConfigurationStore.AssertConfigurationIsValid()
+   at AutoMapper.Mapper.AssertConfigurationIsValid()
+   at WebSignalR.Infrastructure.BootStrapper.InitMapperMaps() in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Infrastructure\BootStrapper.cs:line 132
+WARN  2014-03-11 20:44:45,084 18912ms Global                 Application_Error  - URL: http://localhost:6404/favicon.ico; FilePath: /favicon.ico
+ERROR 2014-03-11 20:44:45,085 18913ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): The controller for path '/favicon.ico' was not found or does not implement IController.
+   at System.Web.Mvc.DefaultControllerFactory.GetControllerInstance(RequestContext requestContext, Type controllerType)
+   at System.Web.Mvc.DefaultControllerFactory.CreateController(RequestContext requestContext, String controllerName)
+   at System.Web.Mvc.MvcHandler.ProcessRequestInit(HttpContextBase httpContext, IController& controller, IControllerFactory& factory)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContext httpContext, AsyncCallback callback, Object state)
+   at System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.BeginProcessRequest(HttpContext context, AsyncCallback cb, Object extraData)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-03-11 20:46:04,088 97915ms Global                 Application_End    - Application_End()
+INFO  2014-03-11 20:46:23,967    65ms Global                 Application_Start  - Application_Start()
+ERROR 2014-03-11 20:46:24,133   230ms Global                 InitMapperMaps     - AutoMapper.AutoMapperConfigurationException: The following property on WebSignalR.Common.Entities.User cannot be mapped: 
+	ConnectedUsers
+Add a custom mapping expression, ignore, add a custom resolver, or modify the destination type WebSignalR.Common.Entities.User.
+Context:
+	Mapping to property ConnectedUsers from WebSignalR.Common.DTO.UserDto to WebSignalR.Common.Entities.User
+	Mapping to property ConnectedUsers from System.Collections.Generic.List`1[[WebSignalR.Common.DTO.UserDto, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] to System.Collections.Generic.ICollection`1[[WebSignalR.Common.Entities.User, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
+	Mapping from type WebSignalR.Common.DTO.RoomDto to WebSignalR.Common.Entities.Room
+Exception of type 'AutoMapper.AutoMapperConfigurationException' was thrown.
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.AssertConfigurationIsValid(IEnumerable`1 typeMaps)
+   at AutoMapper.ConfigurationStore.AssertConfigurationIsValid()
+   at WebSignalR.Infrastructure.BootStrapper.InitMapperMaps() in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Infrastructure\BootStrapper.cs:line 132
+INFO  2014-03-11 22:34:13,281 6469378ms Global                 Application_End    - Application_End()
+INFO  2014-03-11 22:48:22,902    95ms Global                 Application_Start  - Application_Start()
+ERROR 2014-03-11 22:48:23,383   576ms Global                 InitMapperMaps     - AutoMapper.AutoMapperConfigurationException: The following property on WebSignalR.Common.Entities.User cannot be mapped: 
+	ConnectedUsers
+Add a custom mapping expression, ignore, add a custom resolver, or modify the destination type WebSignalR.Common.Entities.User.
+Context:
+	Mapping to property ConnectedUsers from WebSignalR.Common.DTO.UserDto to WebSignalR.Common.Entities.User
+	Mapping to property ConnectedUsers from System.Collections.Generic.List`1[[WebSignalR.Common.DTO.UserDto, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] to System.Collections.Generic.ICollection`1[[WebSignalR.Common.Entities.User, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
+	Mapping from type WebSignalR.Common.DTO.RoomDto to WebSignalR.Common.Entities.Room
+Exception of type 'AutoMapper.AutoMapperConfigurationException' was thrown.
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.AssertConfigurationIsValid(IEnumerable`1 typeMaps)
+   at AutoMapper.ConfigurationStore.AssertConfigurationIsValid()
+   at AutoMapper.Mapper.AssertConfigurationIsValid()
+   at WebSignalR.Infrastructure.BootStrapper.InitMapperMaps() in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Infrastructure\BootStrapper.cs:line 132
+INFO  2014-03-11 22:57:24,919 542112ms Global                 Application_End    - Application_End()
+INFO  2014-03-11 22:57:36,763   106ms Global                 Application_Start  - Application_Start()
+ERROR 2014-03-11 22:57:37,145   488ms Global                 InitMapperMaps     - AutoMapper.AutoMapperConfigurationException: The following property on WebSignalR.Common.Entities.User cannot be mapped: 
+	ConnectedUsers
+Add a custom mapping expression, ignore, add a custom resolver, or modify the destination type WebSignalR.Common.Entities.User.
+Context:
+	Mapping to property ConnectedUsers from WebSignalR.Common.DTO.UserDto to WebSignalR.Common.Entities.User
+	Mapping to property ConnectedUsers from System.Collections.Generic.List`1[[WebSignalR.Common.DTO.UserDto, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] to System.Collections.Generic.ICollection`1[[WebSignalR.Common.Entities.User, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
+	Mapping from type WebSignalR.Common.DTO.RoomDto to WebSignalR.Common.Entities.Room
+Exception of type 'AutoMapper.AutoMapperConfigurationException' was thrown.
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.AssertConfigurationIsValid(IEnumerable`1 typeMaps)
+   at AutoMapper.ConfigurationStore.AssertConfigurationIsValid()
+   at AutoMapper.Mapper.AssertConfigurationIsValid()
+   at WebSignalR.Infrastructure.BootStrapper.InitMapperMaps() in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Infrastructure\BootStrapper.cs:line 132
+INFO  2014-03-11 22:58:29,681 53024ms Global                 Application_End    - Application_End()
+INFO  2014-03-11 22:58:35,734   107ms Global                 Application_Start  - Application_Start()
+ERROR 2014-03-11 22:58:36,097   470ms Global                 InitMapperMaps     - AutoMapper.AutoMapperConfigurationException: The following property on WebSignalR.Common.Entities.User cannot be mapped: 
+	ConnectedUsers
+Add a custom mapping expression, ignore, add a custom resolver, or modify the destination type WebSignalR.Common.Entities.User.
+Context:
+	Mapping to property ConnectedUsers from WebSignalR.Common.DTO.UserDto to WebSignalR.Common.Entities.User
+	Mapping to property ConnectedUsers from System.Collections.Generic.List`1[[WebSignalR.Common.DTO.UserDto, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] to System.Collections.Generic.ICollection`1[[WebSignalR.Common.Entities.User, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
+	Mapping from type WebSignalR.Common.DTO.RoomDto to WebSignalR.Common.Entities.Room
+Exception of type 'AutoMapper.AutoMapperConfigurationException' was thrown.
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.AssertConfigurationIsValid(IEnumerable`1 typeMaps)
+   at AutoMapper.ConfigurationStore.AssertConfigurationIsValid()
+   at AutoMapper.Mapper.AssertConfigurationIsValid()
+   at WebSignalR.Infrastructure.BootStrapper.InitMapperMaps() in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Infrastructure\BootStrapper.cs:line 132
+ERROR 2014-03-11 22:59:11,234 35607ms Global                 LogToNLog          -      PUT     http://localhost:6404/api/room/     System.Web.Http.Action     ApiControllerActionSelector     SelectAction  Processing of the HTTP request resulted in an exception. Please see the HTTP response returned by the 'Response' property of this exception for details.
+ERROR 2014-03-11 22:59:11,234 35607ms Global                 LogToNLog          -      PUT     http://localhost:6404/api/room/     System.Web.Http.Action     ApiControllerActionSelector     SelectAction  Processing of the HTTP request resulted in an exception. Please see the HTTP response returned by the 'Response' property of this exception for details.
+ERROR 2014-03-11 22:59:11,234 35607ms Global                 LogToNLog          -      PUT     http://localhost:6404/api/room/     System.Web.Http.Action     ApiControllerActionSelector     SelectAction  Processing of the HTTP request resulted in an exception. Please see the HTTP response returned by the 'Response' property of this exception for details.
+ERROR 2014-03-11 22:59:11,384 35757ms Global                 LogToNLog          -      PUT     http://localhost:6404/api/room/     System.Web.Http.Controllers     RoomController     ExecuteAsync  Processing of the HTTP request resulted in an exception. Please see the HTTP response returned by the 'Response' property of this exception for details.
+ERROR 2014-03-11 22:59:11,384 35757ms Global                 LogToNLog          -      PUT     http://localhost:6404/api/room/     System.Web.Http.Controllers     RoomController     ExecuteAsync  Processing of the HTTP request resulted in an exception. Please see the HTTP response returned by the 'Response' property of this exception for details.
+ERROR 2014-03-11 22:59:11,564 35937ms Global                 LogToNLog          -      PUT     http://localhost:6404/api/room/     System.Web.Http.Controllers     RoomController     ExecuteAsync  Processing of the HTTP request resulted in an exception. Please see the HTTP response returned by the 'Response' property of this exception for details.
+ERROR 2014-03-11 23:00:03,634 88007ms Global                 LogToNLog          -      PUT     http://localhost:6404/api/room/     System.Web.Http.Action     ApiControllerActionSelector     SelectAction  Processing of the HTTP request resulted in an exception. Please see the HTTP response returned by the 'Response' property of this exception for details.
+ERROR 2014-03-11 23:00:03,701 88074ms Global                 LogToNLog          -      PUT     http://localhost:6404/api/room/     System.Web.Http.Controllers     RoomController     ExecuteAsync  Processing of the HTTP request resulted in an exception. Please see the HTTP response returned by the 'Response' property of this exception for details.
+ERROR 2014-03-11 23:00:10,003 94376ms Global                 LogToNLog          -      PUT     http://localhost:6404/api/room/     System.Web.Http.Action     ApiControllerActionSelector     SelectAction  Processing of the HTTP request resulted in an exception. Please see the HTTP response returned by the 'Response' property of this exception for details.
+ERROR 2014-03-11 23:00:10,070 94443ms Global                 LogToNLog          -      PUT     http://localhost:6404/api/room/     System.Web.Http.Controllers     RoomController     ExecuteAsync  Processing of the HTTP request resulted in an exception. Please see the HTTP response returned by the 'Response' property of this exception for details.

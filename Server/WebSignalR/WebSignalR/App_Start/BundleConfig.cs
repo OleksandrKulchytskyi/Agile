@@ -24,7 +24,7 @@ namespace WebSignalR
 				"~/Scripts/app/ajaxlogin.js"));
 
 			bundles.Add(new ScriptBundle("~/bundles/toastr").Include(
-				"~/Scripts/app/toastr.min.js"));
+				"~/Scripts/toastr.js"));
 
 			bundles.Add(new ScriptBundle("~/bundles/notifyService").Include(
 				"~/Scripts/services/notifyService.js"));
@@ -43,8 +43,9 @@ namespace WebSignalR
 			bundles.Add(new StyleBundle("~/Content/css").Include(
 				"~/Content/Site.css",
 				"~/Content/Agile.css",
-				"~/Content/bootstrap.css",
-				"~/Content/toastr.css"));
+				"~/Content/bootstrap.css"));
+
+			bundles.Add(new StyleBundle("~/Content/toastr").Include("~/Content/toastr.css"));
 
 			bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
 						"~/Content/themes/base/jquery.ui.core.css",

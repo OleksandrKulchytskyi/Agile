@@ -231,6 +231,7 @@
     <Content Include="Global.asax" />
     <None Include="Properties\PublishProfiles\Work.pubxml" />
     <Content Include="index.html" />
+    <Content Include="Scripts\_references.js" />
     <Content Include="Scripts\app.service.js" />
     <Content Include="Scripts\App\account.viewmodel.js" />
     <Content Include="Scripts\App\agile.datacontext.js" />
@@ -321,7 +322,9 @@
     <Content Include="Views\Home\_Register.cshtml" />
     <Content Include="Views\Shared\_UserSettings.cshtml" />
     <Content Include="Views\Account\Manage.cshtml" />
-    <Content Include="Scripts\toastr.min.js.map" />
+    <Content Include="Scripts\toastr.min.js.map">
+      <DependentUpon>toastr.js</DependentUpon>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
