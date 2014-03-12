@@ -6,8 +6,11 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using WebSignalR.Common.Extension;
+using WebSignalR.Common.Interfaces;
 using WebSignalR.Common.ViewModels;
 using WebSignalR.Infrastructure;
+using Ninject;
+using WebSignalR.Common.Entities;
 
 namespace WebSignalR.Controllers
 {
@@ -54,10 +57,10 @@ namespace WebSignalR.Controllers
 						{
 							c = new HttpCookie(Infrastructure.Constants.FormsAuthKey);
 							c.Expires = DateTime.Now.AddDays(-1);
-							c.Value = "";
+							c.Value = string.Empty;
 							Response.Cookies.Add(c);
 						}
-						ModelState.AddModelError("", "The user name or password provided is incorrect.");
+						ModelState.AddModelError(string.Empty, "The user name or password provided is incorrect.");
 					}
 				}
 			}
@@ -80,7 +83,7 @@ namespace WebSignalR.Controllers
 		private string GetDomain()
 		{
 			string domain1 = Request.Url.GetLeftPart(UriPartial.Authority);
-			string domain2 = Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + (Request.Url.IsDefaultPort ? "" : ":" + Request.Url.Port);
+			string domain2 = Request.Url.Scheme + System.Uri.SchemeDelimiter + Request.Url.Host + (Request.Url.IsDefaultPort ? string.Empty : ":" + Request.Url.Port);
 			return domain2;
 		}
 
@@ -117,7 +120,7 @@ namespace WebSignalR.Controllers
 					//return Json(new { success = true, redirect = returnUrl });
 				}
 				else
-					ModelState.AddModelError("", "The user name or password provided is incorrect.");
+					ModelState.AddModelError(string.Empty, "The user name or password provided is incorrect.");
 			}
 
 			FormsAuthentication.SignOut();
@@ -128,6 +131,79 @@ namespace WebSignalR.Controllers
 		public ActionResult Manage()
 		{
 			return View();
+		}
+
+		[HttpPost]
+		[AllowAnonymous]
+		[ValidateAntiForgeryToken]
+		public ActionResult JsonRegister(RegisterViewModel model, string returnUrl)
+		{
+			if (ModelState.IsValid)
+			{
+				// Attempt to register the user
+				try
+				{
+					IUnityOfWork unity = Infrastructure.BootStrapper.Kernel.Get<IUnityOfWork>();
+					using (unity)
+					{
+						IRepository<User> userRepo = unity.GetRepository<User>();
+						if (userRepo.Get(x => x.Name == model.UserName).FirstOrDefault() != null)
+							throw new InvalidOperationException("User with such name already exists.");
+						if (model.Password != model.ConfirmPassword)
+							throw new InvalidOperationException("Password must be the same.");
+
+						User usr = new User();
+						usr.Name = model.UserName;
+						usr.Password = model.Password.toBase64Utf8();
+						usr.UserPrivileges.Add(unity.GetRepository<Privileges>().Get(x => x.Name == "User").FirstOrDefault());
+						userRepo.Add(usr);
+						unity.Commit();
+					}
+					return Json(new { success = true, redirect = returnUrl });
+				}
+				catch (Exception ex)
+				{
+					ModelState.AddModelError(string.Empty, ex.Message);
+				}
+			}
+
+			// If we got this far, something failed
+			return Json(new { errors = GetErrorsFromModelState() });
+		}
+
+		[HttpPost]
+		[AllowAnonymous]
+		[ValidateAntiForgeryToken]
+		public ActionResult JsonChangePassword(ChangePasswordViewModel model, string returnUrl)
+		{
+			if (ModelState.IsValid && User.Identity.IsAuthenticated)
+			{
+				try
+				{
+					IUnityOfWork unity = Infrastructure.BootStrapper.Kernel.Get<IUnityOfWork>();
+					using (unity)
+					{
+						IRepository<User> userRepo = unity.GetRepository<User>();
+						User usr;
+						if ((usr = userRepo.Get(x => x.Name == User.Identity.Name).FirstOrDefault()) == null)
+							throw new InvalidOperationException("User with such name is exists.");
+						if (model.Password != model.ConfirmPassword)
+							throw new InvalidOperationException("Password must be the same.");
+
+						usr.Password = model.Password.toBase64Utf8();
+						userRepo.Update(usr);
+						unity.Commit();
+					}
+					return Json(new { success = true, redirect = returnUrl });
+				}
+				catch (Exception ex)
+				{
+					ModelState.AddModelError(string.Empty, ex.Message);
+				}
+			}
+
+			// If we got this far, something failed
+			return Json(new { errors = GetErrorsFromModelState() });
 		}
 	}
 }

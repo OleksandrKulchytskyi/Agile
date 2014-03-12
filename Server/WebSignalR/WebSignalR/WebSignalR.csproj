@@ -325,6 +325,7 @@
     <Content Include="Scripts\toastr.min.js.map">
       <DependentUpon>toastr.js</DependentUpon>
     </Content>
+    <Content Include="Views\Account\_ChangePassword.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

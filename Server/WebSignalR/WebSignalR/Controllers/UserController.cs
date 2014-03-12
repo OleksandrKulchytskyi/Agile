@@ -1,14 +1,16 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using WebSignalR.Common.DTO;
 using WebSignalR.Common.Entities;
 using WebSignalR.Common.Interfaces;
 using WebSignalR.Common.ViewModels;
+using WebSignalR.Common.Extension;
 
 namespace WebSignalR.Controllers
 {
-	[Authorize]
 	public class UserController : BaseController
 	{
 		private IUnityOfWork _unity;
@@ -18,8 +20,10 @@ namespace WebSignalR.Controllers
 			_unity = unity;
 		}
 
-		[AllowAnonymous]
-		//[Authorize(Roles = "Admin")]
+		[HttpPost]
+		[ActionName("RegisterUser")]
+		[Infrastructure.Filters.ValidateHttpAntiForgeryToken]
+		[Infrastructure.Authorization.WebApiAuth(Roles="Admin")]
 		public HttpResponseMessage RegisterUser(RegisterViewModel model)
 		{
 			IRepository<User> repo = _unity.GetRepository<User>();
@@ -33,7 +37,7 @@ namespace WebSignalR.Controllers
 				User usr = new User()
 				{
 					Name = model.UserName,
-					Password = System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(model.Password)),
+					Password = model.Password.toBase64Utf8(),
 					IsAdmin = false
 				};
 				usr.UserPrivileges.Add(_unity.GetRepository<Privileges>().Get(x => x.Name == "User").First());
@@ -46,9 +50,45 @@ namespace WebSignalR.Controllers
 				return new HttpResponseMessage(HttpStatusCode.InternalServerError);
 			}
 
-			HttpResponseMessage msg = new HttpResponseMessage(HttpStatusCode.Created);
-			msg.Headers.Add("Id", repo.Get(x => x.Name == model.UserName).First().Id.ToString());
-			return msg;
+			UserDto dto = AutoMapper.Mapper.Map<UserDto>(repo.Get(x => x.Name == model.UserName).FirstOrDefault());
+			HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, dto);
+			response.Headers.Location = new Uri(Url.Link("DefaultApi", new { id = dto.Id }));
+			return response;
+
+			//HttpResponseMessage msg = new HttpResponseMessage(HttpStatusCode.Created);
+			//msg.Headers.Add("Id", repo.Get(x => x.Name == model.UserName).First().Id.ToString());
+			//return msg;
+		}
+
+		[ActionName("ChangePassword")]
+		[HttpPut()]
+		[Infrastructure.Filters.ValidateHttpAntiForgeryToken]
+		[Infrastructure.Authorization.WebApiAuth(Roles = "User")]
+		public HttpResponseMessage ChangePassword(ChangePasswordViewModel model)
+		{
+			IRepository<User> repo = _unity.GetRepository<User>();
+			WebSignalR.Common.Entities.User usr;
+			if ((usr=repo.Get(x => x.Name == User.Identity.Name).FirstOrDefault())==null)
+				return new HttpResponseMessage(HttpStatusCode.Conflict) { Content = new StringContent("User is not exists.") };
+
+			else if (model.Password != model.ConfirmPassword)
+				return new HttpResponseMessage(HttpStatusCode.BadRequest) { Content = new StringContent("Password must be the same.") };
+			try
+			{
+				usr.Password = model.Password.toBase64Utf8();
+				repo.Update(usr);
+				_unity.Commit();
+			}
+			catch (System.Exception ex)
+			{
+				Global.Logger.Error(ex);
+				return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+			}
+
+			UserDto dto = AutoMapper.Mapper.Map<UserDto>(usr);
+			HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, dto);
+			response.Headers.Location = new Uri(Url.Link("DefaultApi", new { id = dto.Id }));
+			return response;
 		}
 
 		protected override void Dispose(bool disposing)

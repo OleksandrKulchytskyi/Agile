@@ -26,14 +26,22 @@
 			<div class="navbar-inner">
 				<div class="container" style="width: auto;">
 					<div class="nav-collapse">
-						<a class="btn btn-default">Change password</a>
+						<a class="btn btn-default" data-bind="click: changeUserPassword">Change password</a>
 						@if (@User.IsInRole("Admin"))
 	  {
+							<a class="btn btn-default" data-bind="click: addNewUser">Create user</a>
 							<a class="btn btn-default">Change roles</a>
 	  }
 					</div>
 				</div>
 			</div>
+		</div>
+	 
+		<div id="createUserDialog" title="Create new user">
+			@Html.Partial("~/Views/Home/_Register.cshtml")
+		</div>	 
+		<div id="changePasswordDialog" title="Change user password">
+			@Html.Partial("_ChangePassword")
 		</div>
  }
 </div>
@@ -43,5 +51,6 @@
 	@section scripts {
 		@Scripts.Render("~/bundles/knockout")
 		@Scripts.Render("~/bundles/jqueryval")
+		@Scripts.Render("~/bundles/agileManage")
 	}
 }

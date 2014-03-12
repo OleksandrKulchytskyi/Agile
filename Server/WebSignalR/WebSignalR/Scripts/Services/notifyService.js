@@ -17,14 +17,14 @@ window.agileApp.notifyService = (function () {
 	function init() {
 		toastr.options.newestOnTop = true;
 		toastr.options.positionClass = 'toast-top-full-width';
-		toastr.options.extendedTimeOut = 0; //1000;
+		toastr.options.extendedTimeOut =1300;
 		toastr.options.timeOut = 1000;
 		toastr.options.fadeOut = 250;
 		toastr.options.fadeIn = 250;
 	}
 
 	function error(msg, data, showToast) {
-		if (showtoast) {
+		if (showToast) {
 			toastr.options = {
 				"closeButton": true,
 				"debug": false,
@@ -44,9 +44,9 @@ window.agileApp.notifyService = (function () {
 		console.error(msg, data);
 	};
 
-	function info(msg, data, showtoast) {
+	function info(msg, data, showToast) {
 
-		if (showtoast) {
+		if (showToast) {
 			toastr.options = {
 				"closeButton": true,
 				"debug": false,
@@ -66,13 +66,13 @@ window.agileApp.notifyService = (function () {
 		console.info(msg, data);
 	};
 
-	function warning (msg, data, showtoast) {
+	function warning (msg, data, showToast) {
 
-		if (showtoast) {
+		if (showToast) {
 			toastr.options = {
 				"closeButton": false,
 				"debug": false,
-				"positionClass": "toast-bottom-right",
+				"positionClass": "toast-bottom-full-width",
 				"onclick": null,
 				"showDuration": "300",
 				"hideDuration": "1000",
@@ -88,13 +88,13 @@ window.agileApp.notifyService = (function () {
 		console.warning(msg, data);
 	};
 
-	function success (msg, data, showtoast) {
+	function success (msg, data, showToast) {
 
-		if (showtoast) {
+		if (showToast) {
 			toastr.options = {
 				"closeButton": false,
 				"debug": false,
-				"positionClass": "toast-bottom-right",
+				"positionClass": "toast-top-full-width",
 				"onclick": null,
 				"showDuration": "300",
 				"hideDuration": "1000",

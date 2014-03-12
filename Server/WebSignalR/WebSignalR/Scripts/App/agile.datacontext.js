@@ -11,7 +11,10 @@ window.agileApp.datacontext = (function () {
 		detachUserFromRoom: detachUserFromRoom,
 		jsonify: objJsonify,
 		getPrivileges: getPrivileges,
-		createRegisterVM:initRegisterVM
+		createRegisterVM: initRegisterVM,
+		registerNewUser: registerNewUser,
+		changeUserPassword: changeUserPassword,
+		createChangePasswordVM: createChangePasswordVM
 	};
 
 	return datacontext;
@@ -77,7 +80,19 @@ window.agileApp.datacontext = (function () {
 		return new datacontext.registerVM(data);
 	}
 
-	// Private
+	function registerNewUser(data) {
+		return ajaxRequest("post", userUrl().concat("RegisterUser/"), data);
+	}
+
+	function createChangePasswordVM(data) {
+		return new datacontext.changePasswordVM(data);
+	}
+
+	function changeUserPassword(data) {
+		return ajaxRequest("put", userUrl().concat("ChangePassword/"), data);
+	}
+
+	// Private functions
 	function objJsonify(data) {
 		return ko.toJSON(data)
 	}
@@ -102,9 +117,8 @@ window.agileApp.datacontext = (function () {
 		}
 		return $.ajax(url, options);
 	}
-	// routes
-	function roomItemUrl(id) { return getBaseUrl() + "api/room/" + (id || ""); }
 
+	// Route functions
 	function getBaseUrl() {
 		try {
 
@@ -121,6 +135,10 @@ window.agileApp.datacontext = (function () {
 				if (!base_url.endsWith("/")) {
 					base_url = base_url + "/"
 				}
+				if (base_url.endsWith("Account/")) {
+					base_url = base_url.replace("Account/", "");
+				}
+
 				window.agileApp.baseAddress = base_url;
 				console.log("Base url is:" + window.agileApp.baseAddress);
 				return base_url;
@@ -133,5 +151,9 @@ window.agileApp.datacontext = (function () {
 		}
 	}
 
+	function roomItemUrl(id) { return getBaseUrl() + "api/room/" + (id || ""); }
+
 	function privilegeUrl(id) { return getBaseUrl() + "api/privileges/" + (id || ""); }
+
+	function userUrl(id) { return getBaseUrl() + "api/user/" + (id || ""); }
 })();

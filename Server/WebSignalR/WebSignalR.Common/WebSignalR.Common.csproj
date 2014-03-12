@@ -105,6 +105,7 @@
     <Compile Include="Services\IRoomService.cs" />
     <Compile Include="Services\IUserRoomService.cs" />
     <Compile Include="Services\IVoteService.cs" />
+    <Compile Include="ViewModels\ChangePasswordViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\RegisterViewModel.cs" />
   </ItemGroup>

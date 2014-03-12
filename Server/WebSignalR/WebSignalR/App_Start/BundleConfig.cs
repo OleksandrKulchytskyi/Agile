@@ -35,6 +35,12 @@ namespace WebSignalR
 				"~/Scripts/app/agile.model.js",
 				"~/Scripts/app/agile.viewmodel.js"));
 
+			bundles.Add(new ScriptBundle("~/bundles/agileManage").Include(
+				"~/Scripts/app/common.bindings.js",
+				"~/Scripts/app/agile.datacontext.js",
+				"~/Scripts/app/agile.model.js",
+				"~/Scripts/app/account.viewmodel.js"));
+
 			// Use the development version of Modernizr to develop with and learn from. Then, when you're
 			// ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
 			bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(

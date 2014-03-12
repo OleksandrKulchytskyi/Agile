@@ -1,6 +1,9 @@
 ﻿(function (ko, datacontext) {
+
 	datacontext.roomItem = roomItem;
 	datacontext.registerVM = registerVM;
+	datacontext.privilegeVM = privilegeVM;
+	datacontext.changePasswordVM = changePasswordVM;
 
 	function roomItem(data) {
 		var self = this;
@@ -92,6 +95,33 @@
 		self.userName = ko.observable(data.UserName);
 		self.password = ko.observable(data.Password);
 		self.confirmPassword = ko.observable(data.ConfirmPassword);
+		self.toJson = function () { return ko.toJSON(self) };
+
+		self.registerUser = function () {
+			return datacontext.registerNewUser(self);
+		}
+	}
+
+	function changePasswordVM(data) {
+		var self = this;
+		data = data || {};
+
+		self.password = ko.observable(data.Password);
+		self.confirmPassword = ko.observable(data.ConfirmPassword);
+		self.toJson = function () { return ko.toJSON(self) };
+
+		self.change = function () {
+			return datacontext.changeUserPassword(self);
+		}
+	}
+
+	function privilegeVM(data) {
+		var self = this;
+		data = data || {};
+
+		self.id = ko.observable(data.Id);
+		self.name = ko.observable(data.Name);
+		self.description = ko.observable(data.Description);
 		self.toJson = function () { return ko.toJSON(self) };
 	}
 

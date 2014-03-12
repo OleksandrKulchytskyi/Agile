@@ -90,7 +90,7 @@ namespace WebSignalR.Controllers
 			this.TestHubContext.Clients.All.onRoomAdded(roomdto);
 
 			HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, roomdto);
-			response.Headers.Location = new Uri(Url.Link("DefaultApi", new { id = roomdto }));
+			response.Headers.Location = new Uri(Url.Link("DefaultApi", new { id = roomdto.Id }));
 			return response;
 		}
 
