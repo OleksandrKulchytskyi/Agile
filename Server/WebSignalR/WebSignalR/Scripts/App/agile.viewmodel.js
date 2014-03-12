@@ -29,14 +29,21 @@
         	function deleteFailed() {
         		notify.error("Fail to delete", null, true);
         	}
-        };
+        },
+		navigateToRoom = function (roomItem) {
+			if (window.agileApp.baseAddress !== undefined) {
+				console.log(roomItem.name());
+				window.location.href = window.agileApp.baseAddress + "roomactivity?roomName=" + roomItem.name();
+			}
+		};
 
 	datacontext.getRoomList(roomList, error); // load roomList
-	notify.info("Loading", null, true);
+	notify.info("Loading room list.", null, true);
 
 	return {
 		roomList: roomList,
 		error: error,
+		navigateToRoom: navigateToRoom,
 		addRoomItem: addRoomItem,
 		deleteRoomItem: deleteRoomItem
 	};

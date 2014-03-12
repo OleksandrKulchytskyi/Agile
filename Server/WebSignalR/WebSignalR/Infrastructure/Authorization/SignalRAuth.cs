@@ -15,7 +15,7 @@ namespace WebSignalR.Infrastructure.Authorization
 			if (user == null)
 				throw new ArgumentNullException("user parameter cannot be a null.");
 
-			CustomPrincipal principal = (CustomPrincipal)user;
+			CustomPrincipal principal = (user as CustomPrincipal);
 			if (principal == null)
 				return false;
 

@@ -52,6 +52,9 @@ namespace WebSignalR.Hubs
 
 		public override Task OnConnected()
 		{
+#if DEBUG
+			System.Diagnostics.Debug.WriteLine("OnConnected user: " + Context.User.Identity.Name + " SessionId: " + Context.ConnectionId);
+#endif
 			if (Context.User.Identity.IsAuthenticated)
 			{
 				IRepository<User> repo = GetRepository<User>();
@@ -80,6 +83,9 @@ namespace WebSignalR.Hubs
 
 		public override Task OnDisconnected()
 		{
+#if DEBUG
+			System.Diagnostics.Debug.WriteLine("OnDisconnected user: " + Context.User.Identity.Name + " SessionId: " + Context.ConnectionId);
+#endif
 			DisconnectClient(Context.ConnectionId);
 			return base.OnDisconnected();
 		}

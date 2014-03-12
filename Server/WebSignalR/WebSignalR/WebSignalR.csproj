@@ -231,10 +231,12 @@
     <Content Include="Global.asax" />
     <None Include="Properties\PublishProfiles\Work.pubxml" />
     <Content Include="index.html" />
+    <Content Include="Scripts\App\agile.roomactivityVM.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Scripts\app.service.js" />
     <Content Include="Scripts\App\account.viewmodel.js" />
     <Content Include="Scripts\App\agile.datacontext.js" />
+    <Content Include="Scripts\App\room.model.js" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\App\agile.model.js" />
     <Content Include="Scripts\App\agile.viewmodel.js" />
@@ -279,6 +281,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PriviligesController.cs" />
+    <Compile Include="Controllers\RoomActivityController.cs" />
     <Compile Include="Controllers\RoomController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="DependencyResolvers\NijectDependncyResolver.cs" />
@@ -326,6 +329,7 @@
       <DependentUpon>toastr.js</DependentUpon>
     </Content>
     <Content Include="Views\Account\_ChangePassword.cshtml" />
+    <Content Include="Views\RoomActivity\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

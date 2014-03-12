@@ -18,30 +18,32 @@ window.agileApp.notifyService = (function () {
 		toastr.options.newestOnTop = true;
 		toastr.options.positionClass = 'toast-top-full-width';
 		toastr.options.extendedTimeOut =1300;
-		toastr.options.timeOut = 1000;
+		toastr.options.timeOut = 1200;
 		toastr.options.fadeOut = 250;
 		toastr.options.fadeIn = 250;
 	}
 
-	function error(msg, data, showToast) {
+	function success(msg, data, showToast) {
+
 		if (showToast) {
 			toastr.options = {
-				"closeButton": true,
+				"closeButton": false,
 				"debug": false,
-				"positionClass": "toast-bottom-full-width",
+				"positionClass": "toast-top-right",
 				"onclick": null,
 				"showDuration": "300",
 				"hideDuration": "1000",
-				"timeOut": "300000",
+				"timeOut": "5000",
 				"extendedTimeOut": "1000",
 				"showEasing": "swing",
 				"hideEasing": "linear",
 				"showMethod": "fadeIn",
 				"hideMethod": "fadeOut"
 			};
-			toastr.error(msg,'Error');
+
+			toastr.success(msg, 'Success');
 		}
-		console.error(msg, data);
+		console.info(msg, data);
 	};
 
 	function info(msg, data, showToast) {
@@ -50,11 +52,11 @@ window.agileApp.notifyService = (function () {
 			toastr.options = {
 				"closeButton": true,
 				"debug": false,
-				"positionClass": "toast-bottom-right",
+				"positionClass": "toast-top-right",
 				"onclick": null,
 				"showDuration": "300",
 				"hideDuration": "1000",
-				"timeOut": "300000",
+				"timeOut": "5000",
 				"extendedTimeOut": "1000",
 				"showEasing": "swing",
 				"hideEasing": "linear",
@@ -88,13 +90,12 @@ window.agileApp.notifyService = (function () {
 		console.warning(msg, data);
 	};
 
-	function success (msg, data, showToast) {
-
+	function error(msg, data, showToast) {
 		if (showToast) {
 			toastr.options = {
-				"closeButton": false,
+				"closeButton": true,
 				"debug": false,
-				"positionClass": "toast-top-full-width",
+				"positionClass": "toast-bottom-full-width",
 				"onclick": null,
 				"showDuration": "300",
 				"hideDuration": "1000",
@@ -105,10 +106,9 @@ window.agileApp.notifyService = (function () {
 				"showMethod": "fadeIn",
 				"hideMethod": "fadeOut"
 			};
-
-			toastr.success(msg,'Success');
+			toastr.error(msg, 'Error');
 		}
-		console.info(msg, data);
+		console.error(msg, data);
 	};
 
 })();

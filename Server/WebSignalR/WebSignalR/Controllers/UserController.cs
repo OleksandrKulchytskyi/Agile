@@ -13,8 +13,8 @@ namespace WebSignalR.Controllers
 {
 	public class UserController : BaseController
 	{
-		private IUnityOfWork _unity;
-		
+		private readonly IUnityOfWork _unity;
+
 		public UserController(IUnityOfWork unity)
 		{
 			_unity = unity;
@@ -23,7 +23,7 @@ namespace WebSignalR.Controllers
 		[HttpPost]
 		[ActionName("RegisterUser")]
 		[Infrastructure.Filters.ValidateHttpAntiForgeryToken]
-		[Infrastructure.Authorization.WebApiAuth(Roles="Admin")]
+		[Infrastructure.Authorization.WebApiAuth(Roles = "Admin")]
 		public HttpResponseMessage RegisterUser(RegisterViewModel model)
 		{
 			IRepository<User> repo = _unity.GetRepository<User>();
@@ -54,10 +54,6 @@ namespace WebSignalR.Controllers
 			HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, dto);
 			response.Headers.Location = new Uri(Url.Link("DefaultApi", new { id = dto.Id }));
 			return response;
-
-			//HttpResponseMessage msg = new HttpResponseMessage(HttpStatusCode.Created);
-			//msg.Headers.Add("Id", repo.Get(x => x.Name == model.UserName).First().Id.ToString());
-			//return msg;
 		}
 
 		[ActionName("ChangePassword")]
@@ -68,7 +64,7 @@ namespace WebSignalR.Controllers
 		{
 			IRepository<User> repo = _unity.GetRepository<User>();
 			WebSignalR.Common.Entities.User usr;
-			if ((usr=repo.Get(x => x.Name == User.Identity.Name).FirstOrDefault())==null)
+			if ((usr = repo.Get(x => x.Name == User.Identity.Name).FirstOrDefault()) == null)
 				return new HttpResponseMessage(HttpStatusCode.Conflict) { Content = new StringContent("User is not exists.") };
 
 			else if (model.Password != model.ConfirmPassword)

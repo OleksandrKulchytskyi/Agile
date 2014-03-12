@@ -1692,3 +1692,176 @@ System.Web.HttpException (0x80004005): The controller for path '/favicon.ico' wa
    at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
 ERROR 2014-03-12 14:42:15,752 1262313ms Global                 LogToNLog          -      GET     http://localhost:6404/api/privileges/getPrivileges?_=1394628135459     System.Web.Http.Filters     WebApiAuth     OnAuthorization  Processing of the HTTP request resulted in an exception. Please see the HTTP response returned by the 'Response' property of this exception for details.
 ERROR 2014-03-12 14:42:15,771 1262332ms Global                 LogToNLog          -      GET     http://localhost:6404/api/privileges/getPrivileges?_=1394628135459     System.Web.Http.Controllers     PrivilegesController     ExecuteAsync  Processing of the HTTP request resulted in an exception. Please see the HTTP response returned by the 'Response' property of this exception for details.
+INFO  2014-03-12 16:25:30,736   283ms Global                 Application_Start  - Application_Start()
+ERROR 2014-03-12 16:25:31,567  1114ms Global                 InitMapperMaps     - AutoMapper.AutoMapperConfigurationException: The following property on WebSignalR.Common.Entities.User cannot be mapped: 
+	ConnectedUsers
+Add a custom mapping expression, ignore, add a custom resolver, or modify the destination type WebSignalR.Common.Entities.User.
+Context:
+	Mapping to property ConnectedUsers from WebSignalR.Common.DTO.UserDto to WebSignalR.Common.Entities.User
+	Mapping to property ConnectedUsers from System.Collections.Generic.List`1[[WebSignalR.Common.DTO.UserDto, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] to System.Collections.Generic.ICollection`1[[WebSignalR.Common.Entities.User, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
+	Mapping from type WebSignalR.Common.DTO.RoomDto to WebSignalR.Common.Entities.Room
+Exception of type 'AutoMapper.AutoMapperConfigurationException' was thrown.
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.AssertConfigurationIsValid(IEnumerable`1 typeMaps)
+   at AutoMapper.ConfigurationStore.AssertConfigurationIsValid()
+   at AutoMapper.Mapper.AssertConfigurationIsValid()
+   at WebSignalR.Infrastructure.BootStrapper.InitMapperMaps() in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Infrastructure\BootStrapper.cs:line 132
+INFO  2014-03-12 16:30:06,881   214ms Global                 Application_Start  - Application_Start()
+ERROR 2014-03-12 16:30:07,535   868ms Global                 InitMapperMaps     - AutoMapper.AutoMapperConfigurationException: The following property on WebSignalR.Common.Entities.User cannot be mapped: 
+	ConnectedUsers
+Add a custom mapping expression, ignore, add a custom resolver, or modify the destination type WebSignalR.Common.Entities.User.
+Context:
+	Mapping to property ConnectedUsers from WebSignalR.Common.DTO.UserDto to WebSignalR.Common.Entities.User
+	Mapping to property ConnectedUsers from System.Collections.Generic.List`1[[WebSignalR.Common.DTO.UserDto, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] to System.Collections.Generic.ICollection`1[[WebSignalR.Common.Entities.User, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
+	Mapping from type WebSignalR.Common.DTO.RoomDto to WebSignalR.Common.Entities.Room
+Exception of type 'AutoMapper.AutoMapperConfigurationException' was thrown.
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.AssertConfigurationIsValid(IEnumerable`1 typeMaps)
+   at AutoMapper.ConfigurationStore.AssertConfigurationIsValid()
+   at AutoMapper.Mapper.AssertConfigurationIsValid()
+   at WebSignalR.Infrastructure.BootStrapper.InitMapperMaps() in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Infrastructure\BootStrapper.cs:line 132
+INFO  2014-03-12 16:36:41,079   202ms Global                 Application_Start  - Application_Start()
+ERROR 2014-03-12 16:36:41,743   866ms Global                 InitMapperMaps     - AutoMapper.AutoMapperConfigurationException: The following property on WebSignalR.Common.Entities.User cannot be mapped: 
+	ConnectedUsers
+Add a custom mapping expression, ignore, add a custom resolver, or modify the destination type WebSignalR.Common.Entities.User.
+Context:
+	Mapping to property ConnectedUsers from WebSignalR.Common.DTO.UserDto to WebSignalR.Common.Entities.User
+	Mapping to property ConnectedUsers from System.Collections.Generic.List`1[[WebSignalR.Common.DTO.UserDto, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] to System.Collections.Generic.ICollection`1[[WebSignalR.Common.Entities.User, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
+	Mapping from type WebSignalR.Common.DTO.RoomDto to WebSignalR.Common.Entities.Room
+Exception of type 'AutoMapper.AutoMapperConfigurationException' was thrown.
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.AssertConfigurationIsValid(IEnumerable`1 typeMaps)
+   at AutoMapper.ConfigurationStore.AssertConfigurationIsValid()
+   at AutoMapper.Mapper.AssertConfigurationIsValid()
+   at WebSignalR.Infrastructure.BootStrapper.InitMapperMaps() in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Infrastructure\BootStrapper.cs:line 132
+WARN  2014-03-12 16:40:41,690 240813ms Global                 Application_Error  - URL: http://localhost:6404/favicon.ico; FilePath: /favicon.ico
+ERROR 2014-03-12 16:40:41,693 240816ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): The controller for path '/favicon.ico' was not found or does not implement IController.
+   at System.Web.Mvc.DefaultControllerFactory.GetControllerInstance(RequestContext requestContext, Type controllerType)
+   at System.Web.Mvc.DefaultControllerFactory.CreateController(RequestContext requestContext, String controllerName)
+   at System.Web.Mvc.MvcHandler.ProcessRequestInit(HttpContextBase httpContext, IController& controller, IControllerFactory& factory)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContext httpContext, AsyncCallback callback, Object state)
+   at System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.BeginProcessRequest(HttpContext context, AsyncCallback cb, Object extraData)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+WARN  2014-03-12 16:41:12,928 272051ms Global                 Application_Error  - URL: http://localhost:6404/favicon.ico; FilePath: /favicon.ico
+ERROR 2014-03-12 16:41:12,930 272053ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): The controller for path '/favicon.ico' was not found or does not implement IController.
+   at System.Web.Mvc.DefaultControllerFactory.GetControllerInstance(RequestContext requestContext, Type controllerType)
+   at System.Web.Mvc.DefaultControllerFactory.CreateController(RequestContext requestContext, String controllerName)
+   at System.Web.Mvc.MvcHandler.ProcessRequestInit(HttpContextBase httpContext, IController& controller, IControllerFactory& factory)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContext httpContext, AsyncCallback callback, Object state)
+   at System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.BeginProcessRequest(HttpContext context, AsyncCallback cb, Object extraData)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-03-12 17:02:53,081   210ms Global                 Application_Start  - Application_Start()
+ERROR 2014-03-12 17:02:53,762   891ms Global                 InitMapperMaps     - AutoMapper.AutoMapperConfigurationException: The following property on WebSignalR.Common.Entities.User cannot be mapped: 
+	ConnectedUsers
+Add a custom mapping expression, ignore, add a custom resolver, or modify the destination type WebSignalR.Common.Entities.User.
+Context:
+	Mapping to property ConnectedUsers from WebSignalR.Common.DTO.UserDto to WebSignalR.Common.Entities.User
+	Mapping to property ConnectedUsers from System.Collections.Generic.List`1[[WebSignalR.Common.DTO.UserDto, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] to System.Collections.Generic.ICollection`1[[WebSignalR.Common.Entities.User, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
+	Mapping from type WebSignalR.Common.DTO.RoomDto to WebSignalR.Common.Entities.Room
+Exception of type 'AutoMapper.AutoMapperConfigurationException' was thrown.
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.AssertConfigurationIsValid(IEnumerable`1 typeMaps)
+   at AutoMapper.ConfigurationStore.AssertConfigurationIsValid()
+   at AutoMapper.Mapper.AssertConfigurationIsValid()
+   at WebSignalR.Infrastructure.BootStrapper.InitMapperMaps() in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Infrastructure\BootStrapper.cs:line 132
+INFO  2014-03-12 17:34:33,021   207ms Global                 Application_Start  - Application_Start()
+ERROR 2014-03-12 17:34:33,789   975ms Global                 InitMapperMaps     - AutoMapper.AutoMapperConfigurationException: The following property on WebSignalR.Common.Entities.User cannot be mapped: 
+	ConnectedUsers
+Add a custom mapping expression, ignore, add a custom resolver, or modify the destination type WebSignalR.Common.Entities.User.
+Context:
+	Mapping to property ConnectedUsers from WebSignalR.Common.DTO.UserDto to WebSignalR.Common.Entities.User
+	Mapping to property ConnectedUsers from System.Collections.Generic.List`1[[WebSignalR.Common.DTO.UserDto, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] to System.Collections.Generic.ICollection`1[[WebSignalR.Common.Entities.User, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
+	Mapping from type WebSignalR.Common.DTO.RoomDto to WebSignalR.Common.Entities.Room
+Exception of type 'AutoMapper.AutoMapperConfigurationException' was thrown.
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.AssertConfigurationIsValid(IEnumerable`1 typeMaps)
+   at AutoMapper.ConfigurationStore.AssertConfigurationIsValid()
+   at AutoMapper.Mapper.AssertConfigurationIsValid()
+   at WebSignalR.Infrastructure.BootStrapper.InitMapperMaps() in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Infrastructure\BootStrapper.cs:line 132
+WARN  2014-03-12 17:34:44,364 11550ms Global                 Application_Error  - URL: http://localhost:6404/favicon.ico; FilePath: /favicon.ico
+ERROR 2014-03-12 17:34:44,366 11552ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): The controller for path '/favicon.ico' was not found or does not implement IController.
+   at System.Web.Mvc.DefaultControllerFactory.GetControllerInstance(RequestContext requestContext, Type controllerType)
+   at System.Web.Mvc.DefaultControllerFactory.CreateController(RequestContext requestContext, String controllerName)
+   at System.Web.Mvc.MvcHandler.ProcessRequestInit(HttpContextBase httpContext, IController& controller, IControllerFactory& factory)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContext httpContext, AsyncCallback callback, Object state)
+   at System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.BeginProcessRequest(HttpContext context, AsyncCallback cb, Object extraData)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+WARN  2014-03-12 17:35:11,110 38295ms Global                 Application_Error  - URL: http://localhost:6404/favicon.ico; FilePath: /favicon.ico
+ERROR 2014-03-12 17:35:11,112 38297ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): The controller for path '/favicon.ico' was not found or does not implement IController.
+   at System.Web.Mvc.DefaultControllerFactory.GetControllerInstance(RequestContext requestContext, Type controllerType)
+   at System.Web.Mvc.DefaultControllerFactory.CreateController(RequestContext requestContext, String controllerName)
+   at System.Web.Mvc.MvcHandler.ProcessRequestInit(HttpContextBase httpContext, IController& controller, IControllerFactory& factory)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContext httpContext, AsyncCallback callback, Object state)
+   at System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.BeginProcessRequest(HttpContext context, AsyncCallback cb, Object extraData)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+WARN  2014-03-12 17:37:08,615 155800ms Global                 Application_Error  - URL: http://localhost:6404/favicon.ico; FilePath: /favicon.ico
+ERROR 2014-03-12 17:37:08,617 155802ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): The controller for path '/favicon.ico' was not found or does not implement IController.
+   at System.Web.Mvc.DefaultControllerFactory.GetControllerInstance(RequestContext requestContext, Type controllerType)
+   at System.Web.Mvc.DefaultControllerFactory.CreateController(RequestContext requestContext, String controllerName)
+   at System.Web.Mvc.MvcHandler.ProcessRequestInit(HttpContextBase httpContext, IController& controller, IControllerFactory& factory)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContext httpContext, AsyncCallback callback, Object state)
+   at System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.BeginProcessRequest(HttpContext context, AsyncCallback cb, Object extraData)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+WARN  2014-03-12 17:38:43,833 251019ms Global                 Application_Error  - URL: http://localhost:6404/favicon.ico; FilePath: /favicon.ico
+ERROR 2014-03-12 17:38:43,835 251021ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): The controller for path '/favicon.ico' was not found or does not implement IController.
+   at System.Web.Mvc.DefaultControllerFactory.GetControllerInstance(RequestContext requestContext, Type controllerType)
+   at System.Web.Mvc.DefaultControllerFactory.CreateController(RequestContext requestContext, String controllerName)
+   at System.Web.Mvc.MvcHandler.ProcessRequestInit(HttpContextBase httpContext, IController& controller, IControllerFactory& factory)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContext httpContext, AsyncCallback callback, Object state)
+   at System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.BeginProcessRequest(HttpContext context, AsyncCallback cb, Object extraData)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+WARN  2014-03-12 17:57:18,407 1365592ms Global                 Application_Error  - URL: http://localhost:6404/favicon.ico; FilePath: /favicon.ico
+ERROR 2014-03-12 17:57:18,409 1365594ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): The controller for path '/favicon.ico' was not found or does not implement IController.
+   at System.Web.Mvc.DefaultControllerFactory.GetControllerInstance(RequestContext requestContext, Type controllerType)
+   at System.Web.Mvc.DefaultControllerFactory.CreateController(RequestContext requestContext, String controllerName)
+   at System.Web.Mvc.MvcHandler.ProcessRequestInit(HttpContextBase httpContext, IController& controller, IControllerFactory& factory)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContext httpContext, AsyncCallback callback, Object state)
+   at System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.BeginProcessRequest(HttpContext context, AsyncCallback cb, Object extraData)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-03-12 18:38:30,661   199ms Global                 Application_Start  - Application_Start()
+ERROR 2014-03-12 18:38:31,309   847ms Global                 InitMapperMaps     - AutoMapper.AutoMapperConfigurationException: The following property on WebSignalR.Common.Entities.User cannot be mapped: 
+	ConnectedUsers
+Add a custom mapping expression, ignore, add a custom resolver, or modify the destination type WebSignalR.Common.Entities.User.
+Context:
+	Mapping to property ConnectedUsers from WebSignalR.Common.DTO.UserDto to WebSignalR.Common.Entities.User
+	Mapping to property ConnectedUsers from System.Collections.Generic.List`1[[WebSignalR.Common.DTO.UserDto, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]] to System.Collections.Generic.ICollection`1[[WebSignalR.Common.Entities.User, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]
+	Mapping from type WebSignalR.Common.DTO.RoomDto to WebSignalR.Common.Entities.Room
+Exception of type 'AutoMapper.AutoMapperConfigurationException' was thrown.
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.DryRunTypeMap(ICollection`1 typeMapsChecked, ResolutionContext context)
+   at AutoMapper.ConfigurationStore.AssertConfigurationIsValid(IEnumerable`1 typeMaps)
+   at AutoMapper.ConfigurationStore.AssertConfigurationIsValid()
+   at AutoMapper.Mapper.AssertConfigurationIsValid()
+   at WebSignalR.Infrastructure.BootStrapper.InitMapperMaps() in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Infrastructure\BootStrapper.cs:line 132

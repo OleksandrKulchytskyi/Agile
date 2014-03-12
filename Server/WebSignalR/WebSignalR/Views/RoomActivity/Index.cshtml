@@ -1,0 +1,39 @@
+﻿@using WebSignalR.Infrastructure
+@{
+	ViewBag.Title = "Room activity";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	var user = ViewData["User"] as CustomPrincipal;
+	var uid = (int)ViewData["UserId"];
+	var isAdmin = (bool)ViewData["IsAdmin"];
+	var roomId = (int)ViewData["RoomId"];
+	var roomName = (string)ViewData["RoomName"];
+}
+@functions{
+	public string GetAntiForgeryToken()
+	{
+		string cookieToken, formToken;
+		AntiForgery.GetTokens(null, out cookieToken, out formToken);
+		return cookieToken + ":" + formToken;
+	}
+}
+
+<h2>Room Activity View</h2>
+
+@if (User.Identity.IsAuthenticated)
+{
+	<p class="error" data-bind="text: error"></p>
+	<input id="antiForgeryToken" type="hidden" value="@GetAntiForgeryToken()" />
+	<input id="userId" type="hidden" value="@uid" />
+	<input id="isAdmin" type="hidden" value="@isAdmin" />
+	<input id="roomId" type="hidden" value="@roomId" />
+	<input id="roomName" type="hidden" value="@roomName" />
+}
+
+@if (@User.Identity.IsAuthenticated)
+{
+	@section scripts {
+		@Scripts.Render("~/bundles/ko-signalr")
+		<script type="text/javascript" src="~/signalr/hubs"></script>
+		@Scripts.Render("~/bundles/agileRoomActivity")
+	}
+}

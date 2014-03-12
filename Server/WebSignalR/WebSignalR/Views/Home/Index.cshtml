@@ -37,6 +37,8 @@
 				<a href="#" class="deletelist" data-bind="click: $parent.deleteRoomItem">X</a>
 				@if (@User.IsInRole("Admin"))
 	{
+					<button class="btn btn-primary" data-bind="click: $parent.navigateToRoom">Navigate</button>
+					
 					<div data-bind="visible: connectedUsers().length > 0">
 						<p>
 							Connected users:
