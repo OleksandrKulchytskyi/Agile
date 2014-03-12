@@ -39,7 +39,7 @@ window.agileApp.notifyService = (function () {
 				"showMethod": "fadeIn",
 				"hideMethod": "fadeOut"
 			};
-			toastr.error(msg);
+			toastr.error(msg,'Error');
 		}
 		console.error(msg, data);
 	};
@@ -61,7 +61,7 @@ window.agileApp.notifyService = (function () {
 				"showMethod": "fadeIn",
 				"hideMethod": "fadeOut"
 			};
-			toastr.info(msg);
+			toastr.info(msg,'Information');
 		}
 		console.info(msg, data);
 	};
@@ -106,7 +106,7 @@ window.agileApp.notifyService = (function () {
 				"hideMethod": "fadeOut"
 			};
 
-			toastr.success(msg);
+			toastr.success(msg,'Success');
 		}
 		console.info(msg, data);
 	};

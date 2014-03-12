@@ -8,3 +8,6 @@
 /// <reference path="modernizr-2.6.2.js" />
 /// <reference path="Services/notifyService.js" />
 /// <reference path="app.service.js" />
+/// <reference path=app/agile.datacontext.js" />
+/// <reference path=app/agile.model.js" />
+/// <reference path=app/account.viewmodel.js" />

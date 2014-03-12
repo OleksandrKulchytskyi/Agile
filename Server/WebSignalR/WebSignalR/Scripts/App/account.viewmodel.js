@@ -1,16 +1,12 @@
-﻿window.agileApp.accountViewModel = (function (ko, datacontext) {
+﻿window.agileApp.accountViewModel = (function (ko, datacontext, notifyService) {
 	/// <field name="roomList" value="[new datacontext.roomList()]"></field>
-	var allPriviliges = ko.observableArray(),
+	var allPrivileges = ko.observableArray(),
         error = ko.observable(),
-        addRoomItem = function () {
-        	var roomItem = datacontext.createRoomItem();
-        	roomItem.active(false);
-        	roomItem.name("Add name here..");
-        	roomItem.description("");
-        	datacontext.saveNewRoomItem(roomItem)
+        addNewUser = function () {
+        	var registerVM = datacontext.createRegisterVM();
+        	datacontext.saveNewRoomItem(registerVM)
                 .then(addSucceeded)
                 .fail(addFailed);
-
         	function addSucceeded() {
         		showRoomList(todoList);
         	}
@@ -31,17 +27,24 @@
         		showRoomList(roomList); // re-show the restored list
         	}
         };
-
-	datacontext.getRoomList(roomList, error); // load roomList
+	// load privileges
+	datacontext.getRoomList(roomList, error)
+	.done(function (data) { })
+	.fail(function () {
+		if (window.agileApp.notifyService !== undefined) {
+			window.agileApp.notifyService.error("Unable to retrieve privilege list.", null, true);
+		}
+		error("Error retrieving privileges.");
+	});
 
 	return {
-		roomList: roomList,
+		allPrivileges: allPrivileges,
 		error: error,
-		addRoomItem: addRoomItem,
+		addNewUser: addNewUser,
 		deleteRoomItem: deleteRoomItem
 	};
 
-})(ko, agileApp.datacontext);
+})(ko, agileApp.datacontext, agileApp.notifyService);
 
 // Initiate the Knockout bindings
 ko.applyBindings(window.agileApp.roomListViewModel);

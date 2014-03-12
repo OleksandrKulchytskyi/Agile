@@ -9,7 +9,9 @@ window.agileApp.datacontext = (function () {
 		saveChangedRoomItem: saveChangedRoomItem,
 		deleteRoomItem: deleteRoomItem,
 		detachUserFromRoom: detachUserFromRoom,
-		jsonify: objJsonify
+		jsonify: objJsonify,
+		getPrivileges: getPrivileges,
+		createRegisterVM:initRegisterVM
 	};
 
 	return datacontext;
@@ -32,7 +34,7 @@ window.agileApp.datacontext = (function () {
 
 		function getFailed() {
 			if (window.agileApp.notifyService !== undefined) {
-				window.agileApp.notifyService.error("Room has been saved.", null, true);
+				window.agileApp.notifyService.error("Fail to retrieve room list.", null, true);
 			}
 			errorObservable("Error retrieving room lists.");
 		}
@@ -64,6 +66,15 @@ window.agileApp.datacontext = (function () {
 		 .fail(function (XMLHttpRequest, textStatus, errorThrown) {
 		 	console.log(errorThrown);
 		 });
+	}
+
+	function getPrivileges() {
+		var url = privilegeUrl().concat("getPrivileges");
+		return ajaxRequest('get', url);
+	}
+
+	function initRegisterVM(data) {
+		return new datacontext.registerVM(data);
 	}
 
 	// Private
@@ -121,4 +132,6 @@ window.agileApp.datacontext = (function () {
 			return null;
 		}
 	}
+
+	function privilegeUrl(id) { return getBaseUrl() + "api/privileges/" + (id || ""); }
 })();

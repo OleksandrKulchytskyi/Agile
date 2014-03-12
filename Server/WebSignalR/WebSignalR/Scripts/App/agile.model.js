@@ -1,5 +1,6 @@
 ﻿(function (ko, datacontext) {
 	datacontext.roomItem = roomItem;
+	datacontext.registerVM = registerVM;
 
 	function roomItem(data) {
 		var self = this;
@@ -67,9 +68,6 @@
 
 	function user(data, room) {
 		var self = this;
-
-		console.log("Initiating user");
-		console.log(data);
 		data = data || {};
 
 		self.room = room;
@@ -79,14 +77,22 @@
 		self.toJson = function () { return ko.toJSON(self) };
 
 		self.detachUser = function (user, event) {
-			console.log(user);
-			console.log(self.room);
 			var rid = self.room.id;
 			var uid = self.id;
 			datacontext.detachUserFromRoom(rid, uid);
 			self.room.connectedUsers.remove(user);
 		}
-		console.log(self.room.id);
+	}
+
+	function registerVM(data) {
+		var self = this;
+		data = data || {};
+
+		self.id = data.Id;
+		self.userName = ko.observable(data.UserName);
+		self.password = ko.observable(data.Password);
+		self.confirmPassword = ko.observable(data.ConfirmPassword);
+		self.toJson = function () { return ko.toJSON(self) };
 	}
 
 	// convert raw roomItem data objects into array of roomItems
