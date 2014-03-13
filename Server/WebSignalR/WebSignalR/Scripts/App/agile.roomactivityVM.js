@@ -1,22 +1,25 @@
 ﻿window.agileApp.roomActivityViewModel = (function (ko, datacontext, notify) {
+
 	/// <field name="roomList" value="[new datacontext.roomList()]"></field>
 	var userList = ko.observableArray(),
 		voteList = ko.observableArray(),
-        error = ko.observable(),
+		error = ko.observable(),
 		isUserAdmin = ko.observable(),
 		loggedUser = ko.observable(),
 		mySession = ko.observable(),
+		roomDtoState = ko.observable(),
 
 		setLoggedUser = function (user) {
 			loggedUser(new datacontext.userViewModel(user));
 		},
 		setUserState = function (userState) {
 			mySession(new datacontext.userConnectionState(userState));
+		},
+		setRoomDtoState = function (roomDto) {
+			roomDtoState(new datacontext.roomDtoModel(roomDto));
 		};
 
-	//datacontext.getRoomList(roomList, error); // load roomList
-	//notify.info("Loading", null, true);
-
+	//var viewModel = ko.mapping.fromJS(@Html.Raw(Model.ToJson()));
 	return {
 		userList: userList,
 		voteList: voteList,
@@ -24,30 +27,28 @@
 		mySession: mySession,
 		loggedUser: loggedUser,
 		setLoggedUser: setLoggedUser,
-		setUserState: setUserState
+		setUserState: setUserState,
+		roomDtoState: roomDtoState,
+		setRoomDtoState: setRoomDtoState
 	};
-
 })(ko, agileApp.datacontext, agileApp.notifyService);
 
 var mainVM = window.agileApp.roomActivityViewModel;
-// Initiate the Knockout bindings
-ko.applyBindings(mainVM);
 
 var agileHub = $.connection.agileHub;
 
 $.connection.hub.logging = true;
 $.connection.hub.start()
-	   .done(function () {
-	   	// Call the Initialize function on the server. Will respond with auctionInitialized message
-	   	if (window.agileApp.notifyService !== undefined) {
-	   		window.agileApp.notifyService.success("Successfully connected to the hub service!", null, true);
-	   	}
-	   	agileHub.server.testMethod("Hello");
-	   })
-	   .fail(function () {
-	   	if (window.agileApp.notifyService !== undefined)
-	   		window.agileApp.notifyService.warning("Could not connect to the hub service!", null, true);
-	   });
+				.done(function () {
+					// Call the Initialize function on the server. Will respond with auctionInitialized message
+					if (window.agileApp.notifyService !== undefined)
+						window.agileApp.notifyService.success("Successfully connected to the hub service!", null, true);
+					agileHub.server.testMethod("Hello");
+				})
+				.fail(function () {
+					if (window.agileApp.notifyService !== undefined)
+						window.agileApp.notifyService.warning("Could not connect to the hub service!", null, true);
+				});
 
 // Handle connection loss and reconnect in a robust way
 var timeout = null;
@@ -75,9 +76,6 @@ agileHub.client.onTestMethod = function (data) {
 
 agileHub.client.onState = function (state) {
 	mainVM.setUserState(state);
-	if (window.agileApp.notifyService !== undefined)
-		window.agileApp.notifyService.info(ko.toJSON(state), null, true);
-
 	agileHub.server.joinRoom($("#roomName").val(), mainVM.mySession().sessionId).done(function (joinRoomResult) {
 		agileApp.notifyService.info(ko.toJSON(joinRoomResult), null, true);
 	});
@@ -87,21 +85,40 @@ agileHub.client.onUserLogged = function (user) {
 	mainVM.setLoggedUser(user);
 	if ($("#userId").val() === "0")
 		$("#userId").val(mainVM.loggedUser().id);
+	//window.agileApp.notifyService.info("User e", null, true);
+}
 
-	if (window.agileApp.notifyService !== undefined)
-		window.agileApp.notifyService.info(ko.toJSON(user), null, true);
+agileHub.client.onInitRoom = function (roomDto) {
+	agileApp.notifyService.info("Initializing view datacontext.", {}, true);
+	mainVM.setRoomDtoState(roomDto);
+	ko.applyBindings(mainVM);// Initiate the Knockout bindings
+
+	//var userSection = document.getElementById('users');
+	//if (userSection !== null) 
+	//ko.applyBindings(mainVM.roomDtoState(), userSection);
 }
 
 agileHub.client.onJoinedRoom = function (userDto) {
 
+	var match = ko.utils.arrayFirst(mainVM.roomDtoState().connectedUsers(), function (item) {
+		return item.id === userDto.Id;
+	});
+	if (!match) {
+		var newUser = new agileApp.datacontext.userViewModel(userDto);
+		mainVM.roomDtoState().connectedUsers.push(newUser);
+	}
 }
 
 agileHub.client.onLeftRoom = function (userDto) {
-
+	console.log("onLeftRoom ");
+	mainVM.roomDtoState().connectedUsers.remove(function (item) { return item.id == userDto.Id })
+	//var user = new agileApp.datacontext.userViewModel(userDto);
+	//mainVM.roomDtoState().connectedUsers.remove(user);
 }
 
 agileHub.client.onRoomStateChanged = function (roomDto) {
-
+	var user = new agileApp.datacontext.userViewModel(userDto);
+	mainVM.roomDtoState().connectedUsers.remove(user);
 }
 
 agileHub.client.onUserVoted = function (userVoteDto) {
@@ -110,4 +127,8 @@ agileHub.client.onUserVoted = function (userVoteDto) {
 
 agileHub.client.onVoteItemClosed = function (voteItemDto) {
 
+}
+
+agileHub.client.onRoomDeleted = function (roomDto) {
+	agileApp.notifyService.warning("Sorry room is no longer valid!!!!", {}, true);
 }

@@ -12,6 +12,8 @@ namespace WebSignalR
 				"~/Content/Agile.css",
 				"~/Content/bootstrap.css"));
 
+			bundles.Add(new StyleBundle("~/Content/koGrid").Include("~/Content/KoGrid.css"));
+
 			bundles.Add(new StyleBundle("~/Content/toastr").Include("~/Content/toastr.css"));
 
 			bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
@@ -77,6 +79,8 @@ namespace WebSignalR
 			bundles.Add(new ScriptBundle("~/bundles/ko-signalr").Include(
 				"~/Scripts/jquery.signalR-{version}.js",
 				"~/Scripts/knockout-{version}.js"));
+
+			bundles.Add(new ScriptBundle("~/bundles/koGrid").Include("~/Scripts/koGrid-{version}.js"));
 		}
 	}
 }

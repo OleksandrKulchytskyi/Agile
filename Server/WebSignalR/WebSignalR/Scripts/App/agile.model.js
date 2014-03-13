@@ -24,9 +24,13 @@
 		self.isSaved = ko.observable(false);
 
 		saveChanges = function () {
-			if (self.isSaved)
+			if (self.isSaved() == true) {
+				console.log("Modifying room.");
 				return datacontext.saveChangedRoomItem(self);
+			}
 		};
+
+		self.toJson = function () { return ko.toJSON(self) };
 
 		// Auto-save when these properties change
 		self.name.subscribe(saveChanges);
@@ -34,39 +38,19 @@
 		self.active.subscribe(saveChanges);
 
 		self.saveNewRoom = function (room) {
-			datacontext.saveNewRoomItem(self)
-			.always(alwaysHandler);
+			datacontext.saveNewRoomItem(self).done(savedCallback).fail(failHandler);
 
-			function alwaysHandler(output, status, xhr) {
-
-				try {
-					var res = output.getResponseHeader ? output.getResponseHeader.get('Id')
-							: xhr.getResponseHeader.get('Id');
-					console.log("Result is :" + res);
-					console.log(output.getResponseHeader.get('Id'))
-				}
-				catch (error) {
-					console.log(error);
-				}
-
-				if (output.status == 201) {
-					self.id = res;
-					self.errorMessage("");
-					self.isSaved(true);
-					if (window.agileApp.notifyService !== undefined) {
-						window.agileApp.notifyService.success("Room has been saved.", null, true);
-					}
-				}
-				else {
-					self.errorMessage("Save of new room failed");
-					if (window.agileApp.notifyService !== undefined) {
-						window.agileApp.notifyService.success("Fail to save room.", null, true);
-					}
-				}
-			}
+			function savedCallback(savedRoom) {
+				window.agileApp.notifyService.success("Room has been saved.", null, true);
+				console.log("On success " + savedRoom.Id);
+				self.id = savedRoom.Id;
+				self.isSaved(true);
+			};
+			function failHandler() {
+				window.agileApp.notifyService.error("Fail to save room.", null, true);
+				self.errorMessage("Unable to save room.");
+			};
 		}
-
-		self.toJson = function () { return ko.toJSON(self) };
 	};
 
 	function user(data, room) {

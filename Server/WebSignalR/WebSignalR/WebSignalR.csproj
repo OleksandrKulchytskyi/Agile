@@ -167,6 +167,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
+    <Content Include="Content\KoGrid.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -232,6 +233,8 @@
     <None Include="Properties\PublishProfiles\Work.pubxml" />
     <Content Include="index.html" />
     <Content Include="Scripts\App\agile.roomactivityVM.js" />
+    <Content Include="Scripts\koGrid-2.1.1.debug.js" />
+    <Content Include="Scripts\koGrid-2.1.1.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Scripts\app.service.js" />
     <Content Include="Scripts\App\account.viewmodel.js" />
@@ -308,6 +311,7 @@
     <Compile Include="Infrastructure\DynamicTrace.cs" />
     <Compile Include="Infrastructure\FileBasedVotesProvider.cs" />
     <Compile Include="Infrastructure\Filters\ValidateHttpAntiForgeryTokenAttribute.cs" />
+    <Compile Include="Infrastructure\ObjectExtensions.cs" />
     <Compile Include="Infrastructure\Services\UserRoomService.cs" />
     <Compile Include="Infrastructure\SessionState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

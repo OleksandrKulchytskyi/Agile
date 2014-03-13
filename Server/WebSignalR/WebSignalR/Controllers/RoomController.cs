@@ -71,7 +71,7 @@ namespace WebSignalR.Controllers
 
 			IRepository<Room> repo = _unity.GetRepository<Room>();
 			if (repo.Exist(x => x.Name == room.Name))
-				return new HttpResponseMessage(HttpStatusCode.Conflict) { Content = new StringContent("User with such name already exists.") };
+				return new HttpResponseMessage(HttpStatusCode.Conflict) { Content = new StringContent("Room with such name already exists.") };
 
 			try
 			{
@@ -85,13 +85,41 @@ namespace WebSignalR.Controllers
 			}
 
 			// Need to detach to avoid loop reference exception during JSON serialization
-			Room repoRoom = repo.Get(x => x.Name == room.Name).First();
+			Room repoRoom = repo.Get(x => x.Name == room.Name).FirstOrDefault();
 			roomdto.Id = repoRoom.Id;
-			this.TestHubContext.Clients.All.onRoomAdded(roomdto);
+			this.AgileHubContext.Clients.All.onRoomAdded(roomdto);
 
 			HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, roomdto);
 			response.Headers.Location = new Uri(Url.Link("DefaultApi", new { id = roomdto.Id }));
 			return response;
+		}
+
+		[HttpPut]
+		[Infrastructure.Authorization.WebApiAuth(Roles = "Admin")]
+		public HttpResponseMessage UpdateRoom(int id, RoomDto roomdto)
+		{
+			if (!ModelState.IsValid)
+				return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+			if (id != roomdto.Id)
+				return Request.CreateResponse(HttpStatusCode.BadRequest);
+
+			IRepository<Room> repo = _unity.GetRepository<Room>();
+			Room repoRoom = repo.Get(x => x.Id == id).FirstOrDefault();
+			try
+			{
+				repoRoom.Name = roomdto.Name;
+				repoRoom.Description = roomdto.Description;
+				repoRoom.Active = roomdto.Active;
+				repo.Update(repoRoom);
+				_unity.Commit();
+			}
+			catch (System.Data.Entity.Infrastructure.DbUpdateConcurrencyException)
+			{
+				return Request.CreateResponse(HttpStatusCode.InternalServerError);
+			}
+
+			HttpResponseMessage msg = Request.CreateResponse(HttpStatusCode.OK);
+			return msg;
 		}
 
 		[HttpDelete]
@@ -115,7 +143,7 @@ namespace WebSignalR.Controllers
 			}
 			// Need to detach to avoid loop reference exception during JSON serialization
 			RoomDto dto = AutoMapper.Mapper.Map<RoomDto>(room);
-			this.TestHubContext.Clients.All.onRoomDeleted(dto);
+			this.AgileHubContext.Clients.All.onRoomDeleted(dto);
 			return Request.CreateResponse(HttpStatusCode.OK, dto);
 		}
 
@@ -133,8 +161,8 @@ namespace WebSignalR.Controllers
 				{
 					room.ConnectedUsers.Add(usr);
 					_unity.Commit();
-					RoomDto dto = AutoMapper.Mapper.Map<RoomDto>(room);
-					TestHubContext.Clients.Group(room.Name).onJoinedRoom(dto);
+					UserDto dto = AutoMapper.Mapper.Map<UserDto>(usr);
+					AgileHubContext.Clients.Group(room.Name).onJoinedRoom(dto);
 				}
 				else
 					return new HttpResponseMessage(HttpStatusCode.BadRequest) { Content = new StringContent("Unable to found entities with such id's.") };
@@ -177,8 +205,8 @@ namespace WebSignalR.Controllers
 				{
 					room.ConnectedUsers.Remove(usr);
 					_unity.Commit();
-					RoomDto dto = AutoMapper.Mapper.Map<RoomDto>(room);
-					TestHubContext.Clients.Group(room.Name).onLeftRoom(dto);
+					UserDto dto = AutoMapper.Mapper.Map<UserDto>(usr);
+					base.AgileHubContext.Clients.Group(room.Name).onLeftRoom(dto);
 				}
 				else
 					return new HttpResponseMessage(HttpStatusCode.BadRequest) { Content = new StringContent("Unable to found entities with such id's.") };
@@ -202,6 +230,11 @@ namespace WebSignalR.Controllers
 			try
 			{
 				_userRoomService.DisconnecFromRoomBySessionId(roomName, sessionId);
+
+				IRepository<UserSession> sessionRepo = _unity.GetRepository<UserSession>();
+				UserSession session = sessionRepo.Get(x => x.SessionId == sessionId).FirstOrDefault();
+				if (session != null)
+					AgileHubContext.Clients.Group(roomName).onLeftRoom(AutoMapper.Mapper.Map<UserDto>(session.User));
 			}
 			catch (System.Exception ex)
 			{

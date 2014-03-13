@@ -200,8 +200,16 @@ namespace WebSignalR.Hubs
 				result.Active = room.Active;
 				result.HostMaster = room.Active;
 			}
-			UserDto uDto = Mapper.Map<UserDto>(GetRepository<UserSession>().Get(x => x.SessionId == sessionId).Select(x => x.User).FirstOrDefault());
-			Clients.Group(roomName, Context.ConnectionId).onJoinedRoom(uDto);
+
+			RoomDto rDto = Mapper.Map<RoomDto>(room);
+			Clients.Caller.onInitRoom(rDto);
+
+			var user = GetRepository<UserSession>().Get(x => x.SessionId == sessionId).Select(x => x.User).FirstOrDefault();
+			if (user != null)
+			{
+				UserDto uDto = Mapper.Map<UserDto>(user);
+				Clients.Group(roomName, Context.ConnectionId).onJoinedRoom(uDto);
+			}
 			return result;
 		}
 
@@ -226,6 +234,70 @@ namespace WebSignalR.Hubs
 			Room room = GetRepository<Room>().Get(x => x.Name == roomName).FirstOrDefault();
 			RoomDto dto = Mapper.Map<RoomDto>(room);
 			return Clients.Group(roomName).onRoomStateChanged(dto);
+		}
+
+		[SignalRAuth(Roles = "ScrumMaster")]
+		public Task AddVote(string roomName, string content)
+		{
+			IRepository<Room> roomRepo = GetRepository<Room>();
+			IRepository<VoteItem> voteRepo = GetRepository<VoteItem>();
+
+			Room room = roomRepo.Get(x => x.Name == roomName).FirstOrDefault();
+			VoteItem vote = voteRepo.Get(v => v.Content == content).FirstOrDefault();
+			if (room != null && vote == null)
+			{
+
+				vote = new VoteItem();
+				vote.Closed = false;
+				vote.HostRoom = room;
+				vote.Content = content;
+				vote.OverallMark = 0;
+				try
+				{
+					room.ItemsToVote.Add(vote);
+					roomRepo.Update(room);
+					_unity.Commit();
+				}
+				catch (Exception ex)
+				{
+#if DEBUG
+					System.Diagnostics.Debug.WriteLine("Error occurred: AddVote" + Environment.NewLine + ex.ToString());
+#endif
+					throw;
+				}
+
+				return Clients.Group(room.Name).onRoomStateChanged(Mapper.Map<RoomDto>(room));
+			}
+			return EmptyTask;
+		}
+
+		[SignalRAuth(Roles = "ScrumMaster")]
+		public Task RemoveVote(string roomName, int voteId)
+		{
+			IRepository<Room> roomRepo = GetRepository<Room>();
+			IRepository<VoteItem> voteRepo = GetRepository<VoteItem>();
+
+			Room room = roomRepo.Get(x => x.Name == roomName).FirstOrDefault();
+			VoteItem vote = voteRepo.Get(v => v.Id == voteId).FirstOrDefault();
+			if (room != null && vote != null)
+			{
+				try
+				{
+					room.ItemsToVote.Remove(vote);
+					roomRepo.Update(room);
+					_unity.Commit();
+				}
+				catch (Exception ex)
+				{
+#if DEBUG
+					System.Diagnostics.Debug.WriteLine("Error occurred: RemoveVote" + Environment.NewLine + ex.ToString());
+#endif
+					throw;
+				}
+
+				return Clients.Group(room.Name).onRoomStateChanged(Mapper.Map<RoomDto>(room));
+			}
+			return EmptyTask;
 		}
 
 		[SignalRAuth(Roles = "User")]
@@ -279,6 +351,14 @@ namespace WebSignalR.Hubs
 			if (_unity != null)
 				_unity.Dispose();
 			base.Dispose(disposing);
+		}
+
+		private Task EmptyTask
+		{
+			get
+			{
+				return Task.Factory.StartNew(() => { });
+			}
 		}
 	}
 }

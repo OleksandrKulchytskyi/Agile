@@ -75,7 +75,6 @@ namespace WebSignalR.Infrastructure
 				IUnityOfWork unity = context.Kernel.Get<IUnityOfWork>();
 				ICryptoService crypto = context.Kernel.Get<ICryptoService>();
 				IUserRoomService userRoomSrv = context.Kernel.Get<IUserRoomService>();
-
 				//var service = new MessangerService(cache, crypto, repository);
 				return new Hubs.AgileHub(unity, crypto, userRoomSrv);
 			});
@@ -125,6 +124,7 @@ namespace WebSignalR.Infrastructure
 
 			Mapper.CreateMap<User, UserDto>()
 				   .ForMember(dest => dest.Privileges, opt => opt.MapFrom(src => src.UserPrivileges))
+				   .ForMember(dest=>dest.IsAdmin, opt=> opt.MapFrom(src=>src.IsAdmin))
 				   .IgnoreAllNonExisting();
 
 			try

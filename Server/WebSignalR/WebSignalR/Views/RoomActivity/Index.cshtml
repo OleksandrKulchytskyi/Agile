@@ -16,7 +16,12 @@
 		return cookieToken + ":" + formToken;
 	}
 }
-
+@if (@User.Identity.IsAuthenticated)
+{
+	@section styles{
+		@Styles.Render("~/Content/koGrid")
+	}
+}
 <h2>Room Activity View</h2>
 
 @if (User.Identity.IsAuthenticated)
@@ -28,12 +33,33 @@
 	<input id="isAdmin" type="hidden" value="@isAdmin" />
 	<input id="roomId" type="hidden" value="@roomId" />
 	<input id="roomName" type="hidden" value="@roomName" />
+	
+	<div data-bind="with: roomDtoState">
+		<section id="users" data-bind="foreach: connectedUsers">
+			<article class="agileList" data-bind="attr: { id: id }">
+				<header>
+					<form>
+						<input class="required" data-bind="value: name, blurOnEnter: true" />
+						<p>
+							Is Admin:
+							<input type="checkbox" data-bind="checked: isAdmin" />
+						</p>
+					</form>
+				</header>
+			</article>
+		</section>
+	</div>
+	
+@*<div id='liveActivity'>
+		<div data-bind='simpleGrid: roomDtoState, simpleGridTemplate: "custom_grid_template"'></div>
+	</div>*@
 }
 
 @if (@User.Identity.IsAuthenticated)
 {
 	@section scripts {
 		@Scripts.Render("~/bundles/ko-signalr")
+		@Scripts.Render("~/bundles/koGrid")
 		<script type="text/javascript" src="~/signalr/hubs"></script>
 		@Scripts.Render("~/bundles/agileRoomActivity")
 	}

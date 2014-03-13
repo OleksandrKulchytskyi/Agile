@@ -21,10 +21,7 @@ window.agileApp.datacontext = (function () {
 
 	function getRoomList(roomListsObservable, errorObservable) {
 		var url = roomItemUrl().concat("getRooms")
-		console.log(url);
-		return ajaxRequest("get", url)
-            .done(getSucceeded)
-            .fail(getFailed);
+		return ajaxRequest("get", url).done(getSucceeded).fail(getFailed);
 
 		function getSucceeded(data) {
 			var mappedRoomLists = $.map(data, function (list) {
@@ -36,9 +33,8 @@ window.agileApp.datacontext = (function () {
 		}
 
 		function getFailed() {
-			if (window.agileApp.notifyService !== undefined) {
+			if (window.agileApp.notifyService !== undefined)
 				window.agileApp.notifyService.error("Fail to retrieve room list.", null, true);
-			}
 			errorObservable("Error retrieving room lists.");
 		}
 	}
@@ -47,21 +43,25 @@ window.agileApp.datacontext = (function () {
 	}
 	function saveNewRoomItem(newRoom) {
 		clearErrorMessage(newRoom);
-		return ajaxRequest("post", roomItemUrl().concat("createRoom/"), newRoom, "application/json");
+		return ajaxRequest("post", roomItemUrl().concat("createRoom/"), newRoom);
 	}
 	function deleteRoomItem(roomItem) {
 		clearErrorMessage(roomItem);
-		return ajaxRequest("delete", roomItemUrl(roomItem.id))
-            .fail(function () {
-            	roomItem.errorMessage("Error occured while removing room item.");
-            });
+		return ajaxRequest("delete", roomItemUrl("deleteRoom/?id=" + roomItem.id))
+		.fail(function () {
+			roomItem.errorMessage("Error occured while removing room item.");
+		});
 	}
 	function saveChangedRoomItem(room) {
 		clearErrorMessage(room);
-		return ajaxRequest("put", roomItemUrl(room.id), room, "text")
-            .fail(function () {
-            	room.errorMessage("Error occured while updating room item.");
-            });
+		return ajaxRequest("put", roomItemUrl("UpdateRoom?id=" + room.id), room)
+			.fail(function () {
+				room.errorMessage("Error occured while updating room item.");
+			})
+			.done(function () {
+				clearErrorMessage(room);
+				agileApp.notifyService.success("Room filed has been changed", {}, true);
+			});
 	}
 
 	function detachUserFromRoom(roomId, userId) {

@@ -3,33 +3,31 @@
 	var roomList = ko.observableArray(),
         error = ko.observable(),
         addRoomItem = function () {
-        	var roomItem = datacontext.createRoomItem();
-        	console.log(roomItem);
-        	roomItem.active(false);
-        	roomItem.name("Name here..");
-        	roomItem.description("Description here");
-        	roomItem.errorMessage("");
-        	roomItem.isSaved(false);
-        	showRoomList(roomItem);
-        },
-        showRoomList = function (roomItem) {
-        	roomList.unshift(roomItem); // Insert new room at the front
-        },
+			var roomItem = datacontext.createRoomItem();
+			console.log(roomItem);
+			roomItem.active(false);
+			roomItem.name("Name here..");
+			roomItem.description("Description here");
+			roomItem.errorMessage("");
+			roomItem.isSaved(false);
+			showRoomList(roomItem);
+		},
+		showRoomList = function (roomItem) {
+			roomList.unshift(roomItem); // Insert new room at the front
+		},
 
-        deleteRoomItem = function (roomItem) {
-        	datacontext.deleteRoomItem(roomItem)
+		deleteRoomItem = function (roomItem) {
+			datacontext.deleteRoomItem(roomItem)
 				.done(deleteSuccess)
-                .fail(deleteFailed);
-
-        	function deleteSuccess(data) {
-        		console.log(data);
-        		roomList.remove(data);
-        	}
-
-        	function deleteFailed() {
-        		notify.error("Fail to delete", null, true);
-        	}
-        },
+		        .fail(deleteFailed);
+			function deleteSuccess(data) {
+				notify.success("Room " + data.Name + " has been deleted.", null, true);
+				roomList.remove(function (room) { return room.id == data.Id });
+			}
+			function deleteFailed() {
+				notify.error("Fail to delete room.", null, true);
+			}
+		},
 		navigateToRoom = function (roomItem) {
 			if (window.agileApp.baseAddress !== undefined) {
 				console.log(roomItem.name());
@@ -37,8 +35,8 @@
 			}
 		};
 
+	notify.info("Loading rooms...", null, true);
 	datacontext.getRoomList(roomList, error); // load roomList
-	notify.info("Loading room list.", null, true);
 
 	return {
 		roomList: roomList,

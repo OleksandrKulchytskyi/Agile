@@ -13,6 +13,7 @@ namespace WebSignalR.Common.DTO
 		}
 
 		public string Name { get; set; }
+		public bool IsAdmin { get; set; }
 
 		public List<PrivilegeDto> Privileges { get; set; }
 	}

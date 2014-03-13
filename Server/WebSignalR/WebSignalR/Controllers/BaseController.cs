@@ -15,7 +15,7 @@ namespace WebSignalR.Controllers
 			return GlobalHost.ConnectionManager.GetHubContext<THub>();
 		}
 
-		public IHubContext TestHubContext
+		public IHubContext AgileHubContext
 		{
 			get
 			{
