@@ -194,14 +194,14 @@ namespace WebSignalR.Hubs
 
 			JoinRoomResult result = new JoinRoomResult();
 			Room room = _roomService.JoinToRoomBySessionId(roomName, sessionId);
-			Task addTask = Groups.Add(Context.ConnectionId, roomName);
+			Task addTask = Groups.Add(sessionId, roomName);
 			if (room != null)
 			{
 				result.Active = room.Active;
 				result.HostMaster = room.Active;
 			}
-			RoomDto dto = Mapper.Map<RoomDto>(room);
-			Clients.Group(roomName, Context.ConnectionId).onJoinedRoom(dto);
+			UserDto uDto = Mapper.Map<UserDto>(GetRepository<UserSession>().Get(x => x.SessionId == sessionId).Select(x => x.User).FirstOrDefault());
+			Clients.Group(roomName, Context.ConnectionId).onJoinedRoom(uDto);
 			return result;
 		}
 
@@ -213,9 +213,9 @@ namespace WebSignalR.Hubs
 				sessionId = Context.ConnectionId;
 
 			Room room = _roomService.DisconnecFromRoomBySessionId(roomName, sessionId);
-			Task addTask = Groups.Remove(Context.ConnectionId, roomName);
-			RoomDto dto = Mapper.Map<RoomDto>(room);
-			Clients.Group(roomName).onLeftRoom(dto);
+			Task addTask = Groups.Remove(sessionId, roomName);
+			UserDto uDto = Mapper.Map<UserDto>(GetRepository<UserSession>().Get(x => x.SessionId == sessionId).Select(x => x.User).FirstOrDefault());
+			Clients.Group(roomName).onLeftRoom(uDto);
 			return addTask;
 		}
 

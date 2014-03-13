@@ -169,17 +169,17 @@ public class HubService {
 			@Override
 			public void OnReceived(JSONArray args) {
 				Log.d("onJoinedRoom", args.toString());
-				Room room = null;
+				User user = null;
 				try {
 					JSONObject jsObj = (JSONObject) args.get(0);
-					room = parseRoomState(jsObj);
+					user = parseLoggedUser(jsObj);
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-				if (room == null)
+				if (user == null)
 					return;
 				for (IOnRoomStateListener listener : _onRoomState) {
-					listener.onJoinedRoom(room);
+					listener.onJoinedRoom(user);
 				}
 			}
 		});
@@ -188,16 +188,16 @@ public class HubService {
 			@Override
 			public void OnReceived(JSONArray args) {
 				Log.d("onLeftRoom", args.toString());
-				Room room = null;
+				User user = null;
 				try {
 					JSONObject jsObj = (JSONObject) args.get(0);
-					room = parseRoomState(jsObj);
+					user = parseLoggedUser(jsObj);
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-				if (room != null)
+				if (user != null)
 					for (IOnRoomStateListener listener : _onRoomState) {
-						listener.onLeftRoom(room);
+						listener.onLeftRoom(user);
 					}
 			}
 		});

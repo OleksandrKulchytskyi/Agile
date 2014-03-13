@@ -21,6 +21,7 @@
 
 @if (User.Identity.IsAuthenticated)
 {
+	//data-bind="attr: {id: id}
 	<p class="error" data-bind="text: error"></p>
 	<input id="antiForgeryToken" type="hidden" value="@GetAntiForgeryToken()" />
 	<input id="userId" type="hidden" value="@uid" />

@@ -92,11 +92,11 @@ agileHub.client.onUserLogged = function (user) {
 		window.agileApp.notifyService.info(ko.toJSON(user), null, true);
 }
 
-agileHub.client.onJoinedRoom = function (roomDto) {
+agileHub.client.onJoinedRoom = function (userDto) {
 
 }
 
-agileHub.client.onLeftRoom = function (roomDto) {
+agileHub.client.onLeftRoom = function (userDto) {
 
 }
 

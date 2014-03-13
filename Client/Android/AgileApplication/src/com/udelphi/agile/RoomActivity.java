@@ -146,28 +146,19 @@ public class RoomActivity extends BaseActivity implements IOnRoomStateListener {
 	}
 
 	@Override
-	public void onJoinedRoom(Room state) {
-		if (state == null)
+	public void onJoinedRoom(User user) {
+		if (user == null)
 			return;
-		updateUsers(state);
+		_usrList.add(user);
+		_usrAdapter.notifyDataSetChanged();
 	}
 
 	@Override
-	public void onLeftRoom(Room state) {
-		if (state == null)
+	public void onLeftRoom(User user) {
+		if (user == null)
 			return;
 		
-		updateUsers(state);
-	}
-
-	/**
-	 * @param state
-	 */
-	private void updateUsers(Room state) {
-		_usrList.clear();
-		for (User usr : state.ConnectedUsers)
-			_usrList.add(usr);
-
+		_usrList.remove(user);
 		_usrAdapter.notifyDataSetChanged();
 	}
 
