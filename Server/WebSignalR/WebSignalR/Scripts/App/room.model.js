@@ -5,7 +5,6 @@
 	datacontext.roomDtoModel = roomDtoModel;
 
 	function userConnectionState(data) {
-
 		var self = this;
 		data = data || {};
 
@@ -51,8 +50,9 @@
 		var self = this;
 		data = data || {};
 
-		self.userId = ko.observable(data.User.Id);
-		self.voteId = ko.observable(data.VoteItem.Id);
+		self.id = data.Id;
+		self.userId = ko.observable(data.User.Id || data.UserId);
+		self.voteId = ko.observable(data.VoteItem.Id || data.VoteItemId);
 		self.mark = ko.observable(data.Mark);
 
 		self.toJson = function () {

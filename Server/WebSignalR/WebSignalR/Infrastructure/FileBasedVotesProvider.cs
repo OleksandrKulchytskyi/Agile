@@ -5,6 +5,7 @@ using System.IO;
 using System.Web;
 using WebSignalR.Common.Entities;
 using WebSignalR.Common.Interfaces;
+using System.Xml.Linq;
 
 namespace WebSignalR.Infrastructure
 {
@@ -29,6 +30,23 @@ namespace WebSignalR.Infrastructure
 			}
 
 			return items;
+		}
+	}
+
+	public class XmlVotesProvider : IVotesProvider
+	{
+		public object Source { get; set; }
+
+		public ICollection<VoteItem> GetVotes()
+		{
+			if (Source != null)
+			{
+				XDocument doc = XDocument.Load(Source as Stream);
+				IEnumerable<VoteItem> data = doc.Root.Descendants("Vote").Select(x => new VoteItem() { Closed = false, Content = x.Value });
+				return data.ToList();
+			}
+
+			return null;
 		}
 	}
 }

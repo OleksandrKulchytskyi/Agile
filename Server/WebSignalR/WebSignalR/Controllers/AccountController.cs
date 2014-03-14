@@ -15,8 +15,13 @@ using WebSignalR.Common.Entities;
 namespace WebSignalR.Controllers
 {
 	[Authorize]
-	public class AccountController : Controller
+	public class AccountController : MvcController
 	{
+		public AccountController(IUnityOfWork unity)
+		{
+			base._unity = unity;
+		}
+
 		[AllowAnonymous]
 		[HttpPost]
 		public JsonResult JsonLogin(LoginViewModel model, string returnUrl)
@@ -143,22 +148,19 @@ namespace WebSignalR.Controllers
 				// Attempt to register the user
 				try
 				{
-					IUnityOfWork unity = Infrastructure.BootStrapper.Kernel.Get<IUnityOfWork>();
-					using (unity)
-					{
-						IRepository<User> userRepo = unity.GetRepository<User>();
-						if (userRepo.Get(x => x.Name == model.UserName).FirstOrDefault() != null)
-							throw new InvalidOperationException("User with such name already exists.");
-						if (model.Password != model.ConfirmPassword)
-							throw new InvalidOperationException("Password must be the same.");
+					IRepository<User> userRepo = Unity.GetRepository<User>();
+					if (userRepo.Get(x => x.Name == model.UserName).FirstOrDefault() != null)
+						throw new InvalidOperationException("User with such name already exists.");
+					if (model.Password != model.ConfirmPassword)
+						throw new InvalidOperationException("Password must be the same.");
 
-						User usr = new User();
-						usr.Name = model.UserName;
-						usr.Password = model.Password.toBase64Utf8();
-						usr.UserPrivileges.Add(unity.GetRepository<Privileges>().Get(x => x.Name == "User").FirstOrDefault());
-						userRepo.Add(usr);
-						unity.Commit();
-					}
+					User usr = new User();
+					usr.Name = model.UserName;
+					usr.Password = model.Password.toBase64Utf8();
+					usr.UserPrivileges.Add(Unity.GetRepository<Privileges>().Get(x => x.Name == "User").FirstOrDefault());
+					userRepo.Add(usr);
+					Unity.Commit();
+
 					return Json(new { success = true, redirect = returnUrl });
 				}
 				catch (Exception ex)
@@ -180,20 +182,16 @@ namespace WebSignalR.Controllers
 			{
 				try
 				{
-					IUnityOfWork unity = Infrastructure.BootStrapper.Kernel.Get<IUnityOfWork>();
-					using (unity)
-					{
-						IRepository<User> userRepo = unity.GetRepository<User>();
-						User usr;
-						if ((usr = userRepo.Get(x => x.Name == User.Identity.Name).FirstOrDefault()) == null)
-							throw new InvalidOperationException("User with such name is exists.");
-						if (model.Password != model.ConfirmPassword)
-							throw new InvalidOperationException("Password must be the same.");
+					IRepository<User> userRepo = Unity.GetRepository<User>();
+					User usr;
+					if ((usr = userRepo.Get(x => x.Name == User.Identity.Name).FirstOrDefault()) == null)
+						throw new InvalidOperationException("User with such name is exists.");
+					if (model.Password != model.ConfirmPassword)
+						throw new InvalidOperationException("Password must be the same.");
 
-						usr.Password = model.Password.toBase64Utf8();
-						userRepo.Update(usr);
-						unity.Commit();
-					}
+					usr.Password = model.Password.toBase64Utf8();
+					userRepo.Update(usr);
+					Unity.Commit();
 					return Json(new { success = true, redirect = returnUrl });
 				}
 				catch (Exception ex)
@@ -204,6 +202,11 @@ namespace WebSignalR.Controllers
 
 			// If we got this far, something failed
 			return Json(new { errors = GetErrorsFromModelState() });
+		}
+
+		protected override void Dispose(bool disposing)
+		{
+			base.Dispose(disposing);
 		}
 	}
 }

@@ -13,6 +13,7 @@ namespace WebSignalR
 				"~/Content/bootstrap.css"));
 
 			bundles.Add(new StyleBundle("~/Content/koGrid").Include("~/Content/KoGrid.css"));
+			bundles.Add(new StyleBundle("~/Content/roomActivity").Include("~/Content/RoomActivity.css"));
 
 			bundles.Add(new StyleBundle("~/Content/toastr").Include("~/Content/toastr.css"));
 

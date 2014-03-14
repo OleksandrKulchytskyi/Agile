@@ -66,6 +66,7 @@
 		self.detachUser = function (user, event) {
 			var rid = self.room.id;
 			var uid = self.id;
+			console.log("User id: " + uid + " room id: " + rid);
 			datacontext.detachUserFromRoom(rid, uid);
 			self.room.connectedUsers.remove(user);
 		}

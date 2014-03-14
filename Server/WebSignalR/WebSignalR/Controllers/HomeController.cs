@@ -2,7 +2,7 @@
 
 namespace WebSignalR.Controllers
 {
-	public class HomeController : Controller
+	public class HomeController : MvcController
 	{
 		public ActionResult Index(string returnUrl)
 		{

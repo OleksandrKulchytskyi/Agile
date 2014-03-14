@@ -161,8 +161,8 @@ namespace WebSignalR.Controllers
 				{
 					room.ConnectedUsers.Add(usr);
 					_unity.Commit();
-					UserDto dto = AutoMapper.Mapper.Map<UserDto>(usr);
-					AgileHubContext.Clients.Group(room.Name).onJoinedRoom(dto);
+					UserDto userDto = AutoMapper.Mapper.Map<UserDto>(usr);
+					AgileHubContext.Clients.Group(room.Name).onJoinedRoom(userDto);
 				}
 				else
 					return new HttpResponseMessage(HttpStatusCode.BadRequest) { Content = new StringContent("Unable to found entities with such id's.") };
@@ -174,7 +174,7 @@ namespace WebSignalR.Controllers
 				return new HttpResponseMessage(HttpStatusCode.InternalServerError);
 			}
 
-			return new HttpResponseMessage(HttpStatusCode.OK);
+			return Request.CreateResponse(HttpStatusCode.OK);
 		}
 
 		[HttpGet]
@@ -205,8 +205,8 @@ namespace WebSignalR.Controllers
 				{
 					room.ConnectedUsers.Remove(usr);
 					_unity.Commit();
-					UserDto dto = AutoMapper.Mapper.Map<UserDto>(usr);
-					base.AgileHubContext.Clients.Group(room.Name).onLeftRoom(dto);
+					UserDto userDto = AutoMapper.Mapper.Map<UserDto>(usr);
+					base.AgileHubContext.Clients.Group(room.Name).onLeftRoom(userDto);
 				}
 				else
 					return new HttpResponseMessage(HttpStatusCode.BadRequest) { Content = new StringContent("Unable to found entities with such id's.") };
@@ -218,7 +218,7 @@ namespace WebSignalR.Controllers
 				return new HttpResponseMessage(HttpStatusCode.InternalServerError);
 			}
 
-			return new HttpResponseMessage(HttpStatusCode.OK);
+			return Request.CreateResponse(HttpStatusCode.OK);
 		}
 
 		[HttpPost]

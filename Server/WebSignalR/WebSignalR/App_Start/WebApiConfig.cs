@@ -13,18 +13,18 @@ namespace WebSignalR
 				routeTemplate: "api/{controller}/{id}",
 				defaults: new { id = RouteParameter.Optional }
 			);
-
 			config.Routes.MapHttpRoute(name: "DefaultApiAction",
 				routeTemplate: "api/{controller}/{action}",
 				defaults: new { controller = "room", action = "getRooms" }
 			);
-
 			config.Routes.MapHttpRoute(name: "DefaultApiActionParam",
 				routeTemplate: "api/{controller}/{action}/{id}",
 				defaults: new { id = RouteParameter.Optional }
 			);
 
 			config.DependencyResolver = new DependencyResolvers.NinjectWebApiDependencyResolver(BootStrapper.Kernel);
+			//config.Services.Replace(typeof(System.Web.Http.Dispatcher.IHttpControllerActivator),new Activators.CustomApiActivator());
+			config.Services.Replace(typeof(System.Web.Http.Tracing.ITraceWriter), new Infrastructure.DynamicTrace());
 
 			#region formatting
 
@@ -50,16 +50,12 @@ namespace WebSignalR
 					NullValueHandling = Newtonsoft.Json.NullValueHandling.Include,
 					Converters = new Newtonsoft.Json.JsonConverter[] { new Newtonsoft.Json.Converters.IsoDateTimeConverter() },
 					DateFormatHandling = Newtonsoft.Json.DateFormatHandling.MicrosoftDateFormat,
-					//fix issue with self referencing loop detection
-					ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore,
+					ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore,//fix the issue with self referencing loop detection
 					//if uncommented the line below, in KnockoutJS bindings needs to be refactored to camel case (example: 'name' instead of 'Name', TimeBefore ->timeBefore)
 					//ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
 				};
 			}
 			#endregion formatting
-			//config.Services.Replace(typeof(System.Web.Http.Dispatcher.IHttpControllerActivator),new Activators.CustomApiActivator());
-			config.Services.Replace(typeof(System.Web.Http.Tracing.ITraceWriter), new Infrastructure.DynamicTrace());
 		}
-
 	}
 }

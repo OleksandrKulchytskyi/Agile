@@ -1,0 +1,9 @@
+﻿<h2 id="title">Upload</h2>
+
+@using (Html.BeginForm("Upload", "RoomActivity", FormMethod.Post, new { enctype = "multipart/form-data", Id = "importForm" }))
+{
+	<input type="file" name="UploadedFile" />
+	<br />
+	<p></p>
+	<input type="submit" name="Submit" value="Upload" id="btnUploadFile" />
+}

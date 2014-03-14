@@ -165,9 +165,13 @@
     <Content Include="Content\bootstrap-responsive.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\images\bg_header.jpg" />
+    <Content Include="Content\images\bullet1.gif" />
+    <Content Include="Content\images\bullet2.gif" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
     <Content Include="Content\KoGrid.css" />
+    <Content Include="Content\RoomActivity.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -282,12 +286,13 @@
     <Compile Include="App_Start\NInjectResolver.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\Api\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\PriviligesController.cs" />
+    <Compile Include="Controllers\MvcController.cs" />
+    <Compile Include="Controllers\Api\PriviligesController.cs" />
     <Compile Include="Controllers\RoomActivityController.cs" />
-    <Compile Include="Controllers\RoomController.cs" />
-    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\Api\RoomController.cs" />
+    <Compile Include="Controllers\Api\UserController.cs" />
     <Compile Include="DependencyResolvers\NijectDependncyResolver.cs" />
     <Compile Include="DependencyResolvers\NInjectMvcDependencyResolver.cs" />
     <Compile Include="DependencyResolvers\WebApiDependencyResolver.cs" />
@@ -303,6 +308,7 @@
     <Compile Include="Hubs\Pipelines\LogPipelineModule.cs" />
     <Compile Include="Hubs\SignalRBase.cs" />
     <Compile Include="Hubs\TraceHub.cs" />
+    <Compile Include="Infrastructure\Adapters\HttpContextCacheAdapter.cs" />
     <Compile Include="Infrastructure\Authorization\CustomIdentity.cs" />
     <Compile Include="Infrastructure\Authorization\SignalRAuth.cs" />
     <Compile Include="Infrastructure\Authorization\WebApiAuth.cs" />
@@ -337,6 +343,7 @@
     </Content>
     <Content Include="Views\Account\_ChangePassword.cshtml" />
     <Content Include="Views\RoomActivity\Index.cshtml" />
+    <Content Include="Views\RoomActivity\_Import.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

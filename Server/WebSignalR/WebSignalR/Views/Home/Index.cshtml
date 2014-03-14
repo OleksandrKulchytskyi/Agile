@@ -35,7 +35,7 @@
 					</form>
 				</header>
 				<a href="#" class="deletelist" data-bind="click: $parent.deleteRoomItem">X</a>
-				@if (@User.IsInRole("ScrumMaster") || @User.IsInRole("Admin"))
+				@if (@User.IsInRole("User"))
 	{
 					<button class="btn btn-primary" data-bind="click: $parent.navigateToRoom, visible: isSaved()">Navigate</button>
 	}

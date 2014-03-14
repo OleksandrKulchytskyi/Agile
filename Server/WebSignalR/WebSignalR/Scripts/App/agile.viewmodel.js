@@ -1,8 +1,8 @@
 ﻿window.agileApp.roomListViewModel = (function (ko, datacontext, notify) {
 	/// <field name="roomList" value="[new datacontext.roomList()]"></field>
 	var roomList = ko.observableArray(),
-        error = ko.observable(),
-        addRoomItem = function () {
+		error = ko.observable(),
+		addRoomItem = function () {
 			var roomItem = datacontext.createRoomItem();
 			console.log(roomItem);
 			roomItem.active(false);
@@ -29,14 +29,14 @@
 			}
 		},
 		navigateToRoom = function (roomItem) {
-			if (window.agileApp.baseAddress !== undefined) {
-				console.log(roomItem.name());
+			if (window.agileApp.baseAddress !== undefined)
 				window.location.href = window.agileApp.baseAddress + "roomactivity?roomName=" + roomItem.name();
-			}
 		};
-
 	notify.info("Loading rooms...", null, true);
-	datacontext.getRoomList(roomList, error); // load roomList
+	datacontext.getRoomList(roomList, error).done(onRetrieved);// load roomList
+	function onRetrieved() {
+		$("#lists").show();
+	}
 
 	return {
 		roomList: roomList,
@@ -48,5 +48,6 @@
 
 })(ko, agileApp.datacontext, agileApp.notifyService);
 
+$("#lists").hide();
 // Initiate the Knockout bindings
 ko.applyBindings(window.agileApp.roomListViewModel);

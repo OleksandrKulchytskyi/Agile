@@ -50,7 +50,7 @@ window.agileApp.notifyService = (function () {
 
 		if (showToast) {
 			toastr.options = {
-				"closeButton": true,
+				"closeButton": false,
 				"debug": false,
 				"positionClass": "toast-top-right",
 				"onclick": null,
@@ -72,7 +72,7 @@ window.agileApp.notifyService = (function () {
 
 		if (showToast) {
 			toastr.options = {
-				"closeButton": false,
+				"closeButton": true,
 				"debug": false,
 				"positionClass": "toast-bottom-full-width",
 				"onclick": null,
@@ -87,7 +87,7 @@ window.agileApp.notifyService = (function () {
 			};
 			toastr.warning(msg);
 		}
-		console.warning(msg, data);
+		console.warn(msg, data);
 	};
 
 	function error(msg, data, showToast) {

@@ -2,16 +2,16 @@
 using Microsoft.AspNet.SignalR;
 using Ninject;
 using System;
-using System.Linq;
 using System.Configuration;
 using System.Data.Entity.Migrations;
+using System.Linq;
 using WebSignalR.Common.DTO;
 using WebSignalR.Common.Entities;
 using WebSignalR.Common.Infrastructure;
 using WebSignalR.Common.Interfaces;
+using WebSignalR.Common.Services;
 using WebSignalR.DataAccess.DB;
 using WebSignalR.DataAccess.Repositories;
-using WebSignalR.Common.Services;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(WebSignalR.Infrastructure.BootStrapper), "PreAppStart")]
 namespace WebSignalR.Infrastructure
@@ -76,11 +76,9 @@ namespace WebSignalR.Infrastructure
 
 			kernel.Bind<Hubs.AgileHub>().ToMethod(context =>
 			{
-				// I'm doing this manually, since we want the repository instance to be shared between the messanger service and the messanger hub itself
 				IUnityOfWork unity = context.Kernel.Get<IUnityOfWork>();
 				ICryptoService crypto = context.Kernel.Get<ICryptoService>();
 				IUserRoomService userRoomSrv = context.Kernel.Get<IUserRoomService>();
-				//var service = new MessangerService(cache, crypto, repository);
 				return new Hubs.AgileHub(unity, crypto, userRoomSrv);
 			});
 		}
