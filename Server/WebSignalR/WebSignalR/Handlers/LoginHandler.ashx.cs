@@ -118,10 +118,14 @@ namespace WebSignalR.Handlers
 				string strEncryptedTicket = FormsAuthentication.Encrypt(ticket);
 				HttpCookie cookie = new HttpCookie(Infrastructure.Constants.FormsAuthKey, strEncryptedTicket);
 				context.Response.Cookies.Add(cookie);
-				CustomIdentity identity = new CustomIdentity(ticket);
-				CustomPrincipal principal = new CustomPrincipal(identity);
-				principal.UserId = userDto.Id;
-				SetPrincipal(principal);
+				IPrincipalProvider provider = BootStrapper.Kernel.Get<IPrincipalProvider>();
+				System.Security.Principal.IPrincipal principal = provider.CreatePrincipal(ticket);
+				if (principal is CustomPrincipal)
+				{
+					CustomPrincipal p = principal as CustomPrincipal;
+					p.UserId = userDto.Id;
+					SetPrincipal(p);
+				}
 				return true;
 			}
 			else

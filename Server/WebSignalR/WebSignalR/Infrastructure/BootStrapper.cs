@@ -35,12 +35,16 @@ namespace WebSignalR.Infrastructure
 			IniDIContainer(kernel);
 
 			Kernel = kernel;
-			_resolver = new DependencyResolvers.NinjectDependencyResolver(kernel);
+			_resolver = new DependencyResolvers.NinjectSignalRDependencyResolver(kernel);
 			App_Start.SignalRConfig.Register(_resolver);
+
+			System.Web.Mvc.DependencyResolver.SetResolver(new DependencyResolvers.NInjectMvcDependencyResolver(kernel));
 		}
 
 		private static void IniDIContainer(StandardKernel kernel)
 		{
+			kernel.Bind<System.Web.Mvc.IControllerActivator>().To<DependencyResolvers.NinjectMvcControllerActivator>();
+
 			kernel.Bind<DatabaseContext>().To<DatabaseContext>();
 			kernel.Bind<IContext>().To<DatabaseContext>();
 			kernel.Bind<IRepository<Room>>().To<GenericRepository<Room>>();
@@ -68,6 +72,7 @@ namespace WebSignalR.Infrastructure
 			kernel.Bind<IKeyProvider>().ToConstant(new FileBasedKeyProvider());
 			kernel.Bind<IVotesProvider>().ToConstant(new FileBasedVotesProvider()).Named("FileBased");
 			kernel.Bind<IUserRoomService>().To<UserRoomService>();
+			kernel.Bind<IPrincipalProvider>().To<Infrastructure.Services.FormsPrincipalProvider>().InSingletonScope();
 
 			kernel.Bind<Hubs.AgileHub>().ToMethod(context =>
 			{
@@ -97,12 +102,31 @@ namespace WebSignalR.Infrastructure
 
 		internal static void InitMapperMaps()
 		{
+			Mapper.CreateMap<User, UserDto>()
+				   .ForMember(dest => dest.Privileges, opt => opt.MapFrom(src => src.UserPrivileges))
+				   .ForMember(dest => dest.IsAdmin, opt => opt.MapFrom(src => src.IsAdmin))
+				   .ForSourceMember(src => src.ConnectedSessions, opt => opt.Ignore())
+				   .ForSourceMember(src => src.UserVotes, opt => opt.Ignore())
+					.ForSourceMember(src => src.Password, opt => opt.Ignore());
+
+			Mapper.CreateMap<UserDto, User>()
+				   .ForMember(dest => dest.UserPrivileges, opt => opt.MapFrom(src => src.Privileges))
+				   .ForMember(dest => dest.IsAdmin, opt => opt.MapFrom(src => src.IsAdmin))
+				   .ForMember(src => src.ConnectedSessions, opt => opt.Ignore())
+				   .ForMember(src => src.UserVotes, opt => opt.Ignore())
+				   .ForMember(src => src.Password, opt => opt.Ignore());
+
+
 			Mapper.CreateMap<UserVote, UserVoteDto>()
 				.ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.User.Id))
 				.ForMember(dest => dest.VoteItemId, opt => opt.MapFrom(src => src.VoteItem.Id));
 
 			Mapper.CreateMap<VoteItem, VoteItemDto>()
 				.ForMember(dest => dest.VotedUsers, opt => opt.MapFrom(src => src.VotedUsers.Select(x => x.UserId).ToList()))
+				.IgnoreAllNonExisting();
+
+			Mapper.CreateMap<VoteItemDto, VoteItem>()
+				.ForMember(dest => dest.VotedUsers, opt => opt.MapFrom(src => src.VotedUsers.Select(x => new UserVote() { Id = x }).ToList()))
 				.IgnoreAllNonExisting();
 
 			Mapper.CreateMap<Room, RoomDto>()
@@ -121,11 +145,8 @@ namespace WebSignalR.Infrastructure
 				.ForMember(dest => dest.ConnectedUsers, opt => opt.MapFrom(src => src.ConnectedUsers));
 
 			Mapper.CreateMap<Privileges, PrivilegeDto>().IgnoreAllNonExisting();
+			Mapper.CreateMap<PrivilegeDto, Privileges>().IgnoreAllNonExisting();
 
-			Mapper.CreateMap<User, UserDto>()
-				   .ForMember(dest => dest.Privileges, opt => opt.MapFrom(src => src.UserPrivileges))
-				   .ForMember(dest=>dest.IsAdmin, opt=> opt.MapFrom(src=>src.IsAdmin))
-				   .IgnoreAllNonExisting();
 
 			try
 			{

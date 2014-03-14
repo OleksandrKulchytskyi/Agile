@@ -10,6 +10,8 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.Security;
 using WebSignalR.Infrastructure;
+using Ninject;
+using WebSignalR.Common.Interfaces;
 
 namespace WebSignalR
 {
@@ -86,13 +88,11 @@ namespace WebSignalR
 
 		protected void Application_OnPostAuthenticateRequest(object sender, EventArgs e)
 		{
-			IPrincipal usr = HttpContext.Current.User; // Create the CustomPrincipal
-			// If we are dealing with an authenticated forms authentication request
+			IPrincipal usr = HttpContext.Current.User; // If we are dealing with an authenticated forms authentication request
 			if (usr.Identity.IsAuthenticated && usr.Identity.AuthenticationType == "Forms")
 			{
-				FormsIdentity fIdent = usr.Identity as FormsIdentity;
-				CustomIdentity ci = new CustomIdentity(fIdent.Ticket); // Create a CustomIdentity based on the FormsAuthenticationTicket  
-				CustomPrincipal p = new CustomPrincipal(ci); // Create the CustomPrincipal
+				var provider = BootStrapper.Kernel.Get<IPrincipalProvider>();
+				IPrincipal p = provider.CreatePrincipal(usr.Identity as FormsIdentity);
 				HttpContext.Current.User = p;
 				Thread.CurrentPrincipal = p;
 			}

@@ -2,14 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace WebSignalR.DependencyResolvers
 {
-	internal class NinjectDependencyResolver : Microsoft.AspNet.SignalR.DefaultDependencyResolver
+	internal class NinjectSignalRDependencyResolver : Microsoft.AspNet.SignalR.DefaultDependencyResolver
 	{
 		private readonly IKernel _kernel;
-		public NinjectDependencyResolver(IKernel kernel)
+		public NinjectSignalRDependencyResolver(IKernel kernel)
 		{
 			_kernel = kernel;
 		}

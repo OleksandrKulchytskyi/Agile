@@ -225,6 +225,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Content\toastr.css" />
     <Content Include="Content\toastr.min.css" />
+    <Content Include="favicon.ico" />
     <Content Include="Handlers\LoginHandler.ashx" />
     <Content Include="Handlers\LogoutHandler.ashx" />
     <Content Include="Content\toastr.less" />
@@ -288,6 +289,7 @@
     <Compile Include="Controllers\RoomController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="DependencyResolvers\NijectDependncyResolver.cs" />
+    <Compile Include="DependencyResolvers\NInjectMvcDependencyResolver.cs" />
     <Compile Include="DependencyResolvers\WebApiDependencyResolver.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -312,6 +314,7 @@
     <Compile Include="Infrastructure\FileBasedVotesProvider.cs" />
     <Compile Include="Infrastructure\Filters\ValidateHttpAntiForgeryTokenAttribute.cs" />
     <Compile Include="Infrastructure\ObjectExtensions.cs" />
+    <Compile Include="Infrastructure\Services\FormsPrincipalProvider.cs" />
     <Compile Include="Infrastructure\Services\UserRoomService.cs" />
     <Compile Include="Infrastructure\SessionState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Http;
+using WebSignalR.Infrastructure;
 
 namespace WebSignalR
 {
@@ -25,7 +24,7 @@ namespace WebSignalR
 				defaults: new { id = RouteParameter.Optional }
 			);
 
-			config.DependencyResolver = new DependencyResolvers.NinjectWebApiDependencyResolver(Infrastructure.BootStrapper.Kernel);
+			config.DependencyResolver = new DependencyResolvers.NinjectWebApiDependencyResolver(BootStrapper.Kernel);
 
 			#region formatting
 
