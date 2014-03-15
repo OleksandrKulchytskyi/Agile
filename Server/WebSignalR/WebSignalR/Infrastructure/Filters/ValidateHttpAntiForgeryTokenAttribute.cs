@@ -29,13 +29,9 @@ namespace WebSignalR.Infrastructure.Filters
 				try
 				{
 					if (IsAjaxRequest(request))
-					{
 						ValidateRequestHeader(request);
-					}
 					else
-					{
 						AntiForgery.Validate();
-					}
 				}
 				catch (HttpAntiForgeryException e)
 				{

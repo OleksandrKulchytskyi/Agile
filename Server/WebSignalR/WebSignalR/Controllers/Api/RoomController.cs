@@ -24,6 +24,24 @@ namespace WebSignalR.Controllers
 		}
 
 		[HttpGet]
+		[ActionName("InvokeTest")]
+		public HttpResponseMessage InvokeTest(string data, string room)
+		{
+			try
+			{
+				//AgileHubContext.Clients.All.onTestMethod(data);
+				//AgileHubContext.Clients.Group(room).onTestMethod(data);
+				AgileHubConnection.All.onTestMethod(data);
+				AgileHubConnection.Group(room).onTestMethod(data + " : " + room);
+			}
+			catch (Exception ex)
+			{
+				return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
+			}
+			return Request.CreateResponse(HttpStatusCode.OK);
+		}
+
+		[HttpGet]
 		[ActionName("ByName")]
 		public Room ByName([FromUri]string name)
 		{

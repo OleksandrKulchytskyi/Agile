@@ -105,6 +105,12 @@ var mainVM = window.agileApp.roomActivityViewModel;
 
 var agileHub = $.connection.agileHub;
 
+//Multiple methods added to proxy in JavaScript using jQuery: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//$.extend(agileHub.server, {
+//	method1: function (param1, param2) {},
+//	method2: function (param3, param4) {}
+//});
+
 $.connection.hub.logging = true;
 $.connection.hub.start()
 				.done(function () {
@@ -113,9 +119,9 @@ $.connection.hub.start()
 						window.agileApp.notifyService.success("Successfully connected to the hub service!", null, true);
 					agileHub.server.testMethod("Hello");
 				})
-				.fail(function () {
+				.fail(function (ex) {
 					if (window.agileApp.notifyService !== undefined)
-						window.agileApp.notifyService.warning("Could not connect to the hub service!", null, true);
+						window.agileApp.notifyService.error("Could not connect to the hub service!" + ex.message, null, true);
 				});
 
 // Handle connection loss and reconnect in a robust way
@@ -137,6 +143,18 @@ $.connection.hub.stateChanged(function (change) {
 	}
 });
 
+agileHub.client.onErrorHandler = function (exMessage) {
+	if (agileApp.notifyService !== undefined)
+		agileApp.notifyService.error(exMessage, {}, true);
+
+	//$("#error").fadeIn(1000, function () {
+	//	$("#error").fadeOut(3000);
+	//});
+	agileHub.connection.stop();
+
+	chat.connection.stop();
+}
+
 agileHub.client.onTestMethod = function (data) {
 	if (window.agileApp.notifyService !== undefined)
 		window.agileApp.notifyService.info(data, null, true);
@@ -144,9 +162,11 @@ agileHub.client.onTestMethod = function (data) {
 
 agileHub.client.onState = function (state) {
 	mainVM.setUserState(state);
-	agileHub.server.joinRoom($("#roomName").val(), mainVM.mySession().sessionId).done(function (joinRoomResult) {
-		agileApp.notifyService.info(ko.toJSON(joinRoomResult), null, true);
-	});
+	agileHub.server.joinRoom($("#roomName").val(), mainVM.mySession().sessionId).fail(logHubInvokeExc)
+					.done(function (joinRoomResult) {
+			agileApp.notifyService.info(ko.toJSON(joinRoomResult), null, true);
+		});
+	
 }
 
 agileHub.client.onUserLogged = function (user) {
@@ -194,7 +214,6 @@ function addCellToRow(row, uId, vId) {
 	//addRowContents(newRow);
 }
 
-
 function addRow(grid) {
 	var newRow = $('<tr></tr>').appendTo(grid);
 	addRowContents(newRow);
@@ -215,6 +234,14 @@ function addRowContents(row) {
 		$(this).hide();
 	}).appendTo(buttonCell);
 }
+
+function logHubInvokeExc(e) {
+	if (e.source === 'HubException' && agileApp.notifyService !== undefined) {
+		var data = e.message + ' : ' + e.data.user;
+		console.log(data);
+		agileApp.notifyService.error("Could not inoke hub server method! " + data, null, true);
+	}
+};
 
 agileHub.client.onJoinedRoom = function (userDto) {
 	console.log("onJoinedRoom ");

@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNet.SignalR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using Microsoft.AspNet.SignalR.Hubs;
+using Ninject;
 using System.Web.Http;
 using WebSignalR.Hubs;
 
@@ -20,6 +18,14 @@ namespace WebSignalR.Controllers
 			get
 			{
 				return GetHub<AgileHub>();
+			}
+		}
+
+		public IHubConnectionContext AgileHubConnection
+		{
+			get
+			{
+				return Infrastructure.BootStrapper.Kernel.Get<IHubConnectionContext>("AgileHub");
 			}
 		}
 	}

@@ -45,6 +45,10 @@ namespace WebSignalR.Infrastructure
 		{
 			kernel.Bind<System.Web.Mvc.IControllerActivator>().To<DependencyResolvers.NinjectMvcControllerActivator>();
 
+			kernel.Bind<Microsoft.AspNet.SignalR.Hubs.IHubConnectionContext>().ToMethod(context =>
+						_resolver.Resolve<Microsoft.AspNet.SignalR.Infrastructure.IConnectionManager>().GetHubContext<Hubs.AgileHub>().Clients).
+						Named("AgileHub");
+
 			kernel.Bind<DatabaseContext>().To<DatabaseContext>();
 			kernel.Bind<IContext>().To<DatabaseContext>();
 			kernel.Bind<IRepository<Room>>().To<GenericRepository<Room>>();

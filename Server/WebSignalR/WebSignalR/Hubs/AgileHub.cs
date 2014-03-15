@@ -191,24 +191,32 @@ namespace WebSignalR.Hubs
 			Guid sesID;
 			if (!Guid.TryParse(sessionId, out sesID))
 				sessionId = Context.ConnectionId;
-
 			JoinRoomResult result = new JoinRoomResult();
-			Room room = _roomService.JoinToRoomBySessionId(roomName, sessionId);
-			Task addTask = Groups.Add(sessionId, roomName);
-			if (room != null)
+
+			try
 			{
-				result.Active = room.Active;
-				result.HostMaster = room.Active;
+				Room room = _roomService.JoinToRoomBySessionId(roomName, sessionId);
+				Task addTask = Groups.Add(sessionId, roomName);
+				if (room != null)
+				{
+					result.Active = room.Active;
+					result.HostMaster = room.Active;
+				}
+
+				RoomDto rDto = Mapper.Map<RoomDto>(room);
+				Clients.Caller.onInitRoom(rDto);
+
+				var user = GetRepository<UserSession>().Get(x => x.SessionId == sessionId).Select(x => x.User).FirstOrDefault();
+				if (user != null)
+				{
+					UserDto uDto = Mapper.Map<UserDto>(user);
+					Clients.Group(roomName, Context.ConnectionId).onJoinedRoom(uDto);
+				}
 			}
-
-			RoomDto rDto = Mapper.Map<RoomDto>(room);
-			Clients.Caller.onInitRoom(rDto);
-
-			var user = GetRepository<UserSession>().Get(x => x.SessionId == sessionId).Select(x => x.User).FirstOrDefault();
-			if (user != null)
+			catch (Exception ex)
 			{
-				UserDto uDto = Mapper.Map<UserDto>(user);
-				Clients.Group(roomName, Context.ConnectionId).onJoinedRoom(uDto);
+				Clients.Caller.onErrorHandler(ex.Message);
+				throw;
 			}
 			return result;
 		}
