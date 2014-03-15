@@ -1,7 +1,5 @@
 namespace WebSignalR.DataAccess.Migrations
 {
-	using System;
-	using System.Data.Entity;
 	using System.Data.Entity.Migrations;
 	using System.Linq;
 	using WebSignalR.Common.Entities;

@@ -53,7 +53,6 @@ namespace WebSignalR.Controllers
 					return room;
 				else
 					throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound) { Content = new StringContent("Room with such name cannot be found.") });
-
 			}
 			catch (Exception ex)
 			{
@@ -105,7 +104,7 @@ namespace WebSignalR.Controllers
 			// Need to detach to avoid loop reference exception during JSON serialization
 			Room repoRoom = repo.Get(x => x.Name == room.Name).FirstOrDefault();
 			roomdto.Id = repoRoom.Id;
-			this.AgileHubContext.Clients.All.onRoomAdded(roomdto);
+			base.AgileHubConnection.All.onRoomAdded(roomdto);
 
 			HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, roomdto);
 			response.Headers.Location = new Uri(Url.Link("DefaultApi", new { id = roomdto.Id }));
@@ -161,7 +160,7 @@ namespace WebSignalR.Controllers
 			}
 			// Need to detach to avoid loop reference exception during JSON serialization
 			RoomDto dto = AutoMapper.Mapper.Map<RoomDto>(room);
-			this.AgileHubContext.Clients.All.onRoomDeleted(dto);
+			this.AgileHubConnection.All.onRoomDeleted(dto);
 			return Request.CreateResponse(HttpStatusCode.OK, dto);
 		}
 
@@ -180,11 +179,10 @@ namespace WebSignalR.Controllers
 					room.ConnectedUsers.Add(usr);
 					_unity.Commit();
 					UserDto userDto = AutoMapper.Mapper.Map<UserDto>(usr);
-					AgileHubContext.Clients.Group(room.Name).onJoinedRoom(userDto);
+					base.AgileHubConnection.Group(room.Name).onJoinedRoom(userDto);
 				}
 				else
 					return new HttpResponseMessage(HttpStatusCode.BadRequest) { Content = new StringContent("Unable to found entities with such id's.") };
-
 			}
 			catch (System.Exception ex)
 			{
@@ -224,11 +222,10 @@ namespace WebSignalR.Controllers
 					room.ConnectedUsers.Remove(usr);
 					_unity.Commit();
 					UserDto userDto = AutoMapper.Mapper.Map<UserDto>(usr);
-					base.AgileHubContext.Clients.Group(room.Name).onLeftRoom(userDto);
+					base.AgileHubConnection.Group(room.Name).onLeftRoom(userDto);
 				}
 				else
 					return new HttpResponseMessage(HttpStatusCode.BadRequest) { Content = new StringContent("Unable to found entities with such id's.") };
-
 			}
 			catch (System.Exception ex)
 			{
@@ -252,7 +249,7 @@ namespace WebSignalR.Controllers
 				IRepository<UserSession> sessionRepo = _unity.GetRepository<UserSession>();
 				UserSession session = sessionRepo.Get(x => x.SessionId == sessionId).FirstOrDefault();
 				if (session != null)
-					AgileHubContext.Clients.Group(roomName).onLeftRoom(AutoMapper.Mapper.Map<UserDto>(session.User));
+					AgileHubConnection.Group(roomName).onLeftRoom(AutoMapper.Mapper.Map<UserDto>(session.User));
 			}
 			catch (System.Exception ex)
 			{

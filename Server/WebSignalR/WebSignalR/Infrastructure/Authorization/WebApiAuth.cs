@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Controllers;
-using System.Linq;
 using System.Web.Security;
 
 namespace WebSignalR.Infrastructure.Authorization
@@ -35,7 +35,7 @@ namespace WebSignalR.Infrastructure.Authorization
 						FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(cookie.Value);
 						if (ticket != null)
 						{
-							CustomIdentity ci = new CustomIdentity(ticket); // Create a CustomIdentity based on the FormsAuthenticationTicket  
+							CustomIdentity ci = new CustomIdentity(ticket); // Create a CustomIdentity based on the FormsAuthenticationTicket
 							CustomPrincipal principal = new CustomPrincipal(ci); // Create the CustomPrincipal
 							if (this.Roles != null)
 							{

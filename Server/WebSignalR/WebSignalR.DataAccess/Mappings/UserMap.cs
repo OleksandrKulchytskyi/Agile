@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity.ModelConfiguration;
-using WebSignalR.Common.Entities;
+﻿using WebSignalR.Common.Entities;
 
 namespace WebSignalR.DataAccess.Mappings
 {

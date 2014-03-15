@@ -13,6 +13,7 @@ namespace WebSignalR.Common.Entities
 		}
 
 		private bool active;
+
 		[Required]
 		//[DataMember(IsRequired = true)]
 		public bool Active
@@ -22,6 +23,7 @@ namespace WebSignalR.Common.Entities
 		}
 
 		private string name;
+
 		[Required]
 		//[DataMember(IsRequired = true)]
 		public string Name
@@ -31,6 +33,7 @@ namespace WebSignalR.Common.Entities
 		}
 
 		private string descr;
+
 		public string Description
 		{
 			get { return descr; }
@@ -38,6 +41,7 @@ namespace WebSignalR.Common.Entities
 		}
 
 		public virtual ICollection<User> ConnectedUsers { get; set; }
+
 		public virtual ICollection<VoteItem> ItemsToVote { get; set; }
 	}
 }

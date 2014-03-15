@@ -112,7 +112,7 @@ var agileHub = $.connection.agileHub;
 //});
 
 $.connection.hub.logging = true;
-$.connection.hub.start()
+$.connection.hub.start({ transport: ['webSockets', 'longPolling'] })
 				.done(function () {
 					// Call the Initialize function on the server. Will respond with auctionInitialized message
 					if (window.agileApp.notifyService !== undefined)
@@ -164,9 +164,9 @@ agileHub.client.onState = function (state) {
 	mainVM.setUserState(state);
 	agileHub.server.joinRoom($("#roomName").val(), mainVM.mySession().sessionId).fail(logHubInvokeExc)
 					.done(function (joinRoomResult) {
-			agileApp.notifyService.info(ko.toJSON(joinRoomResult), null, true);
-		});
-	
+						agileApp.notifyService.info(ko.toJSON(joinRoomResult), null, true);
+					});
+
 }
 
 agileHub.client.onUserLogged = function (user) {
@@ -198,10 +198,8 @@ agileHub.client.onInitRoom = function (roomDto) {
 		voteId = voteItemRow.attr('id');
 		//foreach user for vote item
 		for (var u = 1; u < users.length; u++) {
-
 			var user = $(users[u]);
 			userId = user.attr('id');
-			console.log(user.html());
 			addCellToRow(voteItemRow, userId, voteId);
 		}
 	}
@@ -211,6 +209,15 @@ function addCellToRow(row, uId, vId) {
 	var cell = $('<td><textarea>No vote</textarea></td>');
 	cell.attr('id', vId + "_" + uId);
 	cell.appendTo(row);
+	//addRowContents(newRow);
+}
+
+function RemoveCellFromRow(row, uId, vId) {
+	var cell = $(row).find('#' + vId + '_' + uId);
+	if (cell != null)
+		cell.remove();
+	else
+		console.log("cell not found:" + vId + "_" + uId);
 	//addRowContents(newRow);
 }
 
@@ -244,21 +251,46 @@ function logHubInvokeExc(e) {
 };
 
 agileHub.client.onJoinedRoom = function (userDto) {
-	console.log("onJoinedRoom ");
+
 	var match = ko.utils.arrayFirst(mainVM.roomDtoState().connectedUsers(), function (item) {
 		return item.id === userDto.Id;
 	});
 	if (!match) {
 		var newUser = new agileApp.datacontext.userViewModel(userDto);
 		mainVM.roomDtoState().connectedUsers.push(newUser);
+
+		var voteItems = $('#activityTable tbody tr')
+		if (voteItems.length == 0) return;
+
+		var userId = userDto.Id;
+		var voteId;
+		var voteItemRow;
+
+		//foreach vote item
+		for (var v = 0; v < voteItems.length; v++) {
+			var voteItemRow = $(voteItems[v]);
+			voteId = voteItemRow.attr('id');
+			addCellToRow(voteItemRow, userId, voteId);
+		}
 	}
 }
 
 agileHub.client.onLeftRoom = function (userDto) {
 	console.log("onLeftRoom ");
 	mainVM.roomDtoState().connectedUsers.remove(function (item) { return item.id == userDto.Id })
-	//var user = new agileApp.datacontext.userViewModel(userDto);
-	//mainVM.roomDtoState().connectedUsers.remove(user);
+	var voteItems = $('#activityTable tbody tr')
+	if (voteItems.length == 0) return;
+
+	var userId = userDto.Id;
+	var voteId;
+	var voteItemRow;
+
+	//foreach vote item
+	for (var v = 0; v < voteItems.length; v++) {
+		var voteItemRow = $(voteItems[v]);
+		voteId = voteItemRow.attr('id');
+		RemoveCellFromRow(voteItemRow, userId, voteId);
+	}
 }
 
 agileHub.client.onRoomStateChanged = function (roomDto) {
@@ -267,7 +299,7 @@ agileHub.client.onRoomStateChanged = function (roomDto) {
 	var roomDto = new agileApp.datacontext.roomDtoModel(roomDto);
 	//mainVM.roomDtoState().connectedUsers.remove(user);
 	handleUsers(roomDto.connectedUsers);
-	handleVotes(roomDto.itemsToVote);
+	handleVotes(roomDto);
 }
 
 function handleUsers(usersObservale) {
@@ -286,17 +318,65 @@ function handleUsers(usersObservale) {
 	}
 }
 
-function handleVotes(votesObservale) {
-	console.log(votesObservale);
-	var rows = $('#activityTable tbody tr');
-	console.log("Rows len:" + rows.length);
-	for (var i = 0; i < rows.length; i++) {
-		columns = $(rows[i]).find('td');
-		for (var j = 0; j < columns.length; j++) {
-			console.log($(columns[j]).html());
+function handleVotes(room) {
+
+	var headerRow = $('#activityTable thead tr')[0];
+	var voteItems = $('#activityTable tbody tr')
+	var users = $(headerRow).find('th');
+
+	if (users.length === 1) return;
+	if (voteItems.length === 0) return;
+
+	var userId;
+	var voteId;
+	var voteItemRow;
+
+	//foreach vote item
+	for (var v = 0; v < voteItems.length; v++) {
+		var voteItemRow = $(voteItems[v]);
+		voteId = voteItemRow.attr('id');
+		//foreach user for vote item
+		for (var u = 1; u < users.length; u++) {
+			var user = $(users[u]);
+			userId = user.attr('id');
+			addCellToRow(voteItemRow, userId, voteId);
 		}
 	}
 
+	//var usersRow = $('#activityTable thead tr')[0];
+	//var voteItems = $('#activityTable tbody tr')
+	//var users = $(usersRow).find('th');
+
+	//if (users.length == 1) return;
+	//if (voteItems.length == 0) return;
+
+	//var userId;
+	//var voteId;
+	//var voteItemRow;
+
+	//var forPurge = [];
+	////remove deleted votes
+	//$(voteItems).each(function (indx, row) {
+	//	var id = $(row).attr('id');
+	//	if (!room.containsVote(id))
+	//		forPurge.push(id);
+	//});
+
+	//for (var i = 0; i < forPurge.length; i++) {
+	//	$("#activityTable > tbody > tr:" + i).remove();
+	//}
+
+	////foreach vote item
+	//for (var v = 0; v < voteItems.length; v++) {
+	//	var voteItemRow = $(voteItems[v]);
+	//	voteId = voteItemRow.attr('id');
+	//	//foreach user for vote item
+	//	for (var u = 1; u < users.length; u++) {
+	//		var user = $(users[u]);
+	//		userId = user.attr('id');
+	//		addCellToRow(voteItemRow, userId, voteId);
+	//	}
+	//}
 }
 
 agileHub.client.onUserVoted = function (userVoteDto) {
@@ -305,7 +385,8 @@ agileHub.client.onUserVoted = function (userVoteDto) {
 }
 
 agileHub.client.onVoteItemClosed = function (voteItemDto) {
-
+	var id = voteItemDto.Id;
+	$('#table1 tr[id="' + id + '"]').hide();
 }
 
 agileHub.client.onRoomDeleted = function (roomDto) {

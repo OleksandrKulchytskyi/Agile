@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using WebSignalR.Common.Interfaces;
 
 namespace WebSignalR.Common.Infrastructure
@@ -10,9 +8,13 @@ namespace WebSignalR.Common.Infrastructure
 	public class Page<T> : IPage<T> where T : Entities.EntityBase
 	{
 		public int CurrentPage { get; set; }
+
 		public int PagesCount { get; set; }
+
 		public int PageSize { get; set; }
+
 		public int Count { get; set; }
+
 		public IEnumerable<T> Entities { get; set; }
 
 		public Page(IEnumerable<T> entities, int count, int pageSize, int currentPage)

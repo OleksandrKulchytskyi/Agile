@@ -73,7 +73,7 @@ namespace WebSignalR.Controllers
 							Unity.Commit();
 
 							RoomDto dto = AutoMapper.Mapper.Map<RoomDto>(room);
-							GetHub<Hubs.AgileHub>().Clients.Group(dto.Name).onRoomStateChanged(dto);
+							base.AgileHubConnection.Group(dto.Name).onRoomStateChanged(dto);
 						}
 						catch (Exception ex)
 						{

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Common;
-using System.Linq;
-using System.Web;
 
 namespace WebSignalR.Common.Interfaces
 {
@@ -20,7 +17,7 @@ namespace WebSignalR.Common.Interfaces
 		/// Commit all changes made in a container.
 		/// </summary>
 		///<remarks>
-		/// If the entity have fixed properties and any optimistic concurrency problem exists,  
+		/// If the entity have fixed properties and any optimistic concurrency problem exists,
 		/// then an exception is thrown
 		///</remarks>
 		int Commit();
@@ -34,6 +31,7 @@ namespace WebSignalR.Common.Interfaces
 	public interface IRepositoryContainer
 	{
 		IRepository<TSet> GetRepository<TSet>() where TSet : Entities.EntityBase;
+
 		void AddRepository<TSet>(object repository) where TSet : Entities.EntityBase;
 	}
 }

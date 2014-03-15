@@ -77,6 +77,12 @@
 			return new voteItemViewModel(voteItem);
 		}));
 
+		self.containsVote = function (vid) {
+			return ko.utils.arrayFirst(itemsToVote(), function (item) {
+				return vid === item.id;
+			});
+		}
+
 		self.toJson = function () {
 			return ko.toJSON(self);
 		};

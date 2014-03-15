@@ -7,7 +7,7 @@ using WebSignalR.Common.Interfaces;
 namespace WebSignalR.Common.Infrastructure
 {
 	/// <summary>
-	/// Validator based on Data Annotations. 
+	/// Validator based on Data Annotations.
 	/// This validator use IValidatableObject interface and
 	/// ValidationAttribute ( hierachy of this) for
 	/// perform validation
@@ -23,7 +23,7 @@ namespace WebSignalR.Common.Infrastructure
 		/// <typeparam name="TEntity">The typeof entity</typeparam>
 		/// <param name="item">The item to validate</param>
 		/// <param name="errors">A collection of current errors</param>
-		void SetValidatableObjectErrors<TEntity>(TEntity item, List<string> errors) where TEntity : class
+		private void SetValidatableObjectErrors<TEntity>(TEntity item, List<string> errors) where TEntity : class
 		{
 			if (typeof(IValidatableObject).IsAssignableFrom(typeof(TEntity)))
 			{
@@ -41,7 +41,7 @@ namespace WebSignalR.Common.Infrastructure
 		/// <typeparam name="TEntity">The type of entity</typeparam>
 		/// <param name="item">The entity to validate</param>
 		/// <param name="errors">A collection of current errors</param>
-		void SetValidationAttributeErrors<TEntity>(TEntity item, List<string> errors) where TEntity : class
+		private void SetValidationAttributeErrors<TEntity>(TEntity item, List<string> errors) where TEntity : class
 		{
 			var result = from property in TypeDescriptor.GetProperties(item).Cast<PropertyDescriptor>()
 						 from attribute in property.Attributes.OfType<ValidationAttribute>()
@@ -56,20 +56,18 @@ namespace WebSignalR.Common.Infrastructure
 			}
 		}
 
-		#endregion
+		#endregion Private Methods
 
 		#region IEntityValidator Members
 
-
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <typeparam name="TEntity"></typeparam>
 		/// <param name="item"></param>
 		/// <returns></returns>
 		public bool IsValid<TEntity>(TEntity item) where TEntity : Entities.EntityBase
 		{
-
 			if (item == null)
 				return false;
 
@@ -80,8 +78,9 @@ namespace WebSignalR.Common.Infrastructure
 
 			return !validationErrors.Any();
 		}
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <typeparam name="TEntity"></typeparam>
 		/// <param name="item"></param>
@@ -96,10 +95,9 @@ namespace WebSignalR.Common.Infrastructure
 			SetValidatableObjectErrors(item, validationErrors);
 			SetValidationAttributeErrors(item, validationErrors);
 
-
 			return validationErrors;
 		}
 
-		#endregion
+		#endregion IEntityValidator Members
 	}
 }

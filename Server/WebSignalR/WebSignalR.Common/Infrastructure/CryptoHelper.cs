@@ -10,6 +10,7 @@ namespace WebSignalR.Common.Infrastructure
 	{
 		// AES uses a 16 byte IV
 		private const int IVLength = 16;
+
 		// HMAC 256
 		private const int HMacLength = 32;
 

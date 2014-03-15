@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace WebSignalR.Common.Infrastructure
 {
@@ -13,7 +11,8 @@ namespace WebSignalR.Common.Infrastructure
 	{
 		#region Properties
 
-		IEnumerable<string> _validationErrors;
+		private IEnumerable<string> _validationErrors;
+
 		/// <summary>
 		/// Get or set the validation errors messages
 		/// </summary>
@@ -25,7 +24,7 @@ namespace WebSignalR.Common.Infrastructure
 			}
 		}
 
-		#endregion
+		#endregion Properties
 
 		#region Constructor
 
@@ -39,6 +38,6 @@ namespace WebSignalR.Common.Infrastructure
 			_validationErrors = validationErrors;
 		}
 
-		#endregion
+		#endregion Constructor
 	}
 }

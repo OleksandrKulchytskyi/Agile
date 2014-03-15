@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace WebSignalR.Common.ViewModels
 {
@@ -24,8 +20,11 @@ namespace WebSignalR.Common.ViewModels
 	public class CustomPrincipalSerializeModel
 	{
 		public int UserId { get; set; }
+
 		public string FirstName { get; set; }
+
 		public string LastName { get; set; }
+
 		public string[] roles { get; set; }
 	}
 }

@@ -1,8 +1,5 @@
-﻿using Microsoft.AspNet.SignalR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using Microsoft.AspNet.SignalR.Hubs;
+using Ninject;
 using System.Web.Mvc;
 using WebSignalR.Common.Interfaces;
 
@@ -12,19 +9,17 @@ namespace WebSignalR.Controllers
 	{
 		protected IUnityOfWork _unity;
 
-		//public MvcController(IUnityOfWork unity)
-		//{
-		//	_unity = unity;
-		//}
-
 		protected IUnityOfWork Unity
 		{
 			get { return _unity; }
 		}
 
-		protected IHubContext GetHub<THub>() where THub : Hub
+		protected IHubConnectionContext AgileHubConnection
 		{
-			return GlobalHost.ConnectionManager.GetHubContext<THub>();
+			get
+			{
+				return Infrastructure.BootStrapper.Kernel.Get<IHubConnectionContext>("AgileHub");
+			}
 		}
 
 		protected override void Dispose(bool disposing)

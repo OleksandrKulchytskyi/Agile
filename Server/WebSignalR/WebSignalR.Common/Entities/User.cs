@@ -13,6 +13,7 @@ namespace WebSignalR.Common.Entities
 		}
 
 		private string name;
+
 		public string Name
 		{
 			get { return name; }
@@ -25,6 +26,7 @@ namespace WebSignalR.Common.Entities
 		}
 
 		private string password;
+
 		public string Password
 		{
 			get { return password; }
@@ -37,6 +39,7 @@ namespace WebSignalR.Common.Entities
 		}
 
 		private bool isAdmin;
+
 		public bool IsAdmin
 		{
 			get { return isAdmin; }
@@ -44,7 +47,9 @@ namespace WebSignalR.Common.Entities
 		}
 
 		public virtual ICollection<UserSession> ConnectedSessions { get; set; }
+
 		public virtual ICollection<Privileges> UserPrivileges { get; set; }
+
 		public virtual ICollection<UserVote> UserVotes { get; set; }
 	}
 }

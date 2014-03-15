@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Web;
 using WebSignalR.Common.Interfaces;
 
 namespace WebSignalR.Common.Infrastructure
@@ -44,5 +41,4 @@ namespace WebSignalR.Common.Infrastructure
 			return CryptoHelper.Unprotect(_provider.EncryptionKey, _provider.VerificationKey, payload);
 		}
 	}
-
 }

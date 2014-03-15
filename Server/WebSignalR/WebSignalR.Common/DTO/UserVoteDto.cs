@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace WebSignalR.Common.DTO
+﻿namespace WebSignalR.Common.DTO
 {
 	public class UserVoteDto : DtoBase
 	{
@@ -12,6 +7,5 @@ namespace WebSignalR.Common.DTO
 		public int VoteItemId { get; set; }
 
 		public int UserId { get; set; }
-
 	}
 }

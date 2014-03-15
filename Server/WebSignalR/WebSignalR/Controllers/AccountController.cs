@@ -5,12 +5,11 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using WebSignalR.Common.Entities;
 using WebSignalR.Common.Extension;
 using WebSignalR.Common.Interfaces;
 using WebSignalR.Common.ViewModels;
 using WebSignalR.Infrastructure;
-using Ninject;
-using WebSignalR.Common.Entities;
 
 namespace WebSignalR.Controllers
 {
@@ -131,7 +130,6 @@ namespace WebSignalR.Controllers
 			FormsAuthentication.SignOut();
 			return RedirectToAction("Index", "Home");
 		}
-
 
 		public ActionResult Manage()
 		{

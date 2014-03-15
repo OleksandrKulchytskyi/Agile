@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace WebSignalR.Common.DTO
 {
@@ -13,6 +10,7 @@ namespace WebSignalR.Common.DTO
 		}
 
 		public string Name { get; set; }
+
 		public bool IsAdmin { get; set; }
 
 		public List<PrivilegeDto> Privileges { get; set; }

@@ -12,6 +12,7 @@ namespace WebSignalR.Common.Entities
 		}
 
 		private string content;
+
 		[Required]
 		public string Content
 		{
@@ -20,6 +21,7 @@ namespace WebSignalR.Common.Entities
 		}
 
 		private int overallMark;
+
 		public int OverallMark
 		{
 			get { return overallMark; }
@@ -27,6 +29,7 @@ namespace WebSignalR.Common.Entities
 		}
 
 		private bool closed;
+
 		public bool Closed
 		{
 			get { return closed; }
@@ -34,6 +37,7 @@ namespace WebSignalR.Common.Entities
 		}
 
 		public int? RoomId { get; set; }
+
 		public virtual Room HostRoom { get; set; }
 
 		public virtual ICollection<UserVote> VotedUsers { get; set; }

@@ -5,9 +5,9 @@ using System.Net.Http;
 using System.Web.Http;
 using WebSignalR.Common.DTO;
 using WebSignalR.Common.Entities;
+using WebSignalR.Common.Extension;
 using WebSignalR.Common.Interfaces;
 using WebSignalR.Common.ViewModels;
-using WebSignalR.Common.Extension;
 
 namespace WebSignalR.Controllers
 {

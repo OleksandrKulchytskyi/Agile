@@ -25,7 +25,7 @@ namespace WebSignalR.Infrastructure.Services
 
 			if (ticket == null) return null;
 
-			CustomIdentity customIdentity = new CustomIdentity(ticket); // Create a CustomIdentity based on the FormsAuthenticationTicket  
+			CustomIdentity customIdentity = new CustomIdentity(ticket); // Create a CustomIdentity based on the FormsAuthenticationTicket
 			CustomPrincipal principal = new CustomPrincipal(customIdentity); // Create the CustomPrincipal
 			return principal;
 		}

@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace WebSignalR.Infrastructure
 {
-	internal static  class AutomapperExtnsions
+	internal static class AutomapperExtnsions
 	{
 		public static IMappingExpression<TSource, TDestination> IgnoreAllNonExisting<TSource, TDestination>(this IMappingExpression<TSource, TDestination> expression)
 		{

@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Web;
+using System.Linq;
+using System.Xml.Linq;
 using WebSignalR.Common.Entities;
 using WebSignalR.Common.Interfaces;
-using System.Xml.Linq;
 
 namespace WebSignalR.Infrastructure
 {

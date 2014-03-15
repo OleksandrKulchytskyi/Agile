@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WebSignalR.Common.DTO;
@@ -26,7 +26,6 @@ namespace WebSignalR.Controllers
 		{
 			if (User.Identity.IsAuthenticated)
 			{
-
 			}
 			try
 			{
@@ -40,7 +39,6 @@ namespace WebSignalR.Controllers
 				throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError) { Content = new StringContent(ex.Message) });
 			}
 		}
-
 
 		protected override void Dispose(bool disposing)
 		{

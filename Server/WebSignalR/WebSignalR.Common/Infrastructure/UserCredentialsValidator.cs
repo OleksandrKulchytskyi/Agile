@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using WebSignalR.Common.Entities;
 using WebSignalR.Common.Interfaces;
 
@@ -10,7 +9,8 @@ namespace WebSignalR.Common.Infrastructure
 	public class UserCredentialsValidator : IEntityValidator, IDisposable
 	{
 		private IUnityOfWork _unity;
-		bool isValid;
+		private bool isValid;
+
 		public UserCredentialsValidator(IUnityOfWork unity)
 		{
 			_unity = unity;

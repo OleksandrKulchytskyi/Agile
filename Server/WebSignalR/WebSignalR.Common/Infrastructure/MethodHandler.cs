@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
-using System.Web;
 
 namespace WebSignalR.Common
 {
@@ -11,10 +8,10 @@ namespace WebSignalR.Common
 	//{
 	//	// NOT WORKING
 	//	Debug.Print(MethodHandler.GetValue<int>(key => Clients(Context.ConnectionId).Client.GetValue(key)));
-	
+
 	//	// WORKING
 	//	new Thread(() => Debug.Print(MethodHandler.GetValue<int>(key => Clients(Context.ConnectionId).Client.GetValue(key)))).Start();
-	
+
 	//	return base.OnConnected();
 	//}
 
@@ -45,7 +42,9 @@ namespace WebSignalR.Common
 	internal class ReturnWaiter
 	{
 		private ManualResetEvent _signal = new ManualResetEvent(false);
+
 		public ManualResetEvent Signal { get { return _signal; } }
+
 		public Guid Key { get; private set; }
 
 		public ReturnWaiter(Guid key)
@@ -54,6 +53,7 @@ namespace WebSignalR.Common
 		}
 
 		private object _value;
+
 		public object Value
 		{
 			get { return _value; }

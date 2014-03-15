@@ -16,6 +16,5 @@ namespace WebSignalR.Infrastructure
 				return jw.ToString();
 			}
 		}
-
 	}
 }

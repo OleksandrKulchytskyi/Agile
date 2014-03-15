@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WebSignalR.Common.Entities;
 using WebSignalR.Common.Interfaces;
 
@@ -30,7 +28,6 @@ namespace WebSignalR.DataAccess.Repositories
 			AddRepository<Privileges>(privilegeRepo);
 			AddRepository<VoteItem>(voteRepo);
 			AddRepository<UserVote>(userVoteRepo);
-
 		}
 
 		public bool EnableAuditLog

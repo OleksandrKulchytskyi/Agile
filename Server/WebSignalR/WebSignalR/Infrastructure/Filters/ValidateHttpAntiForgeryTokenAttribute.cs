@@ -7,7 +7,6 @@ using System.Web;
 using System.Web.Helpers;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
-using System.Web.Http.Validation;
 using System.Web.Mvc;
 
 namespace WebSignalR.Infrastructure.Filters

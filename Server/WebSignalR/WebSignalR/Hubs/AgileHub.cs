@@ -20,9 +20,11 @@ namespace WebSignalR.Hubs
 	{
 		private static readonly Version _version = typeof(AgileHub).Assembly.GetName().Version;
 		private static readonly string _versionString = _version.ToString();
+		
 		private readonly IUnityOfWork _unity;
 		private readonly ICryptoService _cryptoService;
 		private readonly IUserRoomService _roomService;
+		private readonly ISessionService _sessionServ;
 
 		private string UserAgent
 		{
@@ -43,11 +45,12 @@ namespace WebSignalR.Hubs
 			}
 		}
 
-		public AgileHub(IUnityOfWork unity, ICryptoService crypto, IUserRoomService roomService)
+		public AgileHub(IUnityOfWork unity, ICryptoService crypto, IUserRoomService roomService, ISessionService sessionServ)
 		{
 			_unity = unity;
 			_cryptoService = crypto;
 			_roomService = roomService;
+			_sessionServ = sessionServ;
 		}
 
 		public override Task OnConnected()
@@ -146,20 +149,17 @@ namespace WebSignalR.Hubs
 		{
 			if (Context.User.Identity.IsAuthenticated)
 			{
-				IRepository<User> repo = GetRepository<User>();
-				User usr = repo.Get(x => x.Name == Context.User.Identity.Name).FirstOrDefault();
-				if (usr != null)
+				IRepository<UserSession> repoSession = GetRepository<UserSession>();
+				UserSession us = _sessionServ.GetCurrentSession(Context.User.Identity.Name, Context.ConnectionId);
+				if (us != null)
 				{
-					IRepository<UserSession> repoSession = GetRepository<UserSession>();
-					UserSession us = repoSession.Get(x => x.SessionId == clientId).FirstOrDefault();
-					if (us != null)
-					{
-						repoSession.Remove(us);
-						_unity.Commit();
-					}
+					repoSession.Remove(us);
+					_unity.Commit();
 				}
 			}
+
 			#region commented
+
 			//string userId = _service.DisconnectClient(clientId);
 
 			//if (string.IsNullOrEmpty(userId))
@@ -181,8 +181,9 @@ namespace WebSignalR.Hubs
 			//		//Clients.Group(group.Name).leave(userViewModel, group.Name).Wait();
 			//		Groups.Remove(clientId, group.Name);
 			//	}
-			//} 
-			#endregion
+			//}
+
+			#endregion commented
 		}
 
 		[SignalRAuth(Roles = "User")]
@@ -206,6 +207,7 @@ namespace WebSignalR.Hubs
 				RoomDto rDto = Mapper.Map<RoomDto>(room);
 				Clients.Caller.onInitRoom(rDto);
 
+				_sessionServ.UpdateSessionActivity(sessionId);
 				var user = GetRepository<UserSession>().Get(x => x.SessionId == sessionId).Select(x => x.User).FirstOrDefault();
 				if (user != null)
 				{
@@ -228,11 +230,14 @@ namespace WebSignalR.Hubs
 			if (!Guid.TryParse(sessionId, out sesID))
 				sessionId = Context.ConnectionId;
 
+			_sessionServ.UpdateSessionActivity(sessionId);
 			Room room = _roomService.DisconnecFromRoomBySessionId(roomName, sessionId);
-			Task addTask = Groups.Remove(sessionId, roomName);
+
+			Task removeTask = Groups.Remove(sessionId, roomName);
 			UserDto uDto = Mapper.Map<UserDto>(GetRepository<UserSession>().Get(x => x.SessionId == sessionId).Select(x => x.User).FirstOrDefault());
 			Clients.Group(roomName).onLeftRoom(uDto);
-			return addTask;
+
+			return removeTask;
 		}
 
 		[SignalRAuth(Roles = "ScrumMaster")]
@@ -254,7 +259,6 @@ namespace WebSignalR.Hubs
 			VoteItem vote = voteRepo.Get(v => v.Content == content).FirstOrDefault();
 			if (room != null && vote == null)
 			{
-
 				vote = new VoteItem();
 				vote.Closed = false;
 				vote.HostRoom = room;
@@ -325,8 +329,11 @@ namespace WebSignalR.Hubs
 				uv.VoteId = vote.Id;
 				uv.Mark = mark;
 				userVorePero.Add(uv);
-				_unity.Commit();
+
 				vote.VotedUsers.Add(uv);
+
+				_unity.Commit();
+				_sessionServ.UpdateSessionActivity(Context.ConnectionId);
 				dto = Mapper.Map<UserVoteDto>(uv);
 			}
 			//VoteItemDto voteDto = Mapper.Map<VoteItemDto>(vote);

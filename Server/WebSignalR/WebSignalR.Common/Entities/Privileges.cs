@@ -1,5 +1,4 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using WebSignalR.Common.Infrastructure;
 
 namespace WebSignalR.Common.Entities
@@ -12,6 +11,7 @@ namespace WebSignalR.Common.Entities
 		}
 
 		private string name;
+
 		public string Name
 		{
 			get { return name; }
@@ -19,12 +19,12 @@ namespace WebSignalR.Common.Entities
 		}
 
 		private string description;
+
 		public string Description
 		{
 			get { return description; }
 			set { description = value; OnPropChanged("Description"); }
 		}
-
 
 		public ICollection<User> Users { get; set; }
 	}

@@ -8,6 +8,7 @@ namespace WebSignalR.DependencyResolvers
 	internal class NinjectSignalRDependencyResolver : Microsoft.AspNet.SignalR.DefaultDependencyResolver
 	{
 		private readonly IKernel _kernel;
+
 		public NinjectSignalRDependencyResolver(IKernel kernel)
 		{
 			_kernel = kernel;
