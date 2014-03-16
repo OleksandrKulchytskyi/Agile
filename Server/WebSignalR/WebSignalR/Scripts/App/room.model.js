@@ -32,7 +32,7 @@
 	function voteItemViewModel(data) {
 		var self = this;
 		data = data || {};
-
+		console.log(data);
 		self.id = data.Id;
 		self.content = ko.observable(data.Content);
 		self.closed = ko.observable(data.Closed);
@@ -49,7 +49,7 @@
 	function userVoteViewModel(data) {
 		var self = this;
 		data = data || {};
-
+		console.log(data);
 		self.id = data.Id;
 		self.userId = ko.observable(data.User.Id || data.UserId);
 		self.voteId = ko.observable(data.VoteItem.Id || data.VoteItemId);

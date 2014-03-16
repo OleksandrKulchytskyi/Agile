@@ -64,6 +64,8 @@ namespace WebSignalR.TestHarness
 				return;
 			}
 
+			txtLog.Clear();
+
 			if (!string.IsNullOrEmpty(txtPass.Password) && !string.IsNullOrEmpty(txtUser.Text) && !string.IsNullOrEmpty(txtUrl.Text))
 			{
 				try
@@ -90,6 +92,7 @@ namespace WebSignalR.TestHarness
 				}
 				catch (Exception ex)
 				{
+					txtLog.AppendText(ex.ToString());
 					MessageBox.Show(this, ex.Message);
 				}
 				finally
@@ -124,6 +127,10 @@ namespace WebSignalR.TestHarness
 				{
 					MessageBox.Show(this, ex.Message);
 				}
+				finally
+				{
+					btnLogout.IsEnabled = false;
+				}
 			}
 		}
 
@@ -144,6 +151,7 @@ namespace WebSignalR.TestHarness
 
 			MethodInvokeView view = new MethodInvokeView(hubProxy);
 			view.Owner = this;
+			view.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner;
 			view.ShowDialog();
 		}
 
@@ -264,6 +272,7 @@ namespace WebSignalR.TestHarness
 		{
 			SubscribeCallbackView view = new SubscribeCallbackView(hubProxy);
 			view.Owner = this;
+			view.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner;
 			view.ShowDialog();
 		}
 	}

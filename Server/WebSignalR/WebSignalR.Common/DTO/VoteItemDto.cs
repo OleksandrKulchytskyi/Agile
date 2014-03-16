@@ -15,6 +15,8 @@ namespace WebSignalR.Common.DTO
 
 		public bool Closed { get; set; }
 
+		public bool Opened { get; set; }
+
 		//public RoomDto HostRoom { get; set; }
 
 		public List<int> VotedUsers { get; set; }

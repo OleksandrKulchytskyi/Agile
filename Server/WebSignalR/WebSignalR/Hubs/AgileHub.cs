@@ -20,7 +20,7 @@ namespace WebSignalR.Hubs
 	{
 		private static readonly Version _version = typeof(AgileHub).Assembly.GetName().Version;
 		private static readonly string _versionString = _version.ToString();
-		
+
 		private readonly IUnityOfWork _unity;
 		private readonly ICryptoService _cryptoService;
 		private readonly IUserRoomService _roomService;
@@ -313,14 +313,14 @@ namespace WebSignalR.Hubs
 		}
 
 		[SignalRAuth(Roles = "User")]
-		public Task VoteForItem(string room, int voteItemId, int userId, int mark)
+		public Task VoteForItem(string room, int voteItemId, int mark)
 		{
 			IRepository<VoteItem> repo = GetRepository<VoteItem>();
 			IRepository<User> repoUser = GetRepository<User>();
 			IRepository<UserVote> userVorePero = GetRepository<UserVote>();
 
 			VoteItem vote = repo.Get(x => x.Id == voteItemId).FirstOrDefault();
-			User usr = repoUser.Get(x => x.Id == userId).FirstOrDefault();
+			User usr = repoUser.Get(x => x.Name == Context.User.Identity.Name).FirstOrDefault();
 			UserVoteDto dto = null;
 			if (vote != null && usr != null)
 			{

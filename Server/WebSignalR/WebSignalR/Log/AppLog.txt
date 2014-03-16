@@ -2,3 +2,17 @@ INFO  2014-03-16 00:15:11,886   109ms Global                 Application_Start  
 INFO  2014-03-16 00:27:47,239   107ms Global                 Application_Start  - Application_Start()
 INFO  2014-03-16 00:42:46,961 899828ms Global                 Sweep              - Begin sweep process
 INFO  2014-03-16 00:43:06,493   117ms Global                 Application_Start  - Application_Start()
+INFO  2014-03-16 12:09:13,402   104ms Global                 Application_Start  - Application_Start()
+INFO  2014-03-16 12:24:12,724 899425ms Global                 Sweep              - Begin sweep process
+INFO  2014-03-16 12:36:18,892 1625593ms Global                 Application_End    - Application_End()
+INFO  2014-03-16 12:36:26,912    69ms Global                 Application_Start  - Application_Start()
+INFO  2014-03-16 12:36:45,561   109ms Global                 Application_Start  - Application_Start()
+ERROR 2014-03-16 12:40:47,292 241839ms Global                 OnIncomingError    - System.AggregateException: One or more errors occurred. ---> System.InvalidOperationException: 'LeaveRoom' method could not be resolved.
+   at Microsoft.AspNet.SignalR.Hubs.NullMethodDescriptor.<get_Invoker>b__0(IHub emptyHub, Object[] emptyParameters)
+   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)
+   --- End of inner exception stack trace ---
+---> (Inner Exception #0) System.InvalidOperationException: 'LeaveRoom' method could not be resolved.
+   at Microsoft.AspNet.SignalR.Hubs.NullMethodDescriptor.<get_Invoker>b__0(IHub emptyHub, Object[] emptyParameters)
+   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)<---
+
+INFO  2014-03-16 12:47:17,596 632143ms Global                 Application_End    - Application_End()

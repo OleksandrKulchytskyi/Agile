@@ -223,9 +223,13 @@ namespace WebSignalR.Infrastructure
 
 			Mapper.CreateMap<UserVote, UserVoteDto>()
 				.ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.User.Id))
-				.ForMember(dest => dest.VoteItemId, opt => opt.MapFrom(src => src.VoteItem.Id));
+				.ForMember(dest => dest.VoteItemId, opt => opt.MapFrom(src => src.VoteItem.Id))
+				.ForMember(dest => dest.Mark, opt => opt.MapFrom(src => src.Mark))
+				.ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
 
-			Mapper.CreateMap<VoteItem, VoteItemDto>()
+
+			Mapper.CreateMap<VoteItem, VoteItemDto>()//TODO: check here !! in JS model ve got only integers, needs to be redesigned
+				.ForMember(d => d.Opened, opt => opt.MapFrom(s => s.Opened))
 				.ForMember(dest => dest.VotedUsers, opt => opt.MapFrom(src => src.VotedUsers.Select(x => x.UserId).ToList()))
 				.IgnoreAllNonExisting();
 

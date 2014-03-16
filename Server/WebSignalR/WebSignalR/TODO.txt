@@ -1,4 +1,7 @@
-﻿http://xsockets.net/blog/building-real-time-spa-using-knockoutjs-codefirst-and-xsocketsnet
+﻿!!!!!!!!!!!!!!!!!!!!!!!!! auth and expiration
+http://stackoverflow.com/questions/14629212/concerning-the-sliding-expiration-of-asp-nets-forms-authentication-and-session
+
+http://xsockets.net/blog/building-real-time-spa-using-knockoutjs-codefirst-and-xsocketsnet
 http://xsockets.net/blog/a-realtime-architecture
 
 https://github.com/codeplanner/FunWithT4/blob/master/FunWithT4.Core/Interfaces/Paging/IPage.cs

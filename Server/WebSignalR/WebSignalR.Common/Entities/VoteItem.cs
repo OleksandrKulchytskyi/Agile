@@ -36,6 +36,15 @@ namespace WebSignalR.Common.Entities
 			set { closed = value; OnPropChanged("Closed"); }
 		}
 
+		private bool isOpened;
+
+		public bool Opened
+		{
+			get { return isOpened; }
+			set { isOpened = value; OnPropChanged("Opened"); }
+		}
+		
+
 		public int? RoomId { get; set; }
 
 		public virtual Room HostRoom { get; set; }

@@ -206,7 +206,7 @@ agileHub.client.onInitRoom = function (roomDto) {
 }
 
 function addCellToRow(row, uId, vId) {
-	var cell = $('<td><textarea>No vote</textarea></td>');
+	var cell = $('<td>No vote</td>');
 	cell.attr('id', vId + "_" + uId);
 	cell.appendTo(row);
 	//addRowContents(newRow);
@@ -380,13 +380,36 @@ function handleVotes(room) {
 }
 
 agileHub.client.onUserVoted = function (userVoteDto) {
+	console.log(userVoteDto);
 	var userId = userVoteDto.UserId;
 	var voteId = userVoteDto.VoteItemId;
+
+	var voteRow = $('#activityTable tr[id="' + voteId + '"]');
+	var cellId = voteId + "_" + userId;
+	console.log("cell id " + cellId);
+	var cell = getCelInRowById(voteRow, cellId);
+	if (cell != null) {
+		$(cell).css('background-color', 'green')
+		var mark = userVoteDto.Mark;
+		$(cell).val(mark);
+		$(cell).text(mark);
+	}
+}
+
+function getCelInRowById(row, cellId) {
+	return $(row).find('td[id="' + cellId + '"]');
+}
+
+function getCell(columnId, rowId) {
+	var column = $('#' + column).index();
+	var row = $('#' + row)
+	return row.find('td').eq(column);
 }
 
 agileHub.client.onVoteItemClosed = function (voteItemDto) {
 	var id = voteItemDto.Id;
-	$('#table1 tr[id="' + id + '"]').hide();
+	var voteRow = $('#activityTable tr[id="' + id + '"]');
+	$(voteRow).children('td, th').css('background-color', '#000');
 }
 
 agileHub.client.onRoomDeleted = function (roomDto) {
