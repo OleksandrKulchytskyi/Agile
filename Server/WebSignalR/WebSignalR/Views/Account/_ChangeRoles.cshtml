@@ -13,10 +13,30 @@
 
 @using (Html.BeginForm("JsonChangeRoles", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { Id = "changeRolesForm" }))
 {
+@*<!-- ko foreach: users -->
+	<li data-bind="text: name, click: $parent.selectedUser"></li>
+	<!-- /ko -->*@
+	
 	<input id="antiForgeryToken" type="hidden" value="@GetAntiForgeryToken()" />
-	<ul data-bind="foreach: users">
-		<li data-bind="text: name, attr: { id: id }"></li>
-	</ul>
+	<div id="userDiv" class="users_side">
+		<ul data-bind="foreach: users" id="usersUl">
+			<li data-bind="text: name, attr: { id: id }"></li>
+		</ul>
+	</div>
+	<div id="rolesDiv" class="roles_side">
+		<ul data-bind="foreach: roles" id="rolesUl">
+			<li data-bind="text: name, attr: { id: id }"></li>
+		</ul>
+	</div>
+	<div id="btnsDiv">
+		<input type='button' value='<<' data-bind="click: addRole" />
+		<input type='button' value='>>' id='move_right' />
+	</div>
+	<div class="userroles_side" id="userRolesDiv">
+		<ul data-bind="foreach: userRoles " id="userRolesUl">
+			<li data-bind="text: name, attr: { id: id }"></li>
+		</ul>
+	</div>
 }
 
 @if (Request.IsAuthenticated)
@@ -25,8 +45,41 @@
 	<script type="text/javascript">
 		console.log("Scripts loaded!!!!");
 		var rolesViewModel = new RolesViewModel(@Html.Raw(Model.ToJson()));
-		var rolesForm = document.getElementById('changeRolesForm');
-
+		//var rolesForm = document.getElementById('changeRolesForm');
+		var rolesForm = $('#changeRolesForm')[0]; //the same as the commented above
 		ko.applyBindings(rolesViewModel, rolesForm);
+
+		var previousUser = null;
+		var previousRole = null;
+
+		$("#usersUl").on("click", "li", function (e) {
+			if (previousUser !== null) {
+				$(previousUser).css('background-color', 'white')
+			}
+			previousUser = $(this);
+
+			$(this).css("background-color", "lightblue");
+			var item = ko.dataFor(this),
+				current = rolesViewModel.selectedUser;
+			if (!current() || item.id !== current().id) {
+				current(item);
+			}
+		});
+
+		$("#rolesUl").on("click", "li", function (e) {
+			if (previousRole !== null) {
+				$(previousRole).css('background-color', 'white')
+			}
+			previousRole = $(this);
+
+			$(this).css("background-color", "lightblue");
+			var item = ko.dataFor(this),
+				current = rolesViewModel.selectedRole;
+			if (!current() || item.id !== current().id) {
+				current(item);
+			}
+		});
+
+
 	</script>
 }

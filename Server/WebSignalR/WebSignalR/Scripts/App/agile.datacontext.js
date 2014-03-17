@@ -14,7 +14,9 @@ window.agileApp.datacontext = (function () {
 		createRegisterVM: initRegisterVM,
 		registerNewUser: registerNewUser,
 		changeUserPassword: changeUserPassword,
-		createChangePasswordVM: createChangePasswordVM
+		createChangePasswordVM: createChangePasswordVM,
+		getUserPrivileges: getUserPrivileges,
+		addUserPrivilege: addUserPrivilege
 	};
 
 	return datacontext;
@@ -74,6 +76,16 @@ window.agileApp.datacontext = (function () {
 	function getPrivileges() {
 		var url = privilegeUrl().concat("getPrivileges");
 		return ajaxRequest('get', url);
+	}
+
+	function getUserPrivileges(userId) {
+		var url = userUrl().concat("GetUserPrivileges?userId=" + userId);
+		return ajaxRequest('get', url);
+	}
+
+	function addUserPrivilege(userId, privilegeId) {
+		var url = privilegeUrl().concat("AppendUserRole?userId=" + userId + "&privilegeId=" + privilegeId);
+		return ajaxRequest('put', url);
 	}
 
 	function initRegisterVM(data) {

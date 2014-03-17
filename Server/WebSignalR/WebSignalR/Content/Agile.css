@@ -90,3 +90,31 @@
 .agileItemInput::-ms-clear {
 	display: none;
 }
+
+
+.agile-scrollable-content {
+	height: 180px;
+	overflow: auto;
+	background-color: whitesmoke;
+}
+
+.users_side {
+	width: 200px;
+	height: 280px;
+	overflow: auto;
+	position: absolute;
+}
+
+.roles_side {
+	margin-left: 230px;
+	margin-right: 20px;
+	height: 280px;
+	overflow: auto;
+}
+
+.userroles_side{
+    width: 100%;
+    height: 180px;
+    overflow: auto; 
+}
+

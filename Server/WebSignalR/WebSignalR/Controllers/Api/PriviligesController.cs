@@ -24,9 +24,6 @@ namespace WebSignalR.Controllers
 		[HttpGet]
 		public IEnumerable<PrivilegeDto> GetPrivileges()
 		{
-			if (User.Identity.IsAuthenticated)
-			{
-			}
 			try
 			{
 				IReadOnlyRepository<Privileges> repo = _unity.GetRepository<Privileges>();
@@ -38,6 +35,35 @@ namespace WebSignalR.Controllers
 				Global.Logger.Error(ex);
 				throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError) { Content = new StringContent(ex.Message) });
 			}
+		}
+
+		[HttpPut]
+		[ActionName("AppendUserRole")]
+		public HttpResponseMessage AppendUserRole(int userId, int privilegeId)
+		{
+			Privileges privilege;
+			try
+			{
+				IReadOnlyRepository<Privileges> privRepo = _unity.GetRepository<Privileges>();
+				IRepository<User> userRepo = _unity.GetRepository<User>();
+				User user = userRepo.Get(x => x.Id == userId).FirstOrDefault();
+				privilege = privRepo.Get(x => x.Id == privilegeId).FirstOrDefault();
+				if (user != null && privilege != null)
+				{
+					user.UserPrivileges.Add(privilege);
+					userRepo.Update(user);
+					_unity.Commit();
+				}
+				else
+					Request.CreateErrorResponse(HttpStatusCode.NotFound, "Entities were not found.");
+
+			}
+			catch (Exception ex)
+			{
+				Global.Logger.Error(ex);
+				return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
+			}
+			return Request.CreateResponse(HttpStatusCode.OK, AutoMapper.Mapper.Map<PrivilegeDto>(privilege));
 		}
 
 		protected override void Dispose(bool disposing)

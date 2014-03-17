@@ -94,8 +94,8 @@
 
 		$("#changeRolesDialog").dialog({
 			autoOpen: false,
-			height: 450,
-			width: 400,
+			height: 500,
+			width: 450,
 			modal: true,
 			buttons: {
 				Cancel: function () {

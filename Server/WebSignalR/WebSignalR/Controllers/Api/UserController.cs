@@ -20,6 +20,20 @@ namespace WebSignalR.Controllers
 			_unity = unity;
 		}
 
+		[ActionName("GetUserPrivileges")]
+		[Infrastructure.Authorization.WebApiAuth(Roles = "Admin")]
+		[HttpGet]
+		public HttpResponseMessage GetUserPrivileges(int userId)
+		{
+			IReadOnlyRepository<User> userRepo = _unity.GetRepository<User>();
+			var user = userRepo.Get(x => x.Id == userId).FirstOrDefault();
+			if (user == null)
+				return Request.CreateErrorResponse(HttpStatusCode.NotFound, "User with such id cannot be found.");
+
+			return Request.CreateResponse(HttpStatusCode.OK, user.UserPrivileges.Select(x => AutoMapper.Mapper.Map<PrivilegeDto>(x)).ToList());
+		}
+
+
 		[HttpPost]
 		[ActionName("RegisterUser")]
 		[Infrastructure.Filters.ValidateHttpAntiForgeryToken]
