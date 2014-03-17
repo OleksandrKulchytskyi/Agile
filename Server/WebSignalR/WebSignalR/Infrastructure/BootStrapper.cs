@@ -199,9 +199,7 @@ namespace WebSignalR.Infrastructure
 				return;
 			// Only run migrations for SQL server (Sql ce not supported as yet)
 			var settings = new WebSignalR.DataAccess.Migrations.Configuration();
-
 			var migrator = new DbMigrator(settings);
-
 			migrator.Update();
 		}
 
@@ -230,11 +228,13 @@ namespace WebSignalR.Infrastructure
 
 			Mapper.CreateMap<VoteItem, VoteItemDto>()//TODO: check here !! in JS model ve got only integers, needs to be redesigned
 				.ForMember(d => d.Opened, opt => opt.MapFrom(s => s.Opened))
-				.ForMember(dest => dest.VotedUsers, opt => opt.MapFrom(src => src.VotedUsers.Select(x => x.UserId).ToList()))
+				.ForMember(dest => dest.HostRoomId, opt => opt.MapFrom(src => src.HostRoom.Id))
+				.ForMember(dest => dest.VotedUsers, opt => opt.Ignore())
 				.IgnoreAllNonExisting();
 
 			Mapper.CreateMap<VoteItemDto, VoteItem>()
 				.ForMember(dest => dest.VotedUsers, opt => opt.MapFrom(src => src.VotedUsers.Select(x => new UserVote() { Id = x }).ToList()))
+				.ForSourceMember(src => src.HostRoomId, opt => opt.Ignore())
 				.IgnoreAllNonExisting();
 
 			Mapper.CreateMap<Room, RoomDto>()

@@ -1,0 +1,32 @@
+﻿@using WebSignalR.Infrastructure
+@model  WebSignalR.ViewModels.ChangeRolesViewModel
+
+
+@functions{
+	public string GetAntiForgeryToken()
+	{
+		string cookieToken, formToken;
+		AntiForgery.GetTokens(null, out cookieToken, out formToken);
+		return cookieToken + ":" + formToken;
+	}
+}
+
+@using (Html.BeginForm("JsonChangeRoles", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { Id = "changeRolesForm" }))
+{
+	<input id="antiForgeryToken" type="hidden" value="@GetAntiForgeryToken()" />
+	<ul data-bind="foreach: users">
+		<li data-bind="text: name, attr: { id: id }"></li>
+	</ul>
+}
+
+@if (Request.IsAuthenticated)
+{
+	<script type="text/javascript" src="/Scripts/app/account.rolesVM.js"></script>
+	<script type="text/javascript">
+		console.log("Scripts loaded!!!!");
+		var rolesViewModel = new RolesViewModel(@Html.Raw(Model.ToJson()));
+		var rolesForm = document.getElementById('changeRolesForm');
+
+		ko.applyBindings(rolesViewModel, rolesForm);
+	</script>
+}

@@ -16,5 +16,18 @@ namespace WebSignalR.Infrastructure
 				return jw.ToString();
 			}
 		}
+
+		public static string ToJsonCamel(this object obj)
+		{
+			if (obj == null)
+				return "{}";
+
+			JsonSerializerSettings serializerSettings = new JsonSerializerSettings
+			{
+				ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
+			};
+
+			return JsonConvert.SerializeObject(obj, Formatting.None, serializerSettings);
+		}
 	}
 }

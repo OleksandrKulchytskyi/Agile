@@ -7,7 +7,10 @@
         },
         changeUserPassword = function () {
         	$("#changePasswordDialog").dialog("open");
-        };
+        },
+		changeRoles = function () {
+			$("#changeRolesDialog").dialog("open");
+		};
 
 	function initDialogs() {
 
@@ -89,6 +92,26 @@
 			}
 		});
 
+		$("#changeRolesDialog").dialog({
+			autoOpen: false,
+			height: 450,
+			width: 400,
+			modal: true,
+			buttons: {
+				Cancel: function () {
+					$(this).dialog("close");
+					var from = $("#changePasswordForm");
+					from.find('input:password').val('');
+				}
+			},
+			open: function (event, ui) {
+				$(this).load("/Account/JsonChangeRoles");
+			},
+			close: function () {
+				$("#changeRolesForm").empty();
+			}
+		});
+
 		$("#btnSubmit").hide();
 	}
 
@@ -113,7 +136,8 @@
 		allPrivileges: allPrivileges,
 		error: error,
 		addNewUser: addNewUser,
-		changeUserPassword: changeUserPassword
+		changeUserPassword: changeUserPassword,
+		changeRoles: changeRoles
 	};
 
 })(ko, agileApp.datacontext, agileApp.notifyService);

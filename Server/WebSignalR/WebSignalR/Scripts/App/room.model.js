@@ -34,8 +34,13 @@
 		data = data || {};
 		console.log(data);
 		self.id = data.Id;
+
 		self.content = ko.observable(data.Content);
 		self.closed = ko.observable(data.Closed);
+		self.opened = ko.observable(data.Opened);
+
+		self.hostRoomId = ko.observable(data.HostRoomId);
+
 		self.overallMark = ko.observable(data.OverallMark);
 		self.votedUsers = ko.observableArray(ko.utils.arrayMap(data.VotedUsers, function myfunction(userVote) {
 			return new userVoteViewModel(userVote);

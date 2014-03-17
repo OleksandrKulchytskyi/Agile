@@ -16,3 +16,56 @@ ERROR 2014-03-16 12:40:47,292 241839ms Global                 OnIncomingError   
    at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)<---
 
 INFO  2014-03-16 12:47:17,596 632143ms Global                 Application_End    - Application_End()
+INFO  2014-03-17 10:32:35,442   197ms Global                 Application_Start  - Application_Start()
+INFO  2014-03-17 10:36:14,388   200ms Global                 Application_Start  - Application_Start()
+INFO  2014-03-17 10:38:11,030   198ms Global                 Application_Start  - Application_Start()
+INFO  2014-03-17 12:25:25,158   203ms Global                 Application_Start  - Application_Start()
+INFO  2014-03-17 12:30:47,664   214ms Global                 Application_Start  - Application_Start()
+INFO  2014-03-17 12:45:47,085 899635ms Global                 Sweep              - Begin sweep process
+INFO  2014-03-17 12:46:55,644   205ms Global                 Application_Start  - Application_Start()
+ERROR 2014-03-17 12:47:43,704 48264ms Global                 Application_Error  - Application_Error
+System.InvalidOperationException: The partial view 'JsonChangeRoles' was not found or no view engine supports the searched locations. The following locations were searched:
+~/Views/Account/JsonChangeRoles.aspx
+~/Views/Account/JsonChangeRoles.ascx
+~/Views/Shared/JsonChangeRoles.aspx
+~/Views/Shared/JsonChangeRoles.ascx
+~/Views/Account/JsonChangeRoles.cshtml
+~/Views/Account/JsonChangeRoles.vbhtml
+~/Views/Shared/JsonChangeRoles.cshtml
+~/Views/Shared/JsonChangeRoles.vbhtml
+   at System.Web.Mvc.PartialViewResult.FindView(ControllerContext context)
+   at System.Web.Mvc.ViewResultBase.ExecuteResult(ControllerContext context)
+   at System.Web.Mvc.ControllerActionInvoker.InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
+   at System.Web.Mvc.ControllerActionInvoker.<>c__DisplayClass1a.<InvokeActionResultWithFilters>b__17()
+   at System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilter(IResultFilter filter, ResultExecutingContext preContext, Func`1 continuation)
+   at System.Web.Mvc.ControllerActionInvoker.<>c__DisplayClass1a.<>c__DisplayClass1c.<InvokeActionResultWithFilters>b__19()
+   at System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<>c__DisplayClass2a.<BeginInvokeAction>b__20()
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<BeginInvokeAction>b__22(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   at System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   at System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeAction(IAsyncResult asyncResult)
+   at System.Web.Mvc.Controller.<>c__DisplayClass1d.<BeginExecuteCore>b__18(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   at System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   at System.Web.Mvc.Async.AsyncResultWrapper.End(IAsyncResult asyncResult, Object tag)
+   at System.Web.Mvc.Controller.EndExecuteCore(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   at System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   at System.Web.Mvc.Async.AsyncResultWrapper.End(IAsyncResult asyncResult, Object tag)
+   at System.Web.Mvc.Controller.EndExecute(IAsyncResult asyncResult)
+   at System.Web.Mvc.Controller.System.Web.Mvc.Async.IAsyncController.EndExecute(IAsyncResult asyncResult)
+   at System.Web.Mvc.MvcHandler.<>c__DisplayClass8.<BeginProcessRequest>b__3(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   at System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
+   at System.Web.Mvc.Async.AsyncResultWrapper.End(IAsyncResult asyncResult, Object tag)
+   at System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)
+   at System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.EndProcessRequest(IAsyncResult result)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-03-17 12:53:03,283   202ms Global                 Application_Start  - Application_Start()
+INFO  2014-03-17 12:58:59,846   218ms Global                 Application_Start  - Application_Start()
+INFO  2014-03-17 13:00:51,880   205ms Global                 Application_Start  - Application_Start()

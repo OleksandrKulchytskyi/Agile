@@ -67,6 +67,10 @@
     <Compile Include="Migrations\201402261308441_VoteItem_Closed.Designer.cs">
       <DependentUpon>201402261308441_VoteItem_Closed.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201403170824102_VoteItem_Opened.cs" />
+    <Compile Include="Migrations\201403170824102_VoteItem_Opened.Designer.cs">
+      <DependentUpon>201403170824102_VoteItem_Opened.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\GenericRepository.cs" />
@@ -88,6 +92,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201402261308441_VoteItem_Closed.resx">
       <DependentUpon>201402261308441_VoteItem_Closed.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201403170824102_VoteItem_Opened.resx">
+      <DependentUpon>201403170824102_VoteItem_Opened.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

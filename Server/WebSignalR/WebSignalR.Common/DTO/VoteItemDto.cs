@@ -19,6 +19,8 @@ namespace WebSignalR.Common.DTO
 
 		//public RoomDto HostRoom { get; set; }
 
+		public int HostRoomId { get; set; }
+
 		public List<int> VotedUsers { get; set; }
 	}
 }

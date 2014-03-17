@@ -30,7 +30,7 @@
 						@if (@User.IsInRole("Admin"))
 	  {
 							<a class="btn btn-default" data-bind="click: addNewUser">Create user</a>
-							<a class="btn btn-default">Change roles</a>
+							<a class="btn btn-default" data-bind="click: changeRoles">Change roles</a>
 	  }
 					</div>
 				</div>
@@ -44,8 +44,8 @@
 			@Html.Partial("_ChangePassword")
 		</div>
 	 
-		<div id="changeRolesDialog" title="Change user password">
-			@Html.Partial("_ChangeRoles")
+		<div id="changeRolesDialog" title="Change roles">
+			@*@Html.Partial("_ChangeRoles")*@
 		</div>
  }
 </div>

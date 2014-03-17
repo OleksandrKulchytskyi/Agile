@@ -1,15 +1,18 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using WebSignalR.Common.DTO;
 using WebSignalR.Common.Entities;
 using WebSignalR.Common.Extension;
 using WebSignalR.Common.Interfaces;
 using WebSignalR.Common.ViewModels;
 using WebSignalR.Infrastructure;
+using WebSignalR.ViewModels;
 
 namespace WebSignalR.Controllers
 {
@@ -172,7 +175,6 @@ namespace WebSignalR.Controllers
 		}
 
 		[HttpPost]
-		[AllowAnonymous]
 		[ValidateAntiForgeryToken]
 		public ActionResult JsonChangePassword(ChangePasswordViewModel model, string returnUrl)
 		{
@@ -201,6 +203,31 @@ namespace WebSignalR.Controllers
 			// If we got this far, something failed
 			return Json(new { errors = GetErrorsFromModelState() });
 		}
+
+
+		[HttpGet]
+		[Authorize(Roles = "Admin")]
+		public ActionResult JsonChangeRoles()
+		{
+			ChangeRolesViewModel model = new ChangeRolesViewModel();
+			IReadOnlyRepository<User> userRepo = Unity.GetRepository<User>();
+			IReadOnlyRepository<Privileges> privilegeRepo = Unity.GetRepository<Privileges>();
+
+			model.AvaliableRoles = privilegeRepo.GetAll().Select(x => Mapper.Map<PrivilegeDto>(x)).ToList();
+			model.UserList = userRepo.GetAll().Select(x => new WebSignalR.ViewModels.UserVM() { Id = x.Id, Name = x.Name }).ToList();
+
+			if (Request.IsAjaxRequest())
+				return PartialView("_ChangeRoles", model);
+			return View(model);
+		}
+
+		[HttpPost]
+		[Authorize(Roles = "Admin")]
+		public ActionResult JsonChangeRoles(object data)
+		{
+			return Json(new { Status = "Ok" });
+		}
+
 
 		protected override void Dispose(bool disposing)
 		{
