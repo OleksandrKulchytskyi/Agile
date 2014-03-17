@@ -135,7 +135,6 @@ window.agileApp.datacontext = (function () {
 		try {
 
 			if (window.agileApp.baseAddress === undefined) {
-
 				if (typeof String.prototype.endsWith !== 'function') {
 					String.prototype.endsWith = function (suffix) {
 						return this.indexOf(suffix, this.length - suffix.length) !== -1;
@@ -149,6 +148,9 @@ window.agileApp.datacontext = (function () {
 				}
 				if (base_url.endsWith("Account/")) {
 					base_url = base_url.replace("Account/", "");
+				}
+				else if (base_url.endsWith("Account/Manage")) {
+					base_url = base_url.replace("Account/Manage", "");
 				}
 
 				window.agileApp.baseAddress = base_url;

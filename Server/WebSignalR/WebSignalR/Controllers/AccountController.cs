@@ -218,7 +218,7 @@ namespace WebSignalR.Controllers
 
 			if (Request.IsAjaxRequest())
 				return PartialView("_ChangeRoles", model);
-			return View(model);
+			return View("_ChangeRoles", model);
 		}
 
 		[HttpPost]

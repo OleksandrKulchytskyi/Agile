@@ -11,5 +11,7 @@ namespace WebSignalR.Common.Services
 		Task VoteForItem(string room, int voteItemId, int mark);
 
 		Task CloseVoteItem(string room, int voteItemId, int mark);
+
+		Task OpenVoteItem(string room, int voteItemId);
 	}
 }

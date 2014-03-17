@@ -341,6 +341,22 @@ namespace WebSignalR.Hubs
 		}
 
 		[SignalRAuth(Roles = "ScrumMaster")]
+		public Task OpenVoteItem(string room, int voteItemId)
+		{
+			IRepository<VoteItem> repo = GetRepository<VoteItem>();
+			VoteItem voteItem = repo.Get(x => x.Id == voteItemId).FirstOrDefault();
+			if (voteItem != null)
+			{
+				voteItem.Closed = true;
+				if (voteItem.VotedUsers.Count > 0)
+					voteItem.VotedUsers.Clear();
+				_unity.Commit();
+			}
+			VoteItemDto voteDto = Mapper.Map<VoteItemDto>(voteItem);
+			return Clients.Group(room).onVoteItemOpened(voteDto);
+		}
+
+		[SignalRAuth(Roles = "ScrumMaster")]
 		public Task CloseVoteItem(string room, int voteItemId, int mark)
 		{
 			IRepository<VoteItem> repo = GetRepository<VoteItem>();
@@ -349,7 +365,7 @@ namespace WebSignalR.Hubs
 			{
 				vote.OverallMark = mark;
 				vote.Closed = true;
-				vote.VotedUsers.Clear();
+				//vote.VotedUsers.Clear();
 				_unity.Commit();
 			}
 			VoteItemDto voteDto = Mapper.Map<VoteItemDto>(vote);
@@ -375,5 +391,6 @@ namespace WebSignalR.Hubs
 				return Task.Factory.StartNew(() => { });
 			}
 		}
+
 	}
 }

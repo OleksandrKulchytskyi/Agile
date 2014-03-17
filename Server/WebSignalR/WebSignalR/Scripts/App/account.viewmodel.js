@@ -105,7 +105,9 @@
 				}
 			},
 			open: function (event, ui) {
-				$(this).load("/Account/JsonChangeRoles");
+				var url = agileApp.baseAddress + "Account/JsonChangeRoles"
+				console.log(url);
+				$(this).load(url);
 			},
 			close: function () {
 				$("#changeRolesForm").empty();

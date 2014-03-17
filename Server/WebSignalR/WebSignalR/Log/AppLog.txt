@@ -78,3 +78,23 @@ INFO  2014-03-17 15:30:49,299   220ms Global                 Application_Start  
 INFO  2014-03-17 15:45:46,811 897732ms Global                 Sweep              - Begin sweep process
 INFO  2014-03-17 16:11:56,372   209ms Global                 Application_Start  - Application_Start()
 INFO  2014-03-17 16:14:14,865   203ms Global                 Application_Start  - Application_Start()
+INFO  2014-03-17 16:50:33,817   202ms Global                 Application_Start  - Application_Start()
+ERROR 2014-03-17 16:58:08,285 454669ms Global                 OnIncomingError    - System.AggregateException: One or more errors occurred. ---> System.InvalidOperationException: 'OpenoteItem' method could not be resolved.
+   at Microsoft.AspNet.SignalR.Hubs.NullMethodDescriptor.<get_Invoker>b__0(IHub emptyHub, Object[] emptyParameters)
+   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)
+   --- End of inner exception stack trace ---
+---> (Inner Exception #0) System.InvalidOperationException: 'OpenoteItem' method could not be resolved.
+   at Microsoft.AspNet.SignalR.Hubs.NullMethodDescriptor.<get_Invoker>b__0(IHub emptyHub, Object[] emptyParameters)
+   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)<---
+
+INFO  2014-03-17 17:35:27,100   202ms Global                 Application_Start  - Application_Start()
+INFO  2014-03-17 17:51:26,289   204ms Global                 Application_Start  - Application_Start()
+INFO  2014-03-17 18:03:11,246   200ms Global                 Application_Start  - Application_Start()
+ERROR 2014-03-17 18:06:14,804 183758ms Global                 OnIncomingError    - System.AggregateException: One or more errors occurred. ---> System.InvalidOperationException: 'OpenVoteIten' method could not be resolved.
+   at Microsoft.AspNet.SignalR.Hubs.NullMethodDescriptor.<get_Invoker>b__0(IHub emptyHub, Object[] emptyParameters)
+   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)
+   --- End of inner exception stack trace ---
+---> (Inner Exception #0) System.InvalidOperationException: 'OpenVoteIten' method could not be resolved.
+   at Microsoft.AspNet.SignalR.Hubs.NullMethodDescriptor.<get_Invoker>b__0(IHub emptyHub, Object[] emptyParameters)
+   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)<---
+

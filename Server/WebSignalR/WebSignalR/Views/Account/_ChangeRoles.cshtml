@@ -11,12 +11,14 @@
 	}
 }
 
+
 @using (Html.BeginForm("JsonChangeRoles", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { Id = "changeRolesForm" }))
 {
-@*<!-- ko foreach: users -->
+	
+	@*<!-- ko foreach: users -->
 	<li data-bind="text: name, click: $parent.selectedUser"></li>
 	<!-- /ko -->*@
-	
+
 	<input id="antiForgeryToken" type="hidden" value="@GetAntiForgeryToken()" />
 	<div id="userDiv" class="users_side">
 		<ul data-bind="foreach: users" id="usersUl">
@@ -41,7 +43,7 @@
 
 @if (Request.IsAuthenticated)
 {
-	<script type="text/javascript" src="/Scripts/app/account.rolesVM.js"></script>
+	<script type="text/javascript" src="~/Scripts/App/account.rolesVM.js"></script>
 	<script type="text/javascript">
 		console.log("Scripts loaded!!!!");
 		var rolesViewModel = new RolesViewModel(@Html.Raw(Model.ToJson()));
@@ -79,7 +81,6 @@
 				current(item);
 			}
 		});
-
 
 	</script>
 }
