@@ -322,7 +322,7 @@ namespace WebSignalR.Hubs
 			VoteItem vote = repo.Get(x => x.Id == voteItemId).FirstOrDefault();
 			User usr = repoUser.Get(x => x.Name == Context.User.Identity.Name).FirstOrDefault();
 			UserVoteDto dto = null;
-			if (vote != null && usr != null)
+			if (vote != null && usr != null && vote.Opened)
 			{
 				UserVote uv = new UserVote();
 				uv.UserId = usr.Id;
@@ -335,9 +335,15 @@ namespace WebSignalR.Hubs
 				_unity.Commit();
 				_sessionServ.UpdateSessionActivity(Context.ConnectionId);
 				dto = Mapper.Map<UserVoteDto>(uv);
+				return Clients.Group(room).onUserVoted(dto);
 			}
-			//VoteItemDto voteDto = Mapper.Map<VoteItemDto>(vote);
-			return Clients.Group(room).onUserVoted(dto);
+			else
+			{
+				if (vote != null && !vote.Opened)
+					return Clients.Caller.onErrorHandler("Cannot submit vote for non-opend vote item.");
+			}
+
+			return EmptyTask;
 		}
 
 		[SignalRAuth(Roles = "ScrumMaster")]
@@ -347,7 +353,8 @@ namespace WebSignalR.Hubs
 			VoteItem voteItem = repo.Get(x => x.Id == voteItemId).FirstOrDefault();
 			if (voteItem != null)
 			{
-				voteItem.Closed = true;
+				voteItem.Opened = true;
+				voteItem.Closed = false;
 				if (voteItem.VotedUsers.Count > 0)
 					voteItem.VotedUsers.Clear();
 				_unity.Commit();
@@ -365,6 +372,7 @@ namespace WebSignalR.Hubs
 			{
 				vote.OverallMark = mark;
 				vote.Closed = true;
+				vote.Opened = false;
 				//vote.VotedUsers.Clear();
 				_unity.Commit();
 			}

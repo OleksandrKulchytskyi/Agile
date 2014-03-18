@@ -351,6 +351,7 @@
     <Content Include="Views\RoomActivity\_Import.cshtml" />
     <Content Include="Views\Account\_ChangeRoles.cshtml" />
     <Content Include="Views\RoomActivity\_CloseVote.cshtml" />
+    <Content Include="Views\RoomActivity\_ChangeRoomState.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

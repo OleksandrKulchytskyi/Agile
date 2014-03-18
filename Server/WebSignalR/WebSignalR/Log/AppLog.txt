@@ -1,7 +1,31 @@
-INFO  2014-03-18 10:07:53,206   206ms Global                 Application_Start  - Application_Start()
-INFO  2014-03-18 10:39:41,298   221ms Global                 Application_Start  - Application_Start()
-INFO  2014-03-18 10:41:53,145   203ms Global                 Application_Start  - Application_Start()
-ERROR 2014-03-18 11:05:38,949 1426007ms Global                 OnIncomingError    - System.AggregateException: One or more errors occurred. ---> System.InvalidOperationException: The operation failed: The relationship could not be changed because one or more of the foreign-key properties is non-nullable. When a change is made to a relationship, the related foreign-key property is set to a null value. If the foreign-key does not support null values, a new relationship must be defined, the foreign-key property must be assigned another non-null value, or the unrelated object must be deleted.
+INFO  2014-03-18 11:40:56,137   202ms Global                 Application_Start  - Application_Start()
+INFO  2014-03-18 11:52:09,703   205ms Global                 Application_Start  - Application_Start()
+INFO  2014-03-18 12:16:10,134    64ms Global                 Application_Start  - Application_Start()
+WARN  2014-03-18 12:16:14,822  4752ms Global                 Application_Error  - URL: http://localhost:6404/RoomActivity/_ChangeRoomState; FilePath: /RoomActivity/_ChangeRoomState
+ERROR 2014-03-18 12:16:14,848  4778ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): A public action method '_ChangeRoomState' was not found on controller 'WebSignalR.Controllers.RoomActivityController'.
+   at System.Web.Mvc.Controller.HandleUnknownAction(String actionName)
+   at System.Web.Mvc.Controller.<>c__DisplayClass1d.<BeginExecuteCore>b__18(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   at System.Web.Mvc.Controller.EndExecuteCore(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   at System.Web.Mvc.Controller.EndExecute(IAsyncResult asyncResult)
+   at System.Web.Mvc.Controller.System.Web.Mvc.Async.IAsyncController.EndExecute(IAsyncResult asyncResult)
+   at System.Web.Mvc.MvcHandler.<>c__DisplayClass8.<BeginProcessRequest>b__3(IAsyncResult asyncResult)
+   at System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
+   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
+   at System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)
+   at System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.EndProcessRequest(IAsyncResult result)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-03-18 12:16:29,854 19784ms Global                 Application_End    - Application_End()
+INFO  2014-03-18 12:23:54,305   202ms Global                 Application_Start  - Application_Start()
+INFO  2014-03-18 12:35:06,439   217ms Global                 Application_Start  - Application_Start()
+INFO  2014-03-18 12:41:16,507   204ms Global                 Application_Start  - Application_Start()
+INFO  2014-03-18 12:48:40,442   203ms Global                 Application_Start  - Application_Start()
+ERROR 2014-03-18 12:56:12,255 452016ms Global                 OnIncomingError    - System.AggregateException: One or more errors occurred. ---> System.InvalidOperationException: The operation failed: The relationship could not be changed because one or more of the foreign-key properties is non-nullable. When a change is made to a relationship, the related foreign-key property is set to a null value. If the foreign-key does not support null values, a new relationship must be defined, the foreign-key property must be assigned another non-null value, or the unrelated object must be deleted.
    at System.Data.Entity.Core.Objects.ObjectContext.PrepareToSaveChanges(SaveOptions options)
    at System.Data.Entity.Core.Objects.ObjectContext.SaveChanges(SaveOptions options)
    at System.Data.Entity.Internal.InternalContext.SaveChanges()
@@ -9,7 +33,7 @@ ERROR 2014-03-18 11:05:38,949 1426007ms Global                 OnIncomingError  
    at System.Data.Entity.DbContext.SaveChanges()
    at WebSignalR.DataAccess.DB.DatabaseContext.Commit() in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR.DataAccess\DatabaseContext.cs:line 48
    at WebSignalR.DataAccess.Repositories.UnityOfWork.Commit() in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR.DataAccess\Repositories\UnityOfWork.cs:line 63
-   at WebSignalR.Hubs.AgileHub.OpenVoteItem(String room, Int32 voteItemId) in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Hubs\AgileHub.cs:line 353
+   at WebSignalR.Hubs.AgileHub.OpenVoteItem(String room, Int32 voteItemId) in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Hubs\AgileHub.cs:line 360
    at lambda_method(Closure , IHub , Object[] )
    at Microsoft.AspNet.SignalR.Hubs.HubMethodDispatcher.Execute(IHub hub, Object[] parameters)
    at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)
@@ -22,10 +46,8 @@ ERROR 2014-03-18 11:05:38,949 1426007ms Global                 OnIncomingError  
    at System.Data.Entity.DbContext.SaveChanges()
    at WebSignalR.DataAccess.DB.DatabaseContext.Commit() in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR.DataAccess\DatabaseContext.cs:line 48
    at WebSignalR.DataAccess.Repositories.UnityOfWork.Commit() in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR.DataAccess\Repositories\UnityOfWork.cs:line 63
-   at WebSignalR.Hubs.AgileHub.OpenVoteItem(String room, Int32 voteItemId) in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Hubs\AgileHub.cs:line 353
+   at WebSignalR.Hubs.AgileHub.OpenVoteItem(String room, Int32 voteItemId) in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Hubs\AgileHub.cs:line 360
    at lambda_method(Closure , IHub , Object[] )
    at Microsoft.AspNet.SignalR.Hubs.HubMethodDispatcher.Execute(IHub hub, Object[] parameters)
    at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)<---
 
-INFO  2014-03-18 11:16:58,369 2105427ms Global                 Sweep              - Begin sweep process
-INFO  2014-03-18 11:28:45,717   197ms Global                 Application_Start  - Application_Start()

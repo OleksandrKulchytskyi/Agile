@@ -13,13 +13,19 @@
 		selectedVoteItemChanged = function (entry, event) {
 			if (previouslySelectedVote()) {
 				$(previouslySelectedVote()).css("background-color", "white");
+				
+				if (selectedVoteItem().id == entry.id) {
+					console.log(entry.id);
+					selectedVoteItem(null);
+					previouslySelectedVote(null);
+					return;
+				}
 			}
+
 			previouslySelectedVote(event.target);
 			selectedVoteItem(entry);
 			$(event.target).css("background-color", "lightblue");
-
 		},
-
 		setLoggedUser = function (user) {
 			loggedUser(new datacontext.userViewModel(user));
 		},
@@ -39,10 +45,14 @@
 				agileHub.server.openVoteItem(roomName, selectedVoteItem().id).fail(function () {
 					agileApp.notifyService.error("Unable to open vote item.", {}, true);
 				});
+			else
+				agileApp.notifyService.warning("Please select vote item row", {}, true);
 		},
 		closeVoteItem = function () {
 			$("#closeVoteDialog").dialog('open');
-			$
+		},
+		changeRoomState = function () {
+			$("#changeRoomStateDialog").dialog('open');
 		};
 
 	function initDialogs() {
@@ -112,6 +122,28 @@
 			width: 370,
 			modal: true,
 			buttons: {
+				"Set": function () {
+					if (!selectedVoteItem()) {
+						agileApp.notifyService.warning("Please select vote item row", {}, true);
+						return;
+					}
+					//var field = $("#closeVoteItemForm  #closeVoteItemForm");
+					var mark = $('#closeVoteItemForm input[id="txtVoteItemMark"]').val();
+					if (isNaN(mark)) {
+						agileApp.notifyService.warning("Mark value must be a digit.", {}, true);
+					}
+					else {
+						var roomName = $("#roomName").val();
+						agileHub.server.closeVoteItem(roomName, selectedVoteItem().id, mark)
+						.done(function () {
+							agileApp.notifyService.success("Vote item is closed with mark:" + mark, {}, true);
+							$('#closeVoteDialog').dialog('close');
+						})
+						.fail(function () {
+							agileApp.notifyService.error("Unable to close vote item.", {}, true);
+						});
+					}
+				},
 				Cancel: function () {
 					$(this).dialog("close");
 				}
@@ -121,15 +153,40 @@
 			}
 		});
 
+		$("#changeRoomStateDialog").dialog({
+			autoOpen: false,
+			height: 280,
+			width: 370,
+			modal: true,
+			buttons: {
+				"Change": function () {
+					//var option = $("#changeRoomStateForm  #comboState");
+					var text = $('#changeRoomStateForm #comboState :selected').text();
+					var value = $('#changeRoomStateForm #comboState :selected').val();
+					console.log(text);
+					if (value != null) {
+						var roomName = $("#roomName").val();
+						agileHub.server.changeRoomState($("#roomName").val(), value)
+						.done(function () {
+							agileApp.notifyService.success("Room state changed:" + text, {}, true);
+							$('#changeRoomStateDialog').dialog('close');
+						})
+						.fail(function () {
+							agileApp.notifyService.error("Unable to change room state.", {}, true);
+						});
+					}
+				},
+				Cancel: function () {
+					$(this).dialog("close");
+				}
+			},
+			close: function () {
+
+			}
+		});
 	}
 
 	initDialogs();
-
-	//function onSelectedChange() {
-	//	console.log(selectedVoteItem());
-	//};
-
-	//selectedVoteItem.subscribe(onSelectedChange);
 
 	//var viewModel = ko.mapping.fromJS(@Html.Raw(Model.ToJson())); 
 	return {
@@ -147,7 +204,8 @@
 		setRoomDtoState: setRoomDtoState,
 		importQuestions: importQuestions,
 		openVoteItem: openVoteItem,
-		closeVoteItem: closeVoteItem
+		closeVoteItem: closeVoteItem,
+		changeRoomState: changeRoomState
 	};
 })(ko, agileApp.datacontext, agileApp.notifyService);
 
@@ -193,16 +251,15 @@ $.connection.hub.stateChanged(function (change) {
 	}
 });
 
-agileHub.client.onErrorHandler = function (exMessage) {
+agileHub.client.onErrorHandler = function (exMsg) {
 	if (agileApp.notifyService !== undefined)
-		agileApp.notifyService.error(exMessage, {}, true);
+		agileApp.notifyService.error(exMsg, {}, true);
 
 	//$("#error").fadeIn(1000, function () {
 	//	$("#error").fadeOut(3000);
 	//});
-	agileHub.connection.stop();
-
-	chat.connection.stop();
+	//agileHub.connection.stop();
+	//chat.connection.stop();
 }
 
 agileHub.client.onTestMethod = function (data) {
@@ -346,10 +403,9 @@ agileHub.client.onLeftRoom = function (userDto) {
 agileHub.client.onRoomStateChanged = function (roomDto) {
 	console.log("onRoomStateChanged ");
 	console.log(roomDto);
-	var roomDto = new agileApp.datacontext.roomDtoModel(roomDto);
-	//mainVM.roomDtoState().connectedUsers.remove(user);
-	handleUsers(roomDto.connectedUsers);
-	handleVotes(roomDto);
+	var roomDtoObservable = new agileApp.datacontext.roomDtoModel(roomDto);
+	handleUsers(roomDtoObservable.connectedUsers);
+	handleVotes(roomDtoObservable);
 }
 
 function handleUsers(usersObservale) {
@@ -357,7 +413,6 @@ function handleUsers(usersObservale) {
 	var rows = $('#activityTable thead tr');
 
 	var columns;
-	console.log("Rows len:" + rows.length);
 	for (var i = 0; i < rows.length; i++) {
 		columns = $(rows[i]).find('th');
 		for (var j = 0; j < columns.length; j++) {
@@ -368,13 +423,21 @@ function handleUsers(usersObservale) {
 	}
 }
 
-function handleVotes(room) {
+function handleVotes(roomObs) {
 
 	var headerRow = $('#activityTable thead tr')[0];
 	var voteItems = $('#activityTable tbody tr')
 	var users = $(headerRow).find('th');
 
-	if (users.length === 1) return;
+	if (roomObs.itemsToVote().length === voteItems.length &&
+		users.length - 1 == roomObs.connectedUsers().length) {
+		console.log("all equals");
+		return
+	}
+
+	if (users.length - 1 === voteItems.length - 1)
+
+		if (users.length === 1) return;
 	if (voteItems.length === 0) return;
 
 	var userId;
