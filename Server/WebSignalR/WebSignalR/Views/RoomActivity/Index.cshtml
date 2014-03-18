@@ -46,6 +46,7 @@
 					<a class="btn btn-default" data-bind="click: openVoteItem">Open vote</a>
 					<a class="btn btn-default" data-bind="click: closeVoteItem">Close vote</a>
 					<a class="btn btn-default" data-bind="click: changeRoomState">Change room state</a>
+					<a class="btn btn-default" data-bind="click: submitVoteForItem">Vote for selected</a>
 				</div>
 			</div>
 		</div>
@@ -61,6 +62,22 @@
 		@Html.Partial("_ChangeRoomState")
 	</div>
 	}
+	else if(User.IsInRole("User"))
+	{
+	<div class="navbar navbar-default" role="navigation">
+		<div class="navbar-inner">
+			<div class="container" style="width: auto;">
+				<div class="nav-collapse">
+					<a class="btn btn-default" data-bind="click: submitVoteForItem">Vote for selected</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	}
+	
+	<div id="voteForItemDialog" title="Submit vote mark">
+		@Html.Partial("_VoteForItem")
+	</div>
 	
 	<div class="contextMenu" id="dataGridMenu1">
 		<ul>
@@ -87,10 +104,6 @@
 			</tbody>
 		</table>
 	</div>
-	
-@*<div id='liveActivity'>
-		<div data-bind='simpleGrid: roomDtoState, simpleGridTemplate: "custom_grid_template"'></div>
-	</div>*@
 }
 
 @if (@User.Identity.IsAuthenticated)

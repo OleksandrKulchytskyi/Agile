@@ -13,7 +13,7 @@
 		selectedVoteItemChanged = function (entry, event) {
 			if (previouslySelectedVote()) {
 				$(previouslySelectedVote()).css("background-color", "white");
-				
+
 				if (selectedVoteItem().id == entry.id) {
 					console.log(entry.id);
 					selectedVoteItem(null);
@@ -39,7 +39,6 @@
 			$("#importDialog").dialog("open");
 		},
 		openVoteItem = function () {
-
 			var roomName = $("#roomName").val();
 			if (selectedVoteItem())
 				agileHub.server.openVoteItem(roomName, selectedVoteItem().id).fail(function () {
@@ -53,6 +52,9 @@
 		},
 		changeRoomState = function () {
 			$("#changeRoomStateDialog").dialog('open');
+		},
+		submitVoteForItem = function () {
+			$("#voteForItemDialog").dialog('open');
 		};
 
 	function initDialogs() {
@@ -131,6 +133,7 @@
 					var mark = $('#closeVoteItemForm input[id="txtVoteItemMark"]').val();
 					if (isNaN(mark)) {
 						agileApp.notifyService.warning("Mark value must be a digit.", {}, true);
+						return;
 					}
 					else {
 						var roomName = $("#roomName").val();
@@ -184,6 +187,48 @@
 
 			}
 		});
+
+		$("#voteForItemDialog").dialog({
+			autoOpen: false,
+			height: 380,
+			width: 370,
+			modal: true,
+			buttons: {
+				"Vote": function () {
+					//var option = $("#changeRoomStateForm  #comboState");
+					if (!selectedVoteItem()) {
+						agileApp.notifyService.warning("Please select vote item first.", {}, true);
+						return;
+					}
+					var mark = $('#submitVoteForm input[id="txtVoteItemMark"]').val();
+					if (isNaN(mark)) {
+						agileApp.notifyService.warning("Mark value must be a digit.", {}, true);
+						return;
+					}
+					agileHub.server.voteForItem($("#roomName").val(), selectedVoteItem().id, mark)
+					.done(function () {
+						agileApp.notifyService.success("Vote has been accepted.", {}, true);
+						$('#voteForItemDialog').dialog('close');
+					})
+					.fail(function () {
+						agileApp.notifyService.error("Unable to submit vote mark.", {}, true);
+					});
+				},
+				Cancel: function () {
+					$(this).dialog("close");
+				}
+			},
+			open: function () {
+				if (selectedVoteItem()) {
+					var data = selectedVoteItem().content();
+					console.log(data);
+					$('#submitVoteForm #voteItemContent').text(data);
+				}
+			},
+			close: function () {
+
+			}
+		});
 	}
 
 	initDialogs();
@@ -205,7 +250,8 @@
 		importQuestions: importQuestions,
 		openVoteItem: openVoteItem,
 		closeVoteItem: closeVoteItem,
-		changeRoomState: changeRoomState
+		changeRoomState: changeRoomState,
+		submitVoteForItem: submitVoteForItem
 	};
 })(ko, agileApp.datacontext, agileApp.notifyService);
 

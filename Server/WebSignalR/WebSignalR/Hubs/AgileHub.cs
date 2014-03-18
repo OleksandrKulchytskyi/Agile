@@ -356,7 +356,14 @@ namespace WebSignalR.Hubs
 				voteItem.Opened = true;
 				voteItem.Closed = false;
 				if (voteItem.VotedUsers.Count > 0)
+				{
+					IRepository<UserVote> repoVotes = GetRepository<UserVote>();//fixing the issue related to foreign key missing exception in case of voteItem.VotedUsers.Clear(); be only invoked.
+					foreach (var vote in voteItem.VotedUsers)
+					{
+						repoVotes.Remove(vote);
+					}
 					voteItem.VotedUsers.Clear();
+				}
 				_unity.Commit();
 			}
 			VoteItemDto voteDto = Mapper.Map<VoteItemDto>(voteItem);
