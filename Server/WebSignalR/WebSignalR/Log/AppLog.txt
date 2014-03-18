@@ -1,100 +1,31 @@
-INFO  2014-03-16 00:15:11,886   109ms Global                 Application_Start  - Application_Start()
-INFO  2014-03-16 00:27:47,239   107ms Global                 Application_Start  - Application_Start()
-INFO  2014-03-16 00:42:46,961 899828ms Global                 Sweep              - Begin sweep process
-INFO  2014-03-16 00:43:06,493   117ms Global                 Application_Start  - Application_Start()
-INFO  2014-03-16 12:09:13,402   104ms Global                 Application_Start  - Application_Start()
-INFO  2014-03-16 12:24:12,724 899425ms Global                 Sweep              - Begin sweep process
-INFO  2014-03-16 12:36:18,892 1625593ms Global                 Application_End    - Application_End()
-INFO  2014-03-16 12:36:26,912    69ms Global                 Application_Start  - Application_Start()
-INFO  2014-03-16 12:36:45,561   109ms Global                 Application_Start  - Application_Start()
-ERROR 2014-03-16 12:40:47,292 241839ms Global                 OnIncomingError    - System.AggregateException: One or more errors occurred. ---> System.InvalidOperationException: 'LeaveRoom' method could not be resolved.
-   at Microsoft.AspNet.SignalR.Hubs.NullMethodDescriptor.<get_Invoker>b__0(IHub emptyHub, Object[] emptyParameters)
+INFO  2014-03-18 10:07:53,206   206ms Global                 Application_Start  - Application_Start()
+INFO  2014-03-18 10:39:41,298   221ms Global                 Application_Start  - Application_Start()
+INFO  2014-03-18 10:41:53,145   203ms Global                 Application_Start  - Application_Start()
+ERROR 2014-03-18 11:05:38,949 1426007ms Global                 OnIncomingError    - System.AggregateException: One or more errors occurred. ---> System.InvalidOperationException: The operation failed: The relationship could not be changed because one or more of the foreign-key properties is non-nullable. When a change is made to a relationship, the related foreign-key property is set to a null value. If the foreign-key does not support null values, a new relationship must be defined, the foreign-key property must be assigned another non-null value, or the unrelated object must be deleted.
+   at System.Data.Entity.Core.Objects.ObjectContext.PrepareToSaveChanges(SaveOptions options)
+   at System.Data.Entity.Core.Objects.ObjectContext.SaveChanges(SaveOptions options)
+   at System.Data.Entity.Internal.InternalContext.SaveChanges()
+   at System.Data.Entity.Internal.LazyInternalContext.SaveChanges()
+   at System.Data.Entity.DbContext.SaveChanges()
+   at WebSignalR.DataAccess.DB.DatabaseContext.Commit() in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR.DataAccess\DatabaseContext.cs:line 48
+   at WebSignalR.DataAccess.Repositories.UnityOfWork.Commit() in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR.DataAccess\Repositories\UnityOfWork.cs:line 63
+   at WebSignalR.Hubs.AgileHub.OpenVoteItem(String room, Int32 voteItemId) in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Hubs\AgileHub.cs:line 353
+   at lambda_method(Closure , IHub , Object[] )
+   at Microsoft.AspNet.SignalR.Hubs.HubMethodDispatcher.Execute(IHub hub, Object[] parameters)
    at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)
    --- End of inner exception stack trace ---
----> (Inner Exception #0) System.InvalidOperationException: 'LeaveRoom' method could not be resolved.
-   at Microsoft.AspNet.SignalR.Hubs.NullMethodDescriptor.<get_Invoker>b__0(IHub emptyHub, Object[] emptyParameters)
+---> (Inner Exception #0) System.InvalidOperationException: The operation failed: The relationship could not be changed because one or more of the foreign-key properties is non-nullable. When a change is made to a relationship, the related foreign-key property is set to a null value. If the foreign-key does not support null values, a new relationship must be defined, the foreign-key property must be assigned another non-null value, or the unrelated object must be deleted.
+   at System.Data.Entity.Core.Objects.ObjectContext.PrepareToSaveChanges(SaveOptions options)
+   at System.Data.Entity.Core.Objects.ObjectContext.SaveChanges(SaveOptions options)
+   at System.Data.Entity.Internal.InternalContext.SaveChanges()
+   at System.Data.Entity.Internal.LazyInternalContext.SaveChanges()
+   at System.Data.Entity.DbContext.SaveChanges()
+   at WebSignalR.DataAccess.DB.DatabaseContext.Commit() in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR.DataAccess\DatabaseContext.cs:line 48
+   at WebSignalR.DataAccess.Repositories.UnityOfWork.Commit() in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR.DataAccess\Repositories\UnityOfWork.cs:line 63
+   at WebSignalR.Hubs.AgileHub.OpenVoteItem(String room, Int32 voteItemId) in d:\Projects\github\Agile\Server\WebSignalR\WebSignalR\Hubs\AgileHub.cs:line 353
+   at lambda_method(Closure , IHub , Object[] )
+   at Microsoft.AspNet.SignalR.Hubs.HubMethodDispatcher.Execute(IHub hub, Object[] parameters)
    at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)<---
 
-INFO  2014-03-16 12:47:17,596 632143ms Global                 Application_End    - Application_End()
-INFO  2014-03-17 10:32:35,442   197ms Global                 Application_Start  - Application_Start()
-INFO  2014-03-17 10:36:14,388   200ms Global                 Application_Start  - Application_Start()
-INFO  2014-03-17 10:38:11,030   198ms Global                 Application_Start  - Application_Start()
-INFO  2014-03-17 12:25:25,158   203ms Global                 Application_Start  - Application_Start()
-INFO  2014-03-17 12:30:47,664   214ms Global                 Application_Start  - Application_Start()
-INFO  2014-03-17 12:45:47,085 899635ms Global                 Sweep              - Begin sweep process
-INFO  2014-03-17 12:46:55,644   205ms Global                 Application_Start  - Application_Start()
-ERROR 2014-03-17 12:47:43,704 48264ms Global                 Application_Error  - Application_Error
-System.InvalidOperationException: The partial view 'JsonChangeRoles' was not found or no view engine supports the searched locations. The following locations were searched:
-~/Views/Account/JsonChangeRoles.aspx
-~/Views/Account/JsonChangeRoles.ascx
-~/Views/Shared/JsonChangeRoles.aspx
-~/Views/Shared/JsonChangeRoles.ascx
-~/Views/Account/JsonChangeRoles.cshtml
-~/Views/Account/JsonChangeRoles.vbhtml
-~/Views/Shared/JsonChangeRoles.cshtml
-~/Views/Shared/JsonChangeRoles.vbhtml
-   at System.Web.Mvc.PartialViewResult.FindView(ControllerContext context)
-   at System.Web.Mvc.ViewResultBase.ExecuteResult(ControllerContext context)
-   at System.Web.Mvc.ControllerActionInvoker.InvokeActionResult(ControllerContext controllerContext, ActionResult actionResult)
-   at System.Web.Mvc.ControllerActionInvoker.<>c__DisplayClass1a.<InvokeActionResultWithFilters>b__17()
-   at System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilter(IResultFilter filter, ResultExecutingContext preContext, Func`1 continuation)
-   at System.Web.Mvc.ControllerActionInvoker.<>c__DisplayClass1a.<>c__DisplayClass1c.<InvokeActionResultWithFilters>b__19()
-   at System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
-   at System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<>c__DisplayClass2a.<BeginInvokeAction>b__20()
-   at System.Web.Mvc.Async.AsyncControllerActionInvoker.<>c__DisplayClass25.<BeginInvokeAction>b__22(IAsyncResult asyncResult)
-   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
-   at System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
-   at System.Web.Mvc.Async.AsyncControllerActionInvoker.EndInvokeAction(IAsyncResult asyncResult)
-   at System.Web.Mvc.Controller.<>c__DisplayClass1d.<BeginExecuteCore>b__18(IAsyncResult asyncResult)
-   at System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
-   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
-   at System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
-   at System.Web.Mvc.Async.AsyncResultWrapper.End(IAsyncResult asyncResult, Object tag)
-   at System.Web.Mvc.Controller.EndExecuteCore(IAsyncResult asyncResult)
-   at System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
-   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
-   at System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
-   at System.Web.Mvc.Async.AsyncResultWrapper.End(IAsyncResult asyncResult, Object tag)
-   at System.Web.Mvc.Controller.EndExecute(IAsyncResult asyncResult)
-   at System.Web.Mvc.Controller.System.Web.Mvc.Async.IAsyncController.EndExecute(IAsyncResult asyncResult)
-   at System.Web.Mvc.MvcHandler.<>c__DisplayClass8.<BeginProcessRequest>b__3(IAsyncResult asyncResult)
-   at System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass4.<MakeVoidDelegate>b__3(IAsyncResult ar)
-   at System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.End()
-   at System.Web.Mvc.Async.AsyncResultWrapper.End[TResult](IAsyncResult asyncResult, Object tag)
-   at System.Web.Mvc.Async.AsyncResultWrapper.End(IAsyncResult asyncResult, Object tag)
-   at System.Web.Mvc.MvcHandler.EndProcessRequest(IAsyncResult asyncResult)
-   at System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.EndProcessRequest(IAsyncResult result)
-   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
-   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
-INFO  2014-03-17 12:53:03,283   202ms Global                 Application_Start  - Application_Start()
-INFO  2014-03-17 12:58:59,846   218ms Global                 Application_Start  - Application_Start()
-INFO  2014-03-17 13:00:51,880   205ms Global                 Application_Start  - Application_Start()
-INFO  2014-03-17 13:15:57,247   290ms Global                 Application_Start  - Application_Start()
-INFO  2014-03-17 13:30:56,469 899511ms Global                 Sweep              - Begin sweep process
-INFO  2014-03-17 13:45:56,432 1799474ms Global                 Sweep              - Begin sweep process
-INFO  2014-03-17 14:00:56,471 2699513ms Global                 Sweep              - Begin sweep process
-INFO  2014-03-17 14:25:51,899   198ms Global                 Application_Start  - Application_Start()
-INFO  2014-03-17 15:30:49,299   220ms Global                 Application_Start  - Application_Start()
-INFO  2014-03-17 15:45:46,811 897732ms Global                 Sweep              - Begin sweep process
-INFO  2014-03-17 16:11:56,372   209ms Global                 Application_Start  - Application_Start()
-INFO  2014-03-17 16:14:14,865   203ms Global                 Application_Start  - Application_Start()
-INFO  2014-03-17 16:50:33,817   202ms Global                 Application_Start  - Application_Start()
-ERROR 2014-03-17 16:58:08,285 454669ms Global                 OnIncomingError    - System.AggregateException: One or more errors occurred. ---> System.InvalidOperationException: 'OpenoteItem' method could not be resolved.
-   at Microsoft.AspNet.SignalR.Hubs.NullMethodDescriptor.<get_Invoker>b__0(IHub emptyHub, Object[] emptyParameters)
-   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)
-   --- End of inner exception stack trace ---
----> (Inner Exception #0) System.InvalidOperationException: 'OpenoteItem' method could not be resolved.
-   at Microsoft.AspNet.SignalR.Hubs.NullMethodDescriptor.<get_Invoker>b__0(IHub emptyHub, Object[] emptyParameters)
-   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)<---
-
-INFO  2014-03-17 17:35:27,100   202ms Global                 Application_Start  - Application_Start()
-INFO  2014-03-17 17:51:26,289   204ms Global                 Application_Start  - Application_Start()
-INFO  2014-03-17 18:03:11,246   200ms Global                 Application_Start  - Application_Start()
-ERROR 2014-03-17 18:06:14,804 183758ms Global                 OnIncomingError    - System.AggregateException: One or more errors occurred. ---> System.InvalidOperationException: 'OpenVoteIten' method could not be resolved.
-   at Microsoft.AspNet.SignalR.Hubs.NullMethodDescriptor.<get_Invoker>b__0(IHub emptyHub, Object[] emptyParameters)
-   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)
-   --- End of inner exception stack trace ---
----> (Inner Exception #0) System.InvalidOperationException: 'OpenVoteIten' method could not be resolved.
-   at Microsoft.AspNet.SignalR.Hubs.NullMethodDescriptor.<get_Invoker>b__0(IHub emptyHub, Object[] emptyParameters)
-   at Microsoft.AspNet.SignalR.Hubs.HubDispatcher.Incoming(IHubIncomingInvokerContext context)<---
-
+INFO  2014-03-18 11:16:58,369 2105427ms Global                 Sweep              - Begin sweep process
+INFO  2014-03-18 11:28:45,717   197ms Global                 Application_Start  - Application_Start()

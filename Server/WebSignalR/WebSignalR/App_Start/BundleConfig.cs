@@ -16,6 +16,7 @@ namespace WebSignalR
 			bundles.Add(new StyleBundle("~/Content/roomActivity").Include("~/Content/RoomActivity.css"));
 
 			bundles.Add(new StyleBundle("~/Content/toastr").Include("~/Content/toastr.css"));
+			bundles.Add(new StyleBundle("~/Content/jqueryMenu").Include("~/Content/jquery.contextMenu.css"));
 
 			bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
 						"~/Content/themes/base/jquery.ui.core.css",
@@ -37,6 +38,9 @@ namespace WebSignalR
 
 			bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
 						"~/Scripts/jquery-ui-{version}.js"));
+
+			bundles.Add(new ScriptBundle("~/bundles/jqueryuimenu").Include(
+						"~/Scripts/app/jquery.ContextMenu.js"));
 
 			bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
 						"~/Scripts/jquery.unobtrusive*",

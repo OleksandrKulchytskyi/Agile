@@ -29,5 +29,16 @@ namespace WebSignalR.Infrastructure
 
 			return JsonConvert.SerializeObject(obj, Formatting.None, serializerSettings);
 		}
+
+		public static int ParseInt(this string data, int defaultValue)
+		{
+			if (string.IsNullOrEmpty(data))
+				return defaultValue;
+
+			int val;
+			if (int.TryParse(data, out val))
+				return val;
+			return defaultValue;
+		}
 	}
 }

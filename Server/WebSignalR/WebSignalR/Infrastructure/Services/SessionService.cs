@@ -10,17 +10,19 @@ namespace WebSignalR.Infrastructure.Services
 	public sealed class SessionService : ISessionService
 	{
 		private readonly IUnityOfWork _unity;
+		private readonly IRepository<UserSession> usRepository;
 
 		public SessionService(IUnityOfWork unity)
 		{
 			_unity = unity;
+			usRepository = _unity.GetRepository<UserSession>();
 		}
 
 		public IList<Common.Entities.UserSession> GetSessions(int userId, bool onlyInactive)
 		{
 			if (onlyInactive)
-				return _unity.GetRepository<UserSession>().Get(x => x.User.Id == userId && ElapsedTime(x.LastActivity) > 60).ToList();
-			return _unity.GetRepository<UserSession>().Get(x => x.User.Id == userId).ToList();
+				return usRepository.Get(x => x.User.Id == userId && ElapsedTime(x.LastActivity) > 60).ToList();
+			return usRepository.Get(x => x.User.Id == userId).ToList();
 		}
 
 		private int ElapsedTime(DateTimeOffset lastTiime)
@@ -31,35 +33,32 @@ namespace WebSignalR.Infrastructure.Services
 		public System.Collections.Generic.IList<Common.Entities.UserSession> GetSessions(string name, bool onlyInactive)
 		{
 			if (onlyInactive)
-				return _unity.GetRepository<UserSession>().Get(x => x.User.Name == name && ElapsedTime(x.LastActivity) > 60).ToList();
+				return usRepository.Get(x => x.User.Name == name && ElapsedTime(x.LastActivity) > 60).ToList();
 			return _unity.GetRepository<UserSession>().Get(x => x.User.Name == name).ToList();
 		}
 
 		public void UpdateSessionActivity(string sessionId)
 		{
-			var repo = _unity.GetRepository<UserSession>();
-			UserSession session = repo.Get(x => x.SessionId == sessionId).FirstOrDefault();
+			UserSession session = usRepository.Get(x => x.SessionId == sessionId).FirstOrDefault();
 			if (session != null)
 			{
 				session.LastActivity = DateTime.UtcNow;
-				repo.Update(session);
+				usRepository.Update(session);
 				_unity.Commit();
 			}
 		}
 
 		public UserSession GetCurrentSession(string user, string sessionId)
 		{
-			var repo = _unity.GetRepository<UserSession>();
-			return repo.Get(x => x.SessionId == sessionId && x.User.Name == user).FirstOrDefault();
+			return usRepository.Get(x => x.SessionId == sessionId && x.User.Name == user).FirstOrDefault();
 		}
 
 		public void RemoveAllSessions()
 		{
-			var repo = _unity.GetRepository<UserSession>();
-			var sessions = repo.GetAll();
+			var sessions = usRepository.GetAll();
 			foreach (var session in sessions)
 			{
-				repo.Remove(session);
+				usRepository.Remove(session);
 			}
 			_unity.Commit();
 		}

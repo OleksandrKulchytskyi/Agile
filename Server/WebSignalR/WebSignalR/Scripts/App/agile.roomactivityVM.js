@@ -8,6 +8,17 @@
 		loggedUser = ko.observable(),
 		mySession = ko.observable(),
 		roomDtoState = ko.observable(),
+		selectedVoteItem = ko.observable(),
+		previouslySelectedVote = ko.observable(),
+		selectedVoteItemChanged = function (entry, event) {
+			if (previouslySelectedVote()) {
+				$(previouslySelectedVote()).css("background-color", "white");
+			}
+			previouslySelectedVote(event.target);
+			selectedVoteItem(entry);
+			$(event.target).css("background-color", "lightblue");
+
+		},
 
 		setLoggedUser = function (user) {
 			loggedUser(new datacontext.userViewModel(user));
@@ -20,6 +31,18 @@
 		},
 		importQuestions = function () {
 			$("#importDialog").dialog("open");
+		},
+		openVoteItem = function () {
+
+			var roomName = $("#roomName").val();
+			if (selectedVoteItem())
+				agileHub.server.openVoteItem(roomName, selectedVoteItem().id).fail(function () {
+					agileApp.notifyService.error("Unable to open vote item.", {}, true);
+				});
+		},
+		closeVoteItem = function () {
+			$("#closeVoteDialog").dialog('open');
+			$
 		};
 
 	function initDialogs() {
@@ -82,9 +105,31 @@
 				from.find('input:file').val('');
 			}
 		});
+
+		$("#closeVoteDialog").dialog({
+			autoOpen: false,
+			height: 280,
+			width: 370,
+			modal: true,
+			buttons: {
+				Cancel: function () {
+					$(this).dialog("close");
+				}
+			},
+			close: function () {
+
+			}
+		});
+
 	}
 
 	initDialogs();
+
+	//function onSelectedChange() {
+	//	console.log(selectedVoteItem());
+	//};
+
+	//selectedVoteItem.subscribe(onSelectedChange);
 
 	//var viewModel = ko.mapping.fromJS(@Html.Raw(Model.ToJson())); 
 	return {
@@ -93,11 +138,16 @@
 		error: error,
 		mySession: mySession,
 		loggedUser: loggedUser,
+		selectedVoteItem: selectedVoteItem,
+		previouslySelectedVote: previouslySelectedVote,
+		selectedVoteItemChanged: selectedVoteItemChanged,
 		setLoggedUser: setLoggedUser,
 		setUserState: setUserState,
 		roomDtoState: roomDtoState,
 		setRoomDtoState: setRoomDtoState,
-		importQuestions: importQuestions
+		importQuestions: importQuestions,
+		openVoteItem: openVoteItem,
+		closeVoteItem: closeVoteItem
 	};
 })(ko, agileApp.datacontext, agileApp.notifyService);
 

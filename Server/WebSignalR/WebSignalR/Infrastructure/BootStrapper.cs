@@ -22,8 +22,9 @@ namespace WebSignalR.Infrastructure
 	{
 		private static bool _sweeping;
 		private static Timer _timerClaen;
-		private static readonly TimeSpan _sweepInterval = TimeSpan.FromMinutes(15);
+		private static readonly TimeSpan _sweepInterval = TimeSpan.FromMinutes(29);
 		private const string SqlClient = "System.Data.SqlClient";
+		private static int purgeTime = ConfigurationManager.AppSettings["Sessions.PurgeTime"].ParseInt(55);
 
 		internal static IKernel Kernel = null;
 		private static IDependencyResolver _signalrResolver = null;
@@ -87,7 +88,8 @@ namespace WebSignalR.Infrastructure
 				IUnityOfWork unity = context.Kernel.Get<IUnityOfWork>();
 				ICryptoService crypto = context.Kernel.Get<ICryptoService>();
 				IUserRoomService userRoomSrv = context.Kernel.Get<IUserRoomService>();
-				ISessionService sessions = context.Kernel.Get<ISessionService>();
+				//ISessionService sessions = context.Kernel.Get<ISessionService>(); //in such way we reached exception ralated to the multiple instance of the IEntityChangeTracker. 
+				ISessionService sessions =new Infrastructure.Services.SessionService(unity);
 
 				return new Hubs.AgileHub(unity, crypto, userRoomSrv, sessions);
 			});
@@ -149,7 +151,7 @@ namespace WebSignalR.Infrastructure
 			foreach (var session in sessions)
 			{
 				var elapsed = DateTime.UtcNow - session.LastActivity;
-				if (elapsed.TotalMinutes > 60)
+				if (elapsed.TotalMinutes > purgeTime)
 					inactiveSession.Add(session);
 			}
 

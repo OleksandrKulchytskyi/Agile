@@ -21,6 +21,7 @@
 	@section styles{
 		@*@Styles.Render("~/Content/koGrid")*@
 		@Styles.Render("~/Content/roomActivity")
+		@Styles.Render("~/Content/jqueryMenu")
 	}
 }
 <h2>Room Activity View</h2>
@@ -42,6 +43,8 @@
 			<div class="container" style="width: auto;">
 				<div class="nav-collapse">
 					<a class="btn btn-default" data-bind="click: importQuestions">Import questions</a>
+					<a class="btn btn-default" data-bind="click: openVoteItem">Open vote</a>
+					<a class="btn btn-default" data-bind="click: closeVoteItem">Close vote</a>
 				</div>
 			</div>
 		</div>
@@ -50,7 +53,18 @@
 	<div id="importDialog" title="Import questions">
 		@Html.Partial("_Import")
 	</div>
+	<div id="closeVoteDialog" title="Close vote">
+		@Html.Partial("_CloseVote")
+	</div>
 	}
+	
+	<div class="contextMenu" id="dataGridMenu1">
+		<ul>
+			<li id="openMenuItem">Open vote item</li>
+			<li id="closeMenuItem">Close vote item</li>
+		</ul>
+	</div>
+	
 	
 	<div id="activityContainer" data-bind="with: roomDtoState">
 		<table id="activityTable">
@@ -64,7 +78,7 @@
 			</thead>
 			<tbody data-bind="foreach: itemsToVote">
 				<tr data-bind="attr: { id: id }">
-					<td data-bind="text: content"></td>
+					<td data-bind="text: content, click: function (data, event) { $root.selectedVoteItemChanged($data, event) }"></td>
 				</tr>
 			</tbody>
 		</table>
@@ -82,5 +96,6 @@
 		@*@Scripts.Render("~/bundles/koGrid")*@
 		<script type="text/javascript" src="~/signalr/hubs"></script>
 		@Scripts.Render("~/bundles/agileRoomActivity")
+		@Scripts.Render("~/bundles/jqueryuimenu")
 	}
 }

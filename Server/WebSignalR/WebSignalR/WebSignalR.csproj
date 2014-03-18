@@ -170,6 +170,7 @@
     <Content Include="Content\images\bullet2.gif" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
+    <Content Include="Content\jquery.contextMenu.css" />
     <Content Include="Content\KoGrid.css" />
     <Content Include="Content\RoomActivity.css" />
     <Content Include="Content\Site.css" />
@@ -239,6 +240,7 @@
     <Content Include="index.html" />
     <Content Include="Scripts\App\account.rolesVM.js" />
     <Content Include="Scripts\App\agile.roomactivityVM.js" />
+    <Content Include="Scripts\App\jquery.contextMenu.js" />
     <Content Include="Scripts\koGrid-2.1.1.debug.js" />
     <Content Include="Scripts\koGrid-2.1.1.js" />
     <Content Include="Scripts\_references.js" />
@@ -348,6 +350,7 @@
     <Content Include="Views\RoomActivity\Index.cshtml" />
     <Content Include="Views\RoomActivity\_Import.cshtml" />
     <Content Include="Views\Account\_ChangeRoles.cshtml" />
+    <Content Include="Views\RoomActivity\_CloseVote.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
