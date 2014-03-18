@@ -102,11 +102,6 @@ namespace WebSignalR.Hubs
 			return base.OnReconnected();
 		}
 
-		public void TestMethod(string data)
-		{
-			Clients.Caller.onTestMethod(data);
-		}
-
 		private void SetStateData(string sate)
 		{
 			Clients.Caller.version = _versionString;
@@ -321,7 +316,7 @@ namespace WebSignalR.Hubs
 
 			VoteItem vote = repo.Get(x => x.Id == voteItemId).FirstOrDefault();
 			User usr = repoUser.Get(x => x.Name == Context.User.Identity.Name).FirstOrDefault();
-			UserVoteDto dto = null;
+			UserVoteDto userVoteDto = null;
 			if (vote != null && usr != null && vote.Opened)
 			{
 				UserVote uv = new UserVote();
@@ -334,8 +329,8 @@ namespace WebSignalR.Hubs
 
 				_unity.Commit();
 				_sessionServ.UpdateSessionActivity(Context.ConnectionId);
-				dto = Mapper.Map<UserVoteDto>(uv);
-				return Clients.Group(room).onUserVoted(dto);
+				userVoteDto = Mapper.Map<UserVoteDto>(uv);
+				return Clients.Group(room).onUserVoted(userVoteDto);
 			}
 			else
 			{

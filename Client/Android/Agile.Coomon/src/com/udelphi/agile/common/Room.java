@@ -25,4 +25,12 @@ public class Room {
 	public void RemoveUser(User usr) {
 		ConnectedUsers.remove(usr);
 	}
+	
+	public void AddVote(VoteItem vote) {
+		ItemsToVote.add(vote);
+	}
+
+	public void RemoveVote(VoteItem vote) {
+		ItemsToVote.remove(vote);
+	}
 }

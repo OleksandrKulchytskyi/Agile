@@ -43,7 +43,6 @@ namespace WebSignalR.Common.Entities
 			get { return isOpened; }
 			set { isOpened = value; OnPropChanged("Opened"); }
 		}
-		
 
 		public int? RoomId { get; set; }
 

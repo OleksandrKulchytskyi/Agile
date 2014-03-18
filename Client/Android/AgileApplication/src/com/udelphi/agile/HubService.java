@@ -30,6 +30,8 @@ public class HubService {
 	private List<IOnStateChangedListener> _onConnectionState;
 	private List<IOnUserStateLoggedListener> _onUserState;
 	private List<IOnRoomStateListener> _onRoomState;
+	private List<IOnHubErrorHandler> _onHubErrorListeners;
+	private List<IOnVoteItemStateListener> _onVoteItemListeners;
 	private boolean isStarted;
 
 	public static HubService getInstance() {
@@ -44,6 +46,9 @@ public class HubService {
 		_onConnectionState = new ArrayList<IOnStateChangedListener>();
 		_onUserState = new ArrayList<IOnUserStateLoggedListener>();
 		_onRoomState = new ArrayList<IOnRoomStateListener>();
+
+		_onHubErrorListeners = new ArrayList<IOnHubErrorHandler>();
+		_onVoteItemListeners = new ArrayList<IOnVoteItemStateListener>();
 
 		applicationCtx = (Context) AgileApplication.container.get("Context");
 		Log.d("HubService",
@@ -123,6 +128,25 @@ public class HubService {
 	private void InitializeCallbackListening() {
 		Log.d("HUBService", "Initialize Callbacks Listening");
 
+		hubProxy.On("onErrorHandler", new HubOnDataCallback() {
+			@Override
+			public void OnReceived(JSONArray args) {
+				Log.d("onErrorHandler callback", args.toString());
+
+				String state = null;
+				try {
+					state = (String) args.get(0);
+				} catch (Exception ex) {
+					Log.e("onErrorHandler callback", ex.getMessage());
+					ex.printStackTrace();
+				}
+				if (state != null)
+					for (IOnHubErrorHandler element : _onHubErrorListeners) {
+						element.onHubErrorHandler(state);
+					}
+			}
+		});
+
 		hubProxy.On("onState", new HubOnDataCallback() {
 			@Override
 			public void OnReceived(JSONArray args) {
@@ -153,7 +177,6 @@ public class HubService {
 				try {
 					loggedUser = parseLoggedUser((JSONObject) args.get(0));
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				if (loggedUser != null) {
@@ -201,7 +224,7 @@ public class HubService {
 					}
 			}
 		});
-		
+
 		hubProxy.On("onRoomStateChanged", new HubOnDataCallback() {
 			@Override
 			public void OnReceived(JSONArray args) {
@@ -219,7 +242,83 @@ public class HubService {
 					}
 			}
 		});
+
+		hubProxy.On("onInitRoom", new HubOnDataCallback() {
+			@Override
+			public void OnReceived(JSONArray args) {
+				Log.d("onInitRoom", args.toString());
+				Room room = null;
+				try {
+					JSONObject jsObj = (JSONObject) args.get(0);
+					room = parseRoomState(jsObj);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				if (room != null)
+					for (IOnRoomStateListener listener : _onRoomState) {
+						listener.onInitRoom(room);
+					}
+			}
+		});
+
+		hubProxy.On("onVoteItemOpened", new HubOnDataCallback() {
+			@Override
+			public void OnReceived(JSONArray args) {
+				Log.d("onVoteItemOpened", args.toString());
+				VoteItem voteItem = null;
+				try {
+					JSONObject jsObj = (JSONObject) args.get(0);
+					voteItem = parseVoteItem(jsObj);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				if (voteItem != null)
+					for (IOnRoomStateListener listener : _onRoomState) {
+						listener.onVoteItemOpened(voteItem);
+					}
+			}
+		});
+
+		hubProxy.On("onVoteItemClosed", new HubOnDataCallback() {
+			@Override
+			public void OnReceived(JSONArray args) {
+				Log.d("onVoteItemClosed", args.toString());
+				VoteItem voteItem = null;
+				try {
+					JSONObject jsObj = (JSONObject) args.get(0);
+					voteItem = parseVoteItem(jsObj);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				if (voteItem != null){
+					for (IOnRoomStateListener listener : _onRoomState) {
+						listener.onVoteItemClosed(voteItem);
+					}					
+					for (IOnVoteItemStateListener listener : _onVoteItemListeners) {
+						listener.onVoteItemClosed(voteItem);
+					}
+				}
+			}
+		});
 		
+		hubProxy.On("onUserVoted", new HubOnDataCallback() {
+			@Override
+			public void OnReceived(JSONArray args) {
+				Log.d("onUserVoted callback", args.toString());
+				UserVote userVote = null;
+				try {
+					JSONObject jsObj = (JSONObject) args.get(0);
+					userVote = parseUserVote(jsObj);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				if (userVote != null)
+					for (IOnVoteItemStateListener listener : _onVoteItemListeners) {
+						listener.onUserVoted(userVote);
+					}
+			}
+		});
+
 	}
 
 	private Room parseRoomState(JSONObject jsObj) throws JSONException {
@@ -234,7 +333,40 @@ public class HubService {
 			if (usr != null)
 				room.AddUser(usr);
 		}
+		JSONArray voteArray = jsObj.getJSONArray("ItemsToVote");
+		for (int i = 0; i < voteArray.length(); i++) {
+			VoteItem vote = parseVoteItem((JSONObject) voteArray.get(i));
+			if (vote != null)
+				room.AddVote(vote);
+		}
 		return room;
+	}
+
+	private VoteItem parseVoteItem(JSONObject jsObj) throws JSONException {
+		VoteItem voteItem = new VoteItem();
+		voteItem.Id = jsObj.optInt("Id", -1);
+		voteItem.Content = jsObj.optString("Content", "No content");
+
+		voteItem.Closed = jsObj.getBoolean("Closed");
+		voteItem.Opened = jsObj.getBoolean("Opened");
+		voteItem.OveralMark = jsObj.getInt("OverallMark");
+		voteItem.HostRoomId = jsObj.getInt("HostRoomId");
+
+		JSONArray votesArray = jsObj.getJSONArray("VotedUsers");
+		for (int i = 0; i < votesArray.length(); i++) {
+			voteItem.VotedUsers.add((Integer) votesArray.get(i));
+		}
+
+		return voteItem;
+	}
+
+	private UserVote parseUserVote(JSONObject jsObj) throws JSONException {
+		UserVote userVote = new UserVote();
+		userVote.Id = jsObj.optInt("Id", -1);
+		userVote.Mark = jsObj.getInt("Mark");
+		userVote.UserId = jsObj.getInt("UserId");
+		userVote.VoteItemId = jsObj.getInt("VoteItemId");
+		return userVote;
 	}
 
 	private User parseLoggedUser(JSONObject args) {
@@ -328,5 +460,21 @@ public class HubService {
 
 	public void UnsubscribeOnRoomStateChanged(IOnRoomStateListener listener) {
 		_onRoomState.remove(listener);
+	}
+
+	public void SubscribeOnHubErrorCallback(IOnHubErrorHandler listener) {
+		this._onHubErrorListeners.add(listener);
+	}
+
+	public void UnsubscribeOnHubErrorCallback(IOnHubErrorHandler listener) {
+		this._onHubErrorListeners.remove(listener);
+	}
+
+	public void SubscribeOnVoteItemCallback(IOnVoteItemStateListener listener) {
+		this._onVoteItemListeners.add(listener);
+	}
+
+	public void UnsubscribeOnVoteItemCallback(IOnVoteItemStateListener listener) {
+		this._onVoteItemListeners.remove(listener);
 	}
 }

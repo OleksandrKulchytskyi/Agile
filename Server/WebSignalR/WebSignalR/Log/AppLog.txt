@@ -81,3 +81,6 @@ ERROR 2014-03-18 14:07:54,874 2239825ms Global                 OnIncomingError  
 
 INFO  2014-03-18 14:10:49,196   202ms Global                 Application_Start  - Application_Start()
 INFO  2014-03-18 14:15:36,125   203ms Global                 Application_Start  - Application_Start()
+INFO  2014-03-18 17:28:31,623   278ms Global                 Application_Start  - Application_Start()
+INFO  2014-03-18 17:57:23,723 1732378ms Global                 Sweep              - Begin sweep process
+INFO  2014-03-18 18:26:23,795 3472450ms Global                 Sweep              - Begin sweep process

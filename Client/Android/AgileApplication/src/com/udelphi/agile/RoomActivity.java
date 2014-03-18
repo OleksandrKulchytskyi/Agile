@@ -6,24 +6,29 @@ import org.json.*;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.GridView;
-import android.widget.Toast;
+import android.widget.*;
 
 import com.udelphi.agile.common.*;
 import com.zsoft.signala.hubs.HubInvokeCallback;
 
-public class RoomActivity extends BaseActivity implements IOnRoomStateListener {
+public class RoomActivity extends BaseActivity implements IOnRoomStateListener,
+		IOnHubErrorHandler {
 
 	private View mWaitView;
 	private View mRoomForm;
 	private UserAdapter _usrAdapter;
 	private List<User> _usrList;
+
+	ListView listView;
+	private VoteItemsArrayAdapter _votesAdapter;
+	private List<VoteItem> _voteList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +42,11 @@ public class RoomActivity extends BaseActivity implements IOnRoomStateListener {
 		_usrAdapter = new UserAdapter(getBaseContext(), R.layout.gridview_item,
 				_usrList);
 		gridView.setAdapter(_usrAdapter);
+
+		_voteList = new ArrayList<VoteItem>();
+		_votesAdapter = new VoteItemsArrayAdapter(getBaseContext(), _voteList);
+		listView = (ListView) findViewById(R.id.voteItemsList);
+		listView.setAdapter(_votesAdapter);
 	}
 
 	@Override
@@ -120,12 +130,14 @@ public class RoomActivity extends BaseActivity implements IOnRoomStateListener {
 	protected void onResume() {
 		super.onResume();
 		super.hubService.SubscribeOnRoomStateChanged(this);
+		super.hubService.SubscribeOnHubErrorCallback(this);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
 		super.hubService.UnsubscribeOnRoomStateChanged(this);
+		super.hubService.UnsubscribeOnHubErrorCallback(this);
 	}
 
 	@Override
@@ -139,6 +151,46 @@ public class RoomActivity extends BaseActivity implements IOnRoomStateListener {
 	public void onRoomStateChanged(Room roomState) {
 		if (roomState == null)
 			return;
+
+		if (roomState.ConnectedUsers != null) {
+			for (User usr : roomState.ConnectedUsers) {
+				if (_usrList.indexOf(usr) == -1)
+					_usrList.add(usr);
+			}
+			for (User usr : _usrList) {
+				if (roomState.ConnectedUsers.indexOf(usr) == -1)
+					_usrList.remove(usr);
+			}
+			_usrAdapter.notifyDataSetChanged();
+		}
+
+		if (roomState.ItemsToVote != null) {
+			for (VoteItem vote : roomState.ItemsToVote) {
+				if (_voteList.indexOf(vote) == -1)
+					_voteList.add(vote);
+			}
+			for (VoteItem vote : _voteList) {
+				if (roomState.ItemsToVote.indexOf(vote) == -1)
+					_usrList.remove(vote);
+			}
+			_usrAdapter.notifyDataSetChanged();
+
+			for (VoteItem v : _voteList) {
+				int indx = roomState.ItemsToVote.indexOf(v);
+				if (indx != -1) {
+					VoteItem server = roomState.ItemsToVote.get(indx);
+					v.copyPartialState(server);
+					View view = listView.getChildAt(_voteList.indexOf(v));
+					if (view != null) {
+						if (v.Opened)
+							view.setBackgroundColor(Color.GREEN);
+						if (v.Closed)
+							view.setBackgroundColor(Color.LTGRAY);
+					}
+				}
+			}
+		}
+
 		if (!roomState.Active)
 			showProgress(true);
 		else
@@ -146,20 +198,86 @@ public class RoomActivity extends BaseActivity implements IOnRoomStateListener {
 	}
 
 	@Override
+	public void onInitRoom(Room roomState) {
+		if (roomState == null)
+			return;
+
+		if (roomState.ConnectedUsers != null) {
+			for (User user : roomState.ConnectedUsers) {
+				_usrList.add(user);
+				_usrAdapter.notifyDataSetChanged();
+			}
+		}
+
+		if (roomState.ItemsToVote != null) {
+			for (VoteItem vote : roomState.ItemsToVote) {
+				_voteList.add(vote);
+				_votesAdapter.notifyDataSetChanged();
+			}
+		}
+	}
+
+	@Override
+	public void onVoteItemOpened(VoteItem state) {
+		if (state == null)
+			return;
+
+		int indx = _voteList.indexOf(state);
+		VoteItem listItem = _voteList.get(indx);
+		if (listItem != null) {
+			listItem.Closed = state.Closed;
+			listItem.Opened = state.Opened;
+		}
+
+		if (indx != -1) {
+			View v = listView.getChildAt(indx);
+			if (v != null) {
+				v.setBackgroundColor(Color.GREEN);
+			}
+		}
+		_votesAdapter.notifyDataSetChanged();
+	}
+
+	@Override
+	public void onVoteItemClosed(VoteItem state) {
+		if (state == null)
+			return;
+
+		int indx = _voteList.indexOf(state);
+		VoteItem listItem = _voteList.get(indx);
+		if (listItem != null) {
+			listItem.Closed = state.Closed;
+			listItem.Opened = state.Opened;
+		}
+
+		if (indx != -1) {
+			View v = listView.getChildAt(indx);
+			if (v != null) {
+				v.setBackgroundColor(Color.LTGRAY);
+			}
+		}
+		_votesAdapter.notifyDataSetChanged();
+	}
+
+	@Override
 	public void onJoinedRoom(User user) {
 		if (user == null)
 			return;
-		_usrList.add(user);
-		_usrAdapter.notifyDataSetChanged();
+		if (_usrList.indexOf(user) == -1) {
+			_usrList.add(user);
+			_usrAdapter.notifyDataSetChanged();
+		}
 	}
 
 	@Override
 	public void onLeftRoom(User user) {
 		if (user == null)
 			return;
-		
-		_usrList.remove(user);
-		_usrAdapter.notifyDataSetChanged();
+
+		if (_usrList.indexOf(user) != -1) {
+			_usrList.remove(user);
+			_usrAdapter.notifyDataSetChanged();
+		}
 	}
 
 	@SuppressWarnings("unused")
@@ -225,6 +343,12 @@ public class RoomActivity extends BaseActivity implements IOnRoomStateListener {
 			mWaitView.setVisibility(show ? View.VISIBLE : View.GONE);
 			mRoomForm.setVisibility(show ? View.GONE : View.VISIBLE);
 		}
+	}
+
+	@Override
+	public void onHubErrorHandler(String data) {
+		if (data != null)
+			Toast.makeText(getBaseContext(), data, Toast.LENGTH_LONG).show();
 	}
 
 }

@@ -271,7 +271,7 @@ $.connection.hub.start({ transport: ['webSockets', 'longPolling'] })
 					// Call the Initialize function on the server. Will respond with auctionInitialized message
 					if (window.agileApp.notifyService !== undefined)
 						window.agileApp.notifyService.success("Successfully connected to the hub service!", null, true);
-					agileHub.server.testMethod("Hello");
+					//agileHub.server.testMethod("Hello");
 				})
 				.fail(function (ex) {
 					if (window.agileApp.notifyService !== undefined)
@@ -290,12 +290,19 @@ $.connection.hub.stateChanged(function (change) {
 	}
 	else if (timeout && change.newState === $.signalR.connectionState.connected) {
 		mainVM.mySession().sessionId = $.connection.hub.id;
-		console.log('Server reconnected, reinitialize');
+		window.agileApp.notifyService.warning('Server reconnected, reinitialize', {}, true);
 		//$.connection.auctionHub.initialize();
 		clearTimeout(timeout);
 		timeout = null;
 	}
 });
+
+agileHub.client.onUserLogged = function (user) {
+	mainVM.setLoggedUser(user);
+	if ($("#userId").val() === "0")
+		$("#userId").val(mainVM.loggedUser().id);
+	//window.agileApp.notifyService.info("User e", null, true);
+}
 
 agileHub.client.onErrorHandler = function (exMsg) {
 	if (agileApp.notifyService !== undefined)
@@ -308,25 +315,15 @@ agileHub.client.onErrorHandler = function (exMsg) {
 	//chat.connection.stop();
 }
 
-agileHub.client.onTestMethod = function (data) {
-	if (window.agileApp.notifyService !== undefined)
-		window.agileApp.notifyService.info(data, null, true);
-}
-
 agileHub.client.onState = function (state) {
 	mainVM.setUserState(state);
-	agileHub.server.joinRoom($("#roomName").val(), mainVM.mySession().sessionId).fail(logHubInvokeExc)
+	//after we have received connection state we can perform joinRoom operation
+	agileHub.server.joinRoom($("#roomName").val(), mainVM.mySession().sessionId)
+					.fail(logHubInvokeExc)
 					.done(function (joinRoomResult) {
 						agileApp.notifyService.info(ko.toJSON(joinRoomResult), null, true);
 					});
 
-}
-
-agileHub.client.onUserLogged = function (user) {
-	mainVM.setLoggedUser(user);
-	if ($("#userId").val() === "0")
-		$("#userId").val(mainVM.loggedUser().id);
-	//window.agileApp.notifyService.info("User e", null, true);
 }
 
 agileHub.client.onInitRoom = function (roomDto) {
@@ -357,51 +354,6 @@ agileHub.client.onInitRoom = function (roomDto) {
 		}
 	}
 }
-
-function addCellToRow(row, uId, vId) {
-	var cell = $('<td>No vote</td>');
-	cell.attr('id', vId + "_" + uId);
-	cell.appendTo(row);
-	//addRowContents(newRow);
-}
-
-function RemoveCellFromRow(row, uId, vId) {
-	var cell = $(row).find('#' + vId + '_' + uId);
-	if (cell != null)
-		cell.remove();
-	else
-		console.log("cell not found:" + vId + "_" + uId);
-	//addRowContents(newRow);
-}
-
-function addRow(grid) {
-	var newRow = $('<tr></tr>').appendTo(grid);
-	addRowContents(newRow);
-}
-
-function addRowAfter(target) {
-	var newRow = $('<tr></tr>');
-	addRowContents(newRow);
-	target.after(newRow);
-}
-
-function addRowContents(row) {
-	$('<td><textarea/></td>').appendTo(row);
-	$('<td id = "regla"></td>').droppable(drpOptions).appendTo(row);
-	var buttonCell = $('<td></td>').appendTo(row);
-	$('<button></button>').addClass('addRow').text('+').click(function () {
-		addRowAfter($(this).closest('tr'));
-		$(this).hide();
-	}).appendTo(buttonCell);
-}
-
-function logHubInvokeExc(e) {
-	if (e.source === 'HubException' && agileApp.notifyService !== undefined) {
-		var data = e.message + ' : ' + e.data.user;
-		console.log(data);
-		agileApp.notifyService.error("Could not inoke hub server method! " + data, null, true);
-	}
-};
 
 agileHub.client.onJoinedRoom = function (userDto) {
 
@@ -452,6 +404,55 @@ agileHub.client.onRoomStateChanged = function (roomDto) {
 	var roomDtoObservable = new agileApp.datacontext.roomDtoModel(roomDto);
 	handleUsers(roomDtoObservable.connectedUsers);
 	handleVotes(roomDtoObservable);
+}
+
+agileHub.client.onUserVoted = function (userVoteDto) {
+	console.log(userVoteDto);
+	var userId = userVoteDto.UserId;
+	var voteId = userVoteDto.VoteItemId;
+
+	var voteRow = $('#activityTable tr[id="' + voteId + '"]');
+	var cellId = voteId + "_" + userId;
+	console.log("cell id " + cellId);
+	var cell = getCelInRowById(voteRow, cellId);
+	if (cell != null) {
+		$(cell).css('background-color', 'lightblue')
+		var mark = userVoteDto.Mark;
+		$(cell).val(mark);
+		$(cell).text(mark);
+	}
+}
+
+agileHub.client.onVoteItemClosed = function (voteItemDto) {
+	var id = voteItemDto.Id;
+	var mark = voteItemDto.OverallMark;
+	var voteRow = $('#activityTable tr[id="' + id + '"]');
+	var cells = $(voteRow).children('td');
+	$(cells).css('background-color', '#000');
+	for (var i = 0; i < cells.length; i++) {
+		if (i == 0)
+			continue;
+		$(cells[i]).val(mark);
+		$(cells[i]).text(mark);
+	}
+}
+
+agileHub.client.onVoteItemOpened = function (voteItemDto) {
+	var id = voteItemDto.Id;
+	var voteRow = $('#activityTable tr[id="' + id + '"]');
+	var cells = $(voteRow).children('td');
+	$(cells).css('background-color', 'aliceblue');
+
+	for (var i = 0; i < cells.length; i++) {
+		if (i == 0)
+			continue;
+		$(cells[i]).val("");
+		$(cells[i]).text("");
+	}
+}
+
+agileHub.client.onRoomDeleted = function (roomDto) {
+	agileApp.notifyService.warning("Sorry room is no longer valid!!!!", {}, true);
 }
 
 function handleUsers(usersObservale) {
@@ -538,23 +539,6 @@ function handleVotes(roomObs) {
 	//}
 }
 
-agileHub.client.onUserVoted = function (userVoteDto) {
-	console.log(userVoteDto);
-	var userId = userVoteDto.UserId;
-	var voteId = userVoteDto.VoteItemId;
-
-	var voteRow = $('#activityTable tr[id="' + voteId + '"]');
-	var cellId = voteId + "_" + userId;
-	console.log("cell id " + cellId);
-	var cell = getCelInRowById(voteRow, cellId);
-	if (cell != null) {
-		$(cell).css('background-color', 'lightblue')
-		var mark = userVoteDto.Mark;
-		$(cell).val(mark);
-		$(cell).text(mark);
-	}
-}
-
 function getCelInRowById(row, cellId) {
 	return $(row).find('td[id="' + cellId + '"]');
 }
@@ -565,34 +549,50 @@ function getCell(columnId, rowId) {
 	return row.find('td').eq(column);
 }
 
-agileHub.client.onVoteItemClosed = function (voteItemDto) {
-	var id = voteItemDto.Id;
-	var mark = voteItemDto.OverallMark;
-	var voteRow = $('#activityTable tr[id="' + id + '"]');
-	var cells = $(voteRow).children('td');
-	$(cells).css('background-color', '#000');
-	for (var i = 0; i < cells.length; i++) {
-		if (i == 0)
-			continue;
-		$(cells[i]).val(mark);
-		$(cells[i]).text(mark);
+function addCellToRow(row, uId, vId) {
+	var cell = $('<td>No vote</td>');
+	cell.attr('id', vId + "_" + uId);
+	cell.appendTo(row);
+	//addRowContents(newRow);
+}
+
+function RemoveCellFromRow(row, uId, vId) {
+	var cell = $(row).find('#' + vId + '_' + uId);
+	if (cell != null)
+		cell.remove();
+	else
+		console.log("cell not found:" + vId + "_" + uId);
+	//addRowContents(newRow);
+}
+
+function addRow(grid) {
+	var newRow = $('<tr></tr>').appendTo(grid);
+	addRowContents(newRow);
+}
+
+function addRowAfter(target) {
+	var newRow = $('<tr></tr>');
+	addRowContents(newRow);
+	target.after(newRow);
+}
+
+function addRowContents(row) {
+	$('<td><textarea/></td>').appendTo(row);
+	$('<td id = "regla"></td>').droppable(drpOptions).appendTo(row);
+	var buttonCell = $('<td></td>').appendTo(row);
+	$('<button></button>').addClass('addRow').text('+').click(function () {
+		addRowAfter($(this).closest('tr'));
+		$(this).hide();
+	}).appendTo(buttonCell);
+}
+
+function logHubInvokeExc(e) {
+	if (e.source === 'HubException' && agileApp.notifyService !== undefined) {
+		var data = e.message + ' : ' + e.data.user;
+		console.log(data);
+		agileApp.notifyService.error("Could not inoke hub server method! " + data, null, true);
 	}
-}
-
-agileHub.client.onVoteItemOpened = function (voteItemDto) {
-	var id = voteItemDto.Id;
-	var voteRow = $('#activityTable tr[id="' + id + '"]');
-	var cells = $(voteRow).children('td');
-	$(cells).css('background-color', 'aliceblue');
-
-	for (var i = 0; i < cells.length; i++) {
-		if (i == 0)
-			continue;
-		$(cells[i]).val("");
-		$(cells[i]).text("");
+	else {
+		agileApp.notifyService.error(e, null, true);
 	}
-}
-
-agileHub.client.onRoomDeleted = function (roomDto) {
-	agileApp.notifyService.warning("Sorry room is no longer valid!!!!", {}, true);
-}
+};
