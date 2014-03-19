@@ -15,7 +15,6 @@ using WebSignalR.DataAccess.DB;
 using WebSignalR.DataAccess.Repositories;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(WebSignalR.Infrastructure.BootStrapper), "PreAppStart")]
-
 namespace WebSignalR.Infrastructure
 {
 	public static class BootStrapper
@@ -89,7 +88,7 @@ namespace WebSignalR.Infrastructure
 				ICryptoService crypto = context.Kernel.Get<ICryptoService>();
 				IUserRoomService userRoomSrv = context.Kernel.Get<IUserRoomService>();
 				//ISessionService sessions = context.Kernel.Get<ISessionService>(); //in such way we reached exception ralated to the multiple instance of the IEntityChangeTracker. 
-				ISessionService sessions =new Infrastructure.Services.SessionService(unity);
+				ISessionService sessions = new Infrastructure.Services.SessionService(unity);
 
 				return new Hubs.AgileHub(unity, crypto, userRoomSrv, sessions);
 			});
@@ -108,7 +107,8 @@ namespace WebSignalR.Infrastructure
 			}
 			catch (Exception ex)
 			{
-				Global.Logger.Error("ClearConnectedClients", ex);
+				if (Global.Logger != null)
+					Global.Logger.Error("ClearConnectedClients", ex);
 			}
 			finally
 			{
@@ -132,7 +132,8 @@ namespace WebSignalR.Infrastructure
 			}
 			catch (Exception ex)
 			{
-				Global.Logger.Error(ex);
+				if (Global.Logger != null)
+					Global.Logger.Error(ex);
 			}
 			finally
 			{

@@ -61,11 +61,27 @@
 
 		jQuery.browser = {};
 		(function () {
+			console.log(navigator.userAgent);
 			jQuery.browser.msie = false;
+			jQuery.browser.firefox = false;
+			jQuery.browser.chrome = false;
+			jQuery.browser.opera = false;
 			jQuery.browser.version = 0;
+			jQuery.browser.fullVersion="";
+
 			if (navigator.userAgent.match(/MSIE ([0-9]+)\./)) {
 				jQuery.browser.msie = true;
 				jQuery.browser.version = RegExp.$1;
+			}
+			else if (window.navigator.appVersion.match(/Chrome\/(.*?) /)) { //navigator.userAgent.match(/Chrome([0-9]+)\./)) {
+				jQuery.browser.chrome = true;
+				jQuery.browser.fullVersion = window.navigator.appVersion.match(/Chrome\/(.*?) /)[1];
+				jQuery.browser.version = parseInt(window.navigator.appVersion.match(/Chrome\/(\d+)\./)[1], 10);
+			}
+			else if (navigator.userAgent.match(/Firefox\/(.*?)/)) {
+				jQuery.browser.firefox = true;
+				jQuery.browser.fullVersion = window.navigator.userAgent.match(/Firefox\/(.*?)/)[1];
+				jQuery.browser.version = parseInt(window.navigator.userAgent.match(/Firefox\/(\d+)\./)[1], 10);
 			}
 		})();
 
@@ -258,6 +274,16 @@
 var mainVM = window.agileApp.roomActivityViewModel;
 
 var agileHub = $.connection.agileHub;
+
+//$(window).unload(function () {
+//	alert("Handler for .unload() called.");
+//});
+
+window.onbeforeunload = function () {
+	if ($.browser !== undefined)
+		console.log($.browser);
+	return "Are you sure you want to navigate away?";
+}
 
 //Multiple methods added to proxy in JavaScript using jQuery: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //$.extend(agileHub.server, {

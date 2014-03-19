@@ -290,17 +290,17 @@ public class HubService {
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-				if (voteItem != null){
+				if (voteItem != null) {
 					for (IOnRoomStateListener listener : _onRoomState) {
 						listener.onVoteItemClosed(voteItem);
-					}					
+					}
 					for (IOnVoteItemStateListener listener : _onVoteItemListeners) {
 						listener.onVoteItemClosed(voteItem);
 					}
 				}
 			}
 		});
-		
+
 		hubProxy.On("onUserVoted", new HubOnDataCallback() {
 			@Override
 			public void OnReceived(JSONArray args) {
