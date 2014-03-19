@@ -10,11 +10,4 @@ namespace WebSignalR.Common.Services
 
 		Task ChangeRoomState(string room, bool state);
 	}
-
-	public class JoinRoomResult
-	{
-		public bool Active { get; set; }
-
-		public bool HostMaster { get; set; }
-	}
 }

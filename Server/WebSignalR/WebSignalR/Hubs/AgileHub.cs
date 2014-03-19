@@ -187,18 +187,11 @@ namespace WebSignalR.Hubs
 			Guid sesID;
 			if (!Guid.TryParse(sessionId, out sesID))
 				sessionId = Context.ConnectionId;
-			JoinRoomResult result = new JoinRoomResult();
 
 			try
 			{
 				Room room = _roomService.JoinToRoomBySessionId(roomName, sessionId);
 				Task addTask = Groups.Add(sessionId, roomName);
-				if (room != null)
-				{
-					result.Active = room.Active;
-					result.HostMaster = room.Active;
-				}
-
 				RoomDto rDto = Mapper.Map<RoomDto>(room);
 				Clients.Caller.onInitRoom(rDto);
 
