@@ -117,6 +117,7 @@ namespace WebSignalR.Handlers
 				ticket = new FormsAuthenticationTicket(1, strUser, DateTime.Now, DateTime.Now.AddMinutes(30), /*expire time*/ isPersistent,/*persistent*/ ticketData /*user data*/);
 				string strEncryptedTicket = FormsAuthentication.Encrypt(ticket);
 				HttpCookie cookie = new HttpCookie(Infrastructure.Constants.FormsAuthKey, strEncryptedTicket);
+				cookie.HttpOnly = true;//TODO: check cookie settings here!!!
 				context.Response.Cookies.Add(cookie);
 				IPrincipalProvider provider = BootStrapper.Kernel.Get<IPrincipalProvider>();
 				System.Security.Principal.IPrincipal principal = provider.CreatePrincipal(ticket);

@@ -51,6 +51,7 @@ namespace WebSignalR.Controllers
 							foreach (System.Net.Cookie cookie in collection)
 							{
 								HttpCookie c = new HttpCookie(cookie.Name, cookie.Value);
+								c.HttpOnly = true;//TODO: check cookie settings here!!!
 								Response.Cookies.Add(c);
 							}
 						}
@@ -203,7 +204,6 @@ namespace WebSignalR.Controllers
 			// If we got this far, something failed
 			return Json(new { errors = GetErrorsFromModelState() });
 		}
-
 
 		[HttpGet]
 		[Authorize(Roles = "Admin")]
