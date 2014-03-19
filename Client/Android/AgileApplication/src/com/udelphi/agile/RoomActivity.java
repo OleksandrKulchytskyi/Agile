@@ -47,6 +47,7 @@ public class RoomActivity extends BaseActivity implements IOnRoomStateListener,
 		_votesAdapter = new VoteItemsArrayAdapter(getBaseContext(), _voteList);
 		listView = (ListView) findViewById(R.id.voteItemsList);
 		listView.setAdapter(_votesAdapter);
+		listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 	}
 
 	@Override

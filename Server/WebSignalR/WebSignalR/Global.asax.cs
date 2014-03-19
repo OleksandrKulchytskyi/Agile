@@ -73,7 +73,7 @@ namespace WebSignalR
 
 		protected void Application_EndRequest(object sender, EventArgs e)
 		{
-			if (this.Request.Path.ToLower().StartsWith("/handlers/loginhandler.ashx")
+			if (this.Request.Path.EndsWith("/handlers/loginhandler.ashx", StringComparison.OrdinalIgnoreCase)
 			  && this.Response.StatusCode == 302
 			  && this.Response.RedirectLocation.ToLower().Contains("login.aspx"))
 			{

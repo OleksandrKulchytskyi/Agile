@@ -135,11 +135,12 @@ namespace WebSignalR.Handlers
 		private bool CheckPassword(string username, string password)
 		{
 			IEntityValidator validator = Infrastructure.BootStrapper.Kernel.Get<IEntityValidator>("CredentialsValidator");
+			bool result = false;
 			if (validator != null)
 			{
-				return validator.IsValid<User>(new User() { Name = username, Password = password });
+				result = validator.IsValid<User>(new User() { Name = username, Password = password });
 			}
-			return false;
+			return result;
 		}
 
 		private void SetPrincipal(Infrastructure.CustomPrincipal principal)
