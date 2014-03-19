@@ -92,3 +92,4 @@ INFO  2014-03-19 11:52:20,180   204ms Global                 Application_Start  
 INFO  2014-03-19 12:38:31,173   207ms Global                 Application_Start  - Application_Start()
 INFO  2014-03-19 13:16:49,007   233ms Global                 Application_Start  - Application_Start()
 INFO  2014-03-19 13:45:49,071 1740297ms Global                 Sweep              - Begin sweep process
+INFO  2014-03-19 16:54:10,917   206ms Global                 Application_Start  - Application_Start()

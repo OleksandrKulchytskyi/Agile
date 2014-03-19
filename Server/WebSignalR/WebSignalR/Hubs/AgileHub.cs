@@ -182,7 +182,7 @@ namespace WebSignalR.Hubs
 		}
 
 		[SignalRAuth(Roles = "User")]
-		public JoinRoomResult JoinRoom(string roomName, string sessionId)
+		public Task JoinRoom(string roomName, string sessionId)
 		{
 			Guid sesID;
 			if (!Guid.TryParse(sessionId, out sesID))
@@ -207,7 +207,7 @@ namespace WebSignalR.Hubs
 				if (user != null)
 				{
 					UserDto uDto = Mapper.Map<UserDto>(user);
-					Clients.Group(roomName, Context.ConnectionId).onJoinedRoom(uDto);
+					return Clients.Group(roomName, Context.ConnectionId).onJoinedRoom(uDto);
 				}
 			}
 			catch (Exception ex)
@@ -215,7 +215,7 @@ namespace WebSignalR.Hubs
 				Clients.Caller.onErrorHandler(ex.Message);
 				throw;
 			}
-			return result;
+			return EmptyTask;
 		}
 
 		[SignalRAuth(Roles = "User")]

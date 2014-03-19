@@ -4,7 +4,7 @@ namespace WebSignalR.Common.Services
 {
 	public interface IRoomService
 	{
-		JoinRoomResult JoinRoom(string room, string sessionId);
+		Task JoinRoom(string room, string sessionId);
 
 		Task LeaveRoom(string room, string sessionId);
 

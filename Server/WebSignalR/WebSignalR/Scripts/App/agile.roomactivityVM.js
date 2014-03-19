@@ -346,8 +346,8 @@ agileHub.client.onState = function (state) {
 	//after we have received connection state we can perform joinRoom operation
 	agileHub.server.joinRoom($("#roomName").val(), mainVM.mySession().sessionId)
 					.fail(logHubInvokeExc)
-					.done(function (joinRoomResult) {
-						agileApp.notifyService.info(ko.toJSON(joinRoomResult), null, true);
+					.done(function () {
+						agileApp.notifyService.success("User has successfully logged to the room.", null, true);
 					});
 
 }
