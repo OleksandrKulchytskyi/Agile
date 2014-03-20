@@ -61,7 +61,6 @@
 
 		jQuery.browser = {};
 		(function () {
-			console.log(navigator.userAgent);
 			jQuery.browser.msie = false;
 			jQuery.browser.firefox = false;
 			jQuery.browser.chrome = false;
@@ -292,7 +291,7 @@ window.onbeforeunload = function () {
 //});
 
 $.connection.hub.logging = true;
-$.connection.hub.start({ transport: ['webSockets', 'longPolling'] })
+$.connection.hub.start({ transport: ['webSockets', 'longPolling'] }, onConnectionStarted)
 				.done(function () {
 					// Call the Initialize function on the server. Will respond with auctionInitialized message
 					if (window.agileApp.notifyService !== undefined)
@@ -303,6 +302,11 @@ $.connection.hub.start({ transport: ['webSockets', 'longPolling'] })
 					if (window.agileApp.notifyService !== undefined)
 						window.agileApp.notifyService.error("Could not connect to the hub service!" + ex.message, null, true);
 				});
+
+function onConnectionStarted(){
+	if(window.agileApp.notifyService !== undefined)
+	window.agileApp.notifyService.success("Hub connection is started!", null, true);
+}
 
 // Handle connection loss and reconnect in a robust way
 var timeout = null;
@@ -321,6 +325,11 @@ $.connection.hub.stateChanged(function (change) {
 		clearTimeout(timeout);
 		timeout = null;
 	}
+});
+
+//new event handlers on hub side
+$.connection.hub.reconnected(function () {
+	window.agileApp.notifyService.info('Hub connection has been re-established.', {}, true);
 });
 
 agileHub.client.onUserLogged = function (user) {
