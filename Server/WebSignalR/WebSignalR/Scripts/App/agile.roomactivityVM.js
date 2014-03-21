@@ -274,6 +274,8 @@ var mainVM = window.agileApp.roomActivityViewModel;
 
 var agileHub = $.connection.agileHub;
 
+$('#txtBaseAddress').val(agileApp.baseAddress);
+
 //$(window).unload(function () {
 //	alert("Handler for .unload() called.");
 //});
@@ -283,9 +285,9 @@ window.onbeforeunload = function (e) {
 	//e = e || window.event;	
 	//var result = confirm("Are you sure you want to leave room?");
 	//if (result == true) {
-		//agileApp.datacontext.detachUserFromRoom(rId, uId);
-		//window.agileHub.server.leaveRoom($("#roomName").val(), "")
-		//		.fail(function (e) { console.log(e); });
+	//agileApp.datacontext.detachUserFromRoom(rId, uId);
+	//window.agileHub.server.leaveRoom($("#roomName").val(), "")
+	//		.fail(function (e) { console.log(e); });
 	//}
 	//return result;
 	return "Are you sure you want to leave room?";
@@ -294,7 +296,8 @@ window.onbeforeunload = function (e) {
 $(window).unload(function () {
 	var rId = $("#roomId").val();
 	var uId = $("#userId").val();
-	var myUrl = window.agileApp.baseAddress+'/api/room/leaveroom/?roomId=' + rId + '&userId=' + uId;
+	var address = $('#txtBaseAddress').val();
+	var myUrl = address + 'api/room/leaveroom?roomId=' + rId + '&userId=' + uId;
 	$.ajax({
 		type: 'PUT',
 		url: myUrl,

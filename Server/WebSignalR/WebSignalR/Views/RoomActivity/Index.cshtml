@@ -31,6 +31,7 @@
 	//data-bind="attr: {id: id}
 	<p class="error" data-bind="text: error"></p>
 	<input id="antiForgeryToken" type="hidden" value="@GetAntiForgeryToken()" />
+	<input id="txtBaseAddress" type="hidden" />	
 	<input id="userId" type="hidden" value="@uid" />
 	<input id="isAdmin" type="hidden" value="@isAdmin" />
 	<input id="roomId" type="hidden" value="@roomId" />
@@ -62,7 +63,7 @@
 		@Html.Partial("_ChangeRoomState")
 	</div>
 	}
-	else if(User.IsInRole("User"))
+	else if (User.IsInRole("User"))
 	{
 	<div class="navbar navbar-default" role="navigation">
 		<div class="navbar-inner">

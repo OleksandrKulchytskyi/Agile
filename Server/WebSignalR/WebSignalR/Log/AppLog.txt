@@ -144,3 +144,66 @@ System.NullReferenceException: Object reference not set to an instance of an obj
    at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
    at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
 INFO  2014-03-21 14:16:46,573   204ms Global                 Application_Start  - Application_Start()
+INFO  2014-03-21 17:59:52,222   215ms Global                 Application_Start  - Application_Start()
+WARN  2014-03-21 18:02:22,420 150413ms Global                 Application_Error  - URL: http://localhost:6404/undefined/api/room/leaveroom/?roomId=2&userId=2; FilePath: /undefined/api/room/leaveroom/
+ERROR 2014-03-21 18:02:22,423 150416ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): Path 'PUT' is forbidden.
+   at System.Web.HttpMethodNotAllowedHandler.ProcessRequest(HttpContext context)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+WARN  2014-03-21 18:02:28,590 156582ms Global                 Application_Error  - URL: http://localhost:6404/undefinedapi/room/leaveroom/?roomId=2&userId=2; FilePath: /undefinedapi/room/leaveroom/
+ERROR 2014-03-21 18:02:28,592 156584ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): The controller for path '/undefinedapi/room/leaveroom/' was not found or does not implement IController.
+   at System.Web.Mvc.DefaultControllerFactory.GetControllerInstance(RequestContext requestContext, Type controllerType)
+   at System.Web.Mvc.DefaultControllerFactory.CreateController(RequestContext requestContext, String controllerName)
+   at System.Web.Mvc.MvcHandler.ProcessRequestInit(HttpContextBase httpContext, IController& controller, IControllerFactory& factory)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContext httpContext, AsyncCallback callback, Object state)
+   at System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.BeginProcessRequest(HttpContext context, AsyncCallback cb, Object extraData)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+WARN  2014-03-21 18:04:09,130 257122ms Global                 Application_Error  - URL: http://localhost:6404/undefinedapi/room/leaveroom/?roomId=2&userId=2; FilePath: /undefinedapi/room/leaveroom/
+ERROR 2014-03-21 18:04:09,132 257124ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): The controller for path '/undefinedapi/room/leaveroom/' was not found or does not implement IController.
+   at System.Web.Mvc.DefaultControllerFactory.GetControllerInstance(RequestContext requestContext, Type controllerType)
+   at System.Web.Mvc.DefaultControllerFactory.CreateController(RequestContext requestContext, String controllerName)
+   at System.Web.Mvc.MvcHandler.ProcessRequestInit(HttpContextBase httpContext, IController& controller, IControllerFactory& factory)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContext httpContext, AsyncCallback callback, Object state)
+   at System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.BeginProcessRequest(HttpContext context, AsyncCallback cb, Object extraData)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+WARN  2014-03-21 18:04:56,855 304847ms Global                 Application_Error  - URL: http://localhost:6404/undefinedapi/room/leaveroom/?roomId=1&userId=2; FilePath: /undefinedapi/room/leaveroom/
+ERROR 2014-03-21 18:04:56,857 304849ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): The controller for path '/undefinedapi/room/leaveroom/' was not found or does not implement IController.
+   at System.Web.Mvc.DefaultControllerFactory.GetControllerInstance(RequestContext requestContext, Type controllerType)
+   at System.Web.Mvc.DefaultControllerFactory.CreateController(RequestContext requestContext, String controllerName)
+   at System.Web.Mvc.MvcHandler.ProcessRequestInit(HttpContextBase httpContext, IController& controller, IControllerFactory& factory)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContext httpContext, AsyncCallback callback, Object state)
+   at System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.BeginProcessRequest(HttpContext context, AsyncCallback cb, Object extraData)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+WARN  2014-03-21 18:14:38,058 886050ms Global                 Application_Error  - URL: http://localhost:6404/undefinedapi/room/leaveroom?roomId=1&userId=1; FilePath: /undefinedapi/room/leaveroom
+ERROR 2014-03-21 18:14:38,085 886077ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): The controller for path '/undefinedapi/room/leaveroom' was not found or does not implement IController.
+   at System.Web.Mvc.DefaultControllerFactory.GetControllerInstance(RequestContext requestContext, Type controllerType)
+   at System.Web.Mvc.DefaultControllerFactory.CreateController(RequestContext requestContext, String controllerName)
+   at System.Web.Mvc.MvcHandler.ProcessRequestInit(HttpContextBase httpContext, IController& controller, IControllerFactory& factory)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContext httpContext, AsyncCallback callback, Object state)
+   at System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.BeginProcessRequest(HttpContext context, AsyncCallback cb, Object extraData)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+WARN  2014-03-21 18:15:24,927 932920ms Global                 Application_Error  - URL: http://localhost:6404/undefinedapi/room/leaveroom?roomId=1&userId=2; FilePath: /undefinedapi/room/leaveroom
+ERROR 2014-03-21 18:15:24,930 932923ms Global                 Application_Error  - Application_Error
+System.Web.HttpException (0x80004005): The controller for path '/undefinedapi/room/leaveroom' was not found or does not implement IController.
+   at System.Web.Mvc.DefaultControllerFactory.GetControllerInstance(RequestContext requestContext, Type controllerType)
+   at System.Web.Mvc.DefaultControllerFactory.CreateController(RequestContext requestContext, String controllerName)
+   at System.Web.Mvc.MvcHandler.ProcessRequestInit(HttpContextBase httpContext, IController& controller, IControllerFactory& factory)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)
+   at System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContext httpContext, AsyncCallback callback, Object state)
+   at System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.BeginProcessRequest(HttpContext context, AsyncCallback cb, Object extraData)
+   at System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+INFO  2014-03-21 18:28:10,314   204ms Global                 Application_Start  - Application_Start()
