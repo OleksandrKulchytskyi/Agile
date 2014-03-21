@@ -66,7 +66,7 @@
 			jQuery.browser.chrome = false;
 			jQuery.browser.opera = false;
 			jQuery.browser.version = 0;
-			jQuery.browser.fullVersion="";
+			jQuery.browser.fullVersion = "";
 
 			if (navigator.userAgent.match(/MSIE ([0-9]+)\./)) {
 				jQuery.browser.msie = true;
@@ -278,11 +278,29 @@ var agileHub = $.connection.agileHub;
 //	alert("Handler for .unload() called.");
 //});
 
-window.onbeforeunload = function () {
-	if ($.browser !== undefined)
-		console.log($.browser);
-	return "Are you sure you want to navigate away?";
+window.onbeforeunload = function (e) {
+	//e.preventDefault();
+	//e = e || window.event;	
+	//var result = confirm("Are you sure you want to leave room?");
+	//if (result == true) {
+		//agileApp.datacontext.detachUserFromRoom(rId, uId);
+		//window.agileHub.server.leaveRoom($("#roomName").val(), "")
+		//		.fail(function (e) { console.log(e); });
+	//}
+	//return result;
+	return "Are you sure you want to leave room?";
 }
+
+$(window).unload(function () {
+	var rId = $("#roomId").val();
+	var uId = $("#userId").val();
+	var myUrl = window.agileApp.baseAddress+'/api/room/leaveroom/?roomId=' + rId + '&userId=' + uId;
+	$.ajax({
+		type: 'PUT',
+		url: myUrl,
+		async: false
+	});
+});
 
 //Multiple methods added to proxy in JavaScript using jQuery: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //$.extend(agileHub.server, {
@@ -303,9 +321,9 @@ $.connection.hub.start({ transport: ['webSockets', 'longPolling'] }, onConnectio
 						window.agileApp.notifyService.error("Could not connect to the hub service!" + ex.message, null, true);
 				});
 
-function onConnectionStarted(){
-	if(window.agileApp.notifyService !== undefined)
-	window.agileApp.notifyService.success("Hub connection is started!", null, true);
+function onConnectionStarted() {
+	if (window.agileApp.notifyService !== undefined)
+		window.agileApp.notifyService.success("Hub connection is started!", null, true);
 }
 
 // Handle connection loss and reconnect in a robust way

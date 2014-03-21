@@ -74,7 +74,7 @@ window.agileApp.notifyService = (function () {
 			toastr.options = {
 				"closeButton": true,
 				"debug": false,
-				"positionClass": "toast-bottom-full-width",
+				"positionClass": "toast-top-right",
 				"onclick": null,
 				"showDuration": "300",
 				"hideDuration": "1000",
@@ -95,7 +95,7 @@ window.agileApp.notifyService = (function () {
 			toastr.options = {
 				"closeButton": true,
 				"debug": false,
-				"positionClass": "toast-bottom-full-width",
+				"positionClass": "toast-top-full-width",
 				"onclick": null,
 				"showDuration": "300",
 				"hideDuration": "1000",

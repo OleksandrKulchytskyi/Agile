@@ -98,6 +98,11 @@ namespace WebSignalR.Hubs
 			if (!Context.User.Identity.IsAuthenticated)
 				return null;
 
+			try
+			{
+				_sessionServ.UpdateSessionActivity(Context.ConnectionId);
+			}
+			catch (Exception ex) { Global.Logger.Error(ex); }
 			Clients.Caller.onStatus("Reconnecting...").Wait();
 			return base.OnReconnected();
 		}
@@ -233,6 +238,26 @@ namespace WebSignalR.Hubs
 		{
 			_roomService.ChangeRoomState(roomName, state);
 			Room room = GetRepository<Room>().Get(x => x.Name == roomName).FirstOrDefault();
+			IRepository<VoteItem> voteRepo = GetRepository<VoteItem>();
+
+			if (room.ItemsToVote != null && state)//in case whe we open room clear all previous user votes
+			{
+				foreach (VoteItem item in room.ItemsToVote)
+				{
+					item.Opened = false;
+					item.Closed = false;
+					if (item.VotedUsers != null)
+						item.VotedUsers.Clear();
+					voteRepo.Update(item);
+				}
+			}
+			try { _unity.Commit(); }
+			catch (Exception ex)
+			{
+				Global.Logger.Error(ex);
+				Clients.Caller.onErrorHandler(ex.Message);
+			}
+
 			RoomDto dto = Mapper.Map<RoomDto>(room);
 			return Clients.Group(roomName).onRoomStateChanged(dto);
 		}
