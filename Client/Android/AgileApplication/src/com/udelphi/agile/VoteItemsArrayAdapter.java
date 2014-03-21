@@ -3,6 +3,7 @@ package com.udelphi.agile;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
@@ -52,6 +53,12 @@ public class VoteItemsArrayAdapter extends ArrayAdapter<VoteItem> {
 		if (vote == null)
 			Log.d("VoteItems adapter", "Vote is null");
 
+		if (vote.Opened && !vote.Closed)
+			view.setBackgroundResource(R.drawable.item_opened_bg);
+		
+		if (vote.Closed && !vote.Opened)
+			view.setBackgroundResource(R.drawable.item_closed_bg);
+			
 		contentView.setText(vote.Content);
 		markView.setText(String.valueOf(vote.OveralMark));
 

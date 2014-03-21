@@ -7,10 +7,12 @@ import org.json.*;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.*;
@@ -47,6 +49,7 @@ public class RoomActivity extends BaseActivity implements IOnRoomStateListener,
 		_votesAdapter = new VoteItemsArrayAdapter(getBaseContext(), _voteList);
 		listView = (ListView) findViewById(R.id.voteItemsList);
 		listView.setAdapter(_votesAdapter);
+		listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 	}
 
 	@Override
@@ -218,7 +221,7 @@ public class RoomActivity extends BaseActivity implements IOnRoomStateListener,
 	}
 
 	@Override
-	public void onVoteItemOpened(VoteItem state) {
+	public synchronized void onVoteItemOpened(VoteItem state) {
 		if (state == null)
 			return;
 
@@ -229,12 +232,12 @@ public class RoomActivity extends BaseActivity implements IOnRoomStateListener,
 			listItem.Opened = state.Opened;
 		}
 
-		if (indx != -1) {
-			View v = listView.getChildAt(indx);
-			if (v != null) {
-				v.setBackgroundColor(Color.GREEN);
-			}
-		}
+//		if (indx != -1) {
+//			View v = listView.getChildAt(indx);
+//			if (v != null) {
+//				v.setBackgroundColor(Color.GREEN);
+//			}
+//		}
 		_votesAdapter.notifyDataSetChanged();
 	}
 

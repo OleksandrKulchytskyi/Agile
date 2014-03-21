@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Activity which displays a login screen to the user
@@ -230,18 +231,24 @@ public class LoginActivity extends BaseActivity {
 	 * Represents an asynchronous login/registration task used to authenticate
 	 * the user.
 	 */
-	public class UserLoginTask extends AsyncTask<String, Void, Boolean> {
+	public class UserLoginTask extends AsyncTask<String, Void, Integer> {
+
+		Exception occurredExc;
+
 		@Override
-		protected Boolean doInBackground(String... params) {
+		protected Integer doInBackground(String... params) {
 			CookieStore sCookieStore;
+			occurredExc = null;
+			Integer result = 0;
 			try {
 				String logInformation = "";
 				for (String logInfo : params) {
 					logInformation = logInfo;
 					break;
 				}
-				if (logInformation.isEmpty())
-					return false;
+				if (logInformation.isEmpty()) {
+					return 1;
+				}
 
 				AgileApplication.container.put("ServerUrl", mUrl);
 
@@ -264,10 +271,17 @@ public class LoginActivity extends BaseActivity {
 				sCookieStore = ((AbstractHttpClient) client).getCookieStore();
 				if (sCookieStore != null) {
 					List<Cookie> cookies = sCookieStore.getCookies();
+					boolean found = false;
 					for (Cookie c : cookies) {
-						AgileApplication.container.put(".ASPXAUTH",
-								c.getValue());
+						if (c.getName().equalsIgnoreCase(".ASPXAUTH")) {
+							AgileApplication.container.put(".ASPXAUTH",
+									c.getValue());
+							found = true;
+							break;
+						}
 					}
+					if (!found)
+						return 1;
 				}
 				HttpEntity resEntityGet = responseGet.getEntity();
 				if (resEntityGet != null) {
@@ -275,37 +289,60 @@ public class LoginActivity extends BaseActivity {
 					Log.d("Status", status.toString());
 
 					if (status.getStatusCode() == 200) {
-						AgileApplication.container.put("IsLogged", true);
-					} else {
+						result = 0;
+					} else if (status.getStatusCode() == 401) {
+						result = 1;
 						Log.e("Statuscode",
 								String.valueOf(status.getStatusCode()));
-
-						AgileApplication.container.put("IsLogged", false);
-					}
-					responseGet.getHeaders(".ASPXAUTH");
-				}
-			} catch (Exception e) {
-				Log.e("GET ", e.getMessage());
-				return false;
+					} else if (status.getStatusCode() == 404) {
+						result = 2;
+						Log.e("Statuscode",
+								String.valueOf(status.getStatusCode()));
+					} else
+						result = 3;
+				} else
+					result = 1;
+			} catch (Exception exc) {
+				result = 2;
+				occurredExc = exc;
+				Log.e("GET ", exc.getMessage());
 			}
-			return true;
+
+			return result;
 		}
 
 		@Override
-		protected void onPostExecute(final Boolean success) {
-			mAuthTask = null;
-			showProgress(false);
+		protected void onPostExecute(final Integer loginResult) {
 
-			if (!success) {
+			Log.d("Login result is", String.valueOf(loginResult));
+			if (loginResult == 0)
+				AgileApplication.container.put("IsLogged", true);
+			else if (loginResult == 1) {
+				AgileApplication.container.put("IsLogged", false);
+				mEmailView.setError(getString(R.string.error_invalid_email));
 				mPasswordView
 						.setError(getString(R.string.error_incorrect_password));
 				mPasswordView.requestFocus();
+			} else if (loginResult == 2) {
+				AgileApplication.container.put("IsLogged", false);
+				mUrlView.requestFocus();
+				if (occurredExc != null) {
+					Toast.makeText(getBaseContext(), occurredExc.getMessage(),
+							Toast.LENGTH_SHORT).show();
+				}
+			} else if (loginResult == 3) {
+				AgileApplication.container.put("IsLogged", false);
+				Log.d("Unknown response result", "Login result is 3");
 			}
+
+			showProgress(false);
+			mAuthTask = null;
 		}
 
 		@Override
 		protected void onCancelled() {
 			mAuthTask = null;
+			AgileApplication.container.put("IsLogged", false);
 			showProgress(false);
 		}
 	}
