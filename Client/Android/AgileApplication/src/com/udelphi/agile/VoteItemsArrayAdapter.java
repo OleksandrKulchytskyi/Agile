@@ -53,10 +53,9 @@ public class VoteItemsArrayAdapter extends ArrayAdapter<VoteItem> {
 		if (vote == null)
 			Log.d("VoteItems adapter", "Vote is null");
 
-		if (vote.Opened && !vote.Closed)
+		if (vote.Opened)
 			view.setBackgroundResource(R.drawable.item_opened_bg);
-		
-		if (vote.Closed && !vote.Opened)
+		else if (vote.Closed)
 			view.setBackgroundResource(R.drawable.item_closed_bg);
 			
 		contentView.setText(vote.Content);
