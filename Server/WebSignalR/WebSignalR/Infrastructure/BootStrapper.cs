@@ -25,25 +25,25 @@ namespace WebSignalR.Infrastructure
 		private const string SqlClient = "System.Data.SqlClient";
 		private static int purgeTime = ConfigurationManager.AppSettings["Sessions.PurgeTime"].ParseInt(55);
 
-		internal static IKernel Kernel = null;
+		internal static IServiceLocator serviceLocator;
+
 		private static IDependencyResolver _signalrResolver = null;
 
 		public static void PreAppStart()
 		{
-			var kernel = new StandardKernel();
+			serviceLocator = Services.ServiceLocator.Default;
+			serviceLocator.InitBindings(IniDIContainer);
 
-			IniDIContainer(kernel);
-
-			Kernel = kernel;
-			_signalrResolver = new DependencyResolvers.NinjectSignalRDependencyResolver(kernel);
+			
+			_signalrResolver = new DependencyResolvers.NinjectSignalRDependencyResolver(serviceLocator.Kernel);
 			App_Start.SignalRConfig.Register(_signalrResolver);
 
-			System.Web.Mvc.DependencyResolver.SetResolver(new DependencyResolvers.NInjectMvcDependencyResolver(kernel));
-			var unityFactory = new Func<IUnityOfWork>(() => kernel.Get<IUnityOfWork>());
+			System.Web.Mvc.DependencyResolver.SetResolver(new DependencyResolvers.NInjectMvcDependencyResolver(serviceLocator.Kernel));
+			var unityFactory = new Func<IUnityOfWork>(() => serviceLocator.Kernel.Get<IUnityOfWork>());
 			_timerClaen = new Timer(_ => Sweep(unityFactory, _signalrResolver), null, _sweepInterval, _sweepInterval);
 		}
 
-		private static void IniDIContainer(StandardKernel kernel)
+		private static void IniDIContainer(IKernel kernel)
 		{
 			kernel.Bind<System.Web.Mvc.IControllerActivator>().To<DependencyResolvers.NinjectMvcControllerActivator>();
 

@@ -10,9 +10,9 @@ namespace WebSignalR.DependencyResolvers
 	/// </summary>
 	public class NInjectMvcDependencyResolver : IDependencyResolver
 	{
-		private StandardKernel _kernel;
+		private IKernel _kernel;
 
-		public NInjectMvcDependencyResolver(StandardKernel kernel)
+		public NInjectMvcDependencyResolver(IKernel kernel)
 		{
 			_kernel = kernel;
 		}
