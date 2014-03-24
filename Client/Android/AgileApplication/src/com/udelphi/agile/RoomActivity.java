@@ -245,6 +245,7 @@ public class RoomActivity extends BaseActivity implements IOnRoomStateListener,
 		if (listItem != null) {
 			listItem.Closed = state.Closed;
 			listItem.Opened = state.Opened;
+			listItem.OveralMark = state.OveralMark;
 		}
 		_votesAdapter.notifyDataSetChanged();
 	}
