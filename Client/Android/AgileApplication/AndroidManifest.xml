@@ -35,6 +35,14 @@
             android:name="com.udelphi.agile.RoomActivity"
             android:label="@string/title_activity_room" >
         </activity>
+        <activity
+            android:name="com.udelphi.agile.VoteItemActivity"
+            android:label="@string/title_activity_vote_item"
+            android:parentActivityName="com.udelphi.agile.RoomActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.udelphi.agile.RoomActivity" />
+        </activity>
     </application>
 
 </manifest>
