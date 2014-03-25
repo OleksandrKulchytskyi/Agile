@@ -1,5 +1,6 @@
 ﻿using Ninject;
 using System;
+using System.Linq;
 using WebSignalR.Common.Interfaces;
 
 namespace WebSignalR.Infrastructure.Services
@@ -25,6 +26,7 @@ namespace WebSignalR.Infrastructure.Services
 			public DefaultServiceLocator()
 			{
 				kernel = new StandardKernel();
+				//kernel.Components.Add<Ninject.Planning.Bindings.Resolvers.IMissingBindingResolver, DefaultImplBindingResolver>();
 			}
 
 			public T Get<T>()
@@ -48,5 +50,24 @@ namespace WebSignalR.Infrastructure.Services
 				return kernel.Get<T>(named);
 			}
 		}
+
+		private class DefaultImplBindingResolver : Ninject.Components.NinjectComponent, Ninject.Planning.Bindings.Resolvers.IMissingBindingResolver
+		{
+			public System.Collections.Generic.IEnumerable<Ninject.Planning.Bindings.IBinding> Resolve(Ninject.Infrastructure.Multimap<Type, Ninject.Planning.Bindings.IBinding> bindings, Ninject.Activation.IRequest request)
+			{
+				var service = request.Service;
+				if (!service.IsInterface || !service.Name.StartsWith("I"))
+					return Enumerable.Empty<Ninject.Planning.Bindings.IBinding>();
+
+				return new[] { new Ninject.Planning.Bindings.Binding(service) { ProviderCallback = Ninject.Activation.Providers.StandardProvider.GetCreationCallback(GetDefaultImplementation(service)) } };
+			}
+
+			private Type GetDefaultImplementation(Type service)
+			{
+				var typeName = string.Format("{0}.{1}", service.Namespace, service.Name.TrimStart('I'));
+				return Type.GetType(typeName);
+			}
+		}
+
 	}
 }
