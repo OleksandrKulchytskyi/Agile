@@ -6,14 +6,18 @@ import org.json.*;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.*;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.udelphi.agile.common.*;
 import com.zsoft.signala.hubs.HubInvokeCallback;
@@ -48,6 +52,14 @@ public class RoomActivity extends BaseActivity implements IOnRoomStateListener,
 		listView = (ListView) findViewById(R.id.voteItemsList);
 		listView.setAdapter(_votesAdapter);
 		listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+		listView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				VoteItem vi = (VoteItem) arg0.getAdapter().getItem(arg2) ; //listView.getItemAtPosition(arg2);
+				if (vi.Opened)
+					startActivity(new Intent(RoomActivity.this, VoteItemActivity.class));
+			}
+		});
 	}
 
 	@Override
@@ -181,13 +193,6 @@ public class RoomActivity extends BaseActivity implements IOnRoomStateListener,
 				if (indx != -1) {
 					VoteItem server = roomState.ItemsToVote.get(indx);
 					v.copyPartialState(server);
-					View view = listView.getChildAt(_voteList.indexOf(v));
-					if (view != null) {
-						if (v.Opened)
-							view.setBackgroundColor(Color.GREEN);
-						if (v.Closed)
-							view.setBackgroundColor(Color.LTGRAY);
-					}
 				}
 			}
 		}
@@ -229,13 +234,6 @@ public class RoomActivity extends BaseActivity implements IOnRoomStateListener,
 			listItem.Closed = state.Closed;
 			listItem.Opened = state.Opened;
 		}
-
-		if (indx != -1) {
-			View v = listView.getChildAt(indx);
-			if (v != null) {
-				v.setBackgroundColor(Color.GREEN);
-			}
-		}
 		_votesAdapter.notifyDataSetChanged();
 	}
 
@@ -249,13 +247,7 @@ public class RoomActivity extends BaseActivity implements IOnRoomStateListener,
 		if (listItem != null) {
 			listItem.Closed = state.Closed;
 			listItem.Opened = state.Opened;
-		}
-
-		if (indx != -1) {
-			View v = listView.getChildAt(indx);
-			if (v != null) {
-				v.setBackgroundColor(Color.LTGRAY);
-			}
+			listItem.OveralMark = state.OveralMark;
 		}
 		_votesAdapter.notifyDataSetChanged();
 	}
