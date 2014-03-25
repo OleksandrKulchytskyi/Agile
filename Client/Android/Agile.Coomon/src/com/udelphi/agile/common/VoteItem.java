@@ -13,6 +13,7 @@ public class VoteItem {
 
 	public boolean Opened;
 	public boolean Closed;
+	public boolean Finished;
 
 	public String Content;
 	public int OveralMark;

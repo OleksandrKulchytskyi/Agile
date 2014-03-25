@@ -14,6 +14,7 @@ namespace WebSignalR.DataAccess.Mappings
 
 			this.Property(v => v.Closed).HasColumnName("Closed").IsRequired();
 			this.Property(v => v.Opened).HasColumnName("Opened").IsRequired();
+			this.Property(v => v.Finished).HasColumnName("Finished").IsRequired();
 
 			this.HasRequired(x => x.HostRoom).WithMany(x => x.ItemsToVote).HasForeignKey(x => x.RoomId);
 		}

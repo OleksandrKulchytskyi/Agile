@@ -44,6 +44,14 @@ namespace WebSignalR.Common.Entities
 			set { isOpened = value; OnPropChanged("Opened"); }
 		}
 
+		private bool isFinished;
+
+		public bool Finished
+		{
+			get { return isFinished; }
+			set { isFinished = value; OnPropChanged("Finished"); }
+		}
+
 		public int? RoomId { get; set; }
 
 		public virtual Room HostRoom { get; set; }

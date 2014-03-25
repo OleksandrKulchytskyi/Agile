@@ -55,7 +55,9 @@ public class RoomActivity extends BaseActivity implements IOnRoomStateListener,
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				startActivity(new Intent(RoomActivity.this, VoteItemActivity.class));
+				VoteItem vi = (VoteItem) arg0.getAdapter().getItem(arg2) ; //listView.getItemAtPosition(arg2);
+				if (vi.Opened)
+					startActivity(new Intent(RoomActivity.this, VoteItemActivity.class));
 			}
 		});
 	}
