@@ -332,27 +332,31 @@ namespace WebSignalR.Hubs
 			IRepository<User> repoUser = GetRepository<User>();
 			IRepository<UserVote> userVorePero = GetRepository<UserVote>();
 
-			VoteItem vote = repo.Get(x => x.Id == voteItemId).FirstOrDefault();
+			VoteItem voteItem = repo.Get(x => x.Id == voteItemId).FirstOrDefault();
 			User usr = repoUser.Get(x => x.Name == Context.User.Identity.Name).FirstOrDefault();
 			UserVoteDto userVoteDto = null;
-			if (vote != null && usr != null && vote.Opened)
+			if (voteItem != null && usr != null && voteItem.Opened)
 			{
 				UserVote uv = new UserVote();
 				uv.UserId = usr.Id;
-				uv.VoteId = vote.Id;
+				uv.VoteId = voteItem.Id;
 				uv.Mark = mark;
 				userVorePero.Add(uv);
 
-				vote.VotedUsers.Add(uv);
-
+				voteItem.VotedUsers.Add(uv);
 				_unity.Commit();
 				_sessionServ.UpdateSessionActivity(Context.ConnectionId);
 				userVoteDto = Mapper.Map<UserVoteDto>(uv);
-				return Clients.Group(room).onUserVoted(userVoteDto);
+				Task resultTask = Clients.Group(room).onUserVoted(userVoteDto);
+				if (voteItem.VotedUsers.Count == voteItem.HostRoom.ConnectedUsers.Count) //TODO: check logic related to the vote finished event here 
+				{
+					Clients.Group(room).onVoteFinished(voteItem);
+				}
+				return resultTask;
 			}
 			else
 			{
-				if (vote != null && !vote.Opened)
+				if (voteItem != null && !voteItem.Opened)
 					return Clients.Caller.onErrorHandler("Cannot submit vote for non-opend vote item.");
 			}
 
