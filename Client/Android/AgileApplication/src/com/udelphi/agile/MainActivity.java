@@ -22,7 +22,10 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.CheckBox;
 import android.widget.Spinner;
+
 import com.udelphi.agile.common.*;
+import com.zsoft.signala.ConnectionState;
+import com.zsoft.signala.transport.StateBase;
 
 public class MainActivity extends BaseActivity implements
 		OnConnectionRequestedListener, IOnUserStateLoggedListener {
@@ -140,6 +143,7 @@ public class MainActivity extends BaseActivity implements
 					}
 				}
 				roomAdapter.notifyDataSetChanged();
+				//roomAdapter = new RoomAdapter(getBaseContext(), R.layout.room_item, rooms);
 			}
 		}
 	}
@@ -162,7 +166,6 @@ public class MainActivity extends BaseActivity implements
 			Intent navIntent = new Intent(getBaseContext(), RoomActivity.class);
 			startActivity(navIntent);
 		}
-
 	}
 
 	private void showProgress(final boolean show) {
@@ -202,6 +205,8 @@ public class MainActivity extends BaseActivity implements
 		Log.d("onStateCallback",
 				"Is state null:" + String.valueOf(state == null));
 		AgileApplication.container.put(SessionState.class.getName(), state);
+		//make 'Start' button enabled
+		findViewById(R.id.start_room_button).setEnabled(true);
 	}
 
 	@Override
@@ -218,5 +223,4 @@ public class MainActivity extends BaseActivity implements
 			}
 		}
 	}
-
 }
