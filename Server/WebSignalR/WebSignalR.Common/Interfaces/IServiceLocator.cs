@@ -1,8 +1,5 @@
 ﻿using Ninject;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace WebSignalR.Common.Interfaces
 {
@@ -11,6 +8,7 @@ namespace WebSignalR.Common.Interfaces
 		IKernel Kernel { get; }
 
 		void InitBindings(Action<IKernel> initializer);
+		void LoadModule(string path);
 
 		T Get<T>();
 		T Get<T>(string named);

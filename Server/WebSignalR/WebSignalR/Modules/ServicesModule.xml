@@ -1,0 +1,27 @@
+﻿<module name="ServicesModule">
+
+	<bind service="WebSignalR.Common.Interfaces.IEntityValidator, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+	to="WebSignalR.Common.Infrastructure.UserCredentialsValidator, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+	name="CredentialsValidator"/>
+
+	<bind service="WebSignalR.Common.Interfaces.IPrincipalProvider, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+		  to="WebSignalR.Infrastructure.Services.FormsPrincipalProvider, WebSignalR, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+		  scope="singleton"/>
+
+	<bind service="WebSignalR.Common.Interfaces.ICryptoService, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+			  to="WebSignalR.Common.Infrastructure.CryptoService, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
+
+	<bind service="WebSignalR.Common.Interfaces.IKeyProvider, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+			  to="WebSignalR.Common.Infrastructure.FileBasedKeyProvider, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
+
+	<bind service="WebSignalR.Common.Interfaces.IVotesProvider, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+			  to="WebSignalR.Infrastructure.FileBasedVotesProvider, WebSignalR, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+		  name="FileBased"/>
+
+	<bind service="WebSignalR.Common.Services.IUserRoomService, WebSignalR.Common,Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+		   to="WebSignalR.Infrastructure.UserRoomService, WebSignalR, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
+
+	<bind service="WebSignalR.Common.Services.ISessionService, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+		   to="WebSignalR.Infrastructure.Services.SessionService, WebSignalR, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
+
+</module>

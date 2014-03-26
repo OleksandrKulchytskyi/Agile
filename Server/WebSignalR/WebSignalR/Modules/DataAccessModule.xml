@@ -1,0 +1,28 @@
+﻿
+<module name="DataAccessModule">
+
+	<bind service="WebSignalR.Common.Interfaces.IContext, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+	  to="WebSignalR.DataAccess.DB.DatabaseContext, WebSignalR.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+
+	<bind service="WebSignalR.DataAccess.DB.DatabaseContext, WebSignalR.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+	  to="WebSignalR.DataAccess.DB.DatabaseContext, WebSignalR.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+
+	<bind service="WebSignalR.DataAccess.Repositories.IRoomRepository, WebSignalR.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+	  to="WebSignalR.DataAccess.Repositories.RoomRepository, WebSignalR.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+
+	<bind service="WebSignalR.DataAccess.Repositories.IUserRepository, WebSignalR.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+	  to="WebSignalR.DataAccess.Repositories.UserRepository, WebSignalR.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+	
+	<bind service="WebSignalR.DataAccess.Repositories.ISessionRepository, WebSignalR.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+	  to="WebSignalR.DataAccess.Repositories.SessionRepository, WebSignalR.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+
+	<bind service="WebSignalR.DataAccess.Repositories.IPrivilegeRepository, WebSignalR.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+	  to="WebSignalR.DataAccess.Repositories.PrvilegeRepository, WebSignalR.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+
+	<bind service="WebSignalR.DataAccess.Repositories.IVoteItemRepository, WebSignalR.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+	  to="WebSignalR.DataAccess.Repositories.VoteItemRepository, WebSignalR.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+
+	<bind service="WebSignalR.DataAccess.Repositories.IUserVoteRepository, WebSignalR.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+	  to="WebSignalR.DataAccess.Repositories.UserVoteRepository, WebSignalR.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+
+</module>

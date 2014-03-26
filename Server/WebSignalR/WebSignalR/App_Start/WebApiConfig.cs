@@ -25,8 +25,9 @@ namespace WebSignalR
 			config.DependencyResolver = new DependencyResolvers.NinjectWebApiDependencyResolver(BootStrapper.serviceLocator.Kernel);
 			//config.Services.Replace(typeof(System.Web.Http.Dispatcher.IHttpControllerActivator),new Activators.CustomApiActivator());
 			config.Services.Replace(typeof(System.Web.Http.Tracing.ITraceWriter), new Infrastructure.DynamicTrace());
+			config.Filters.Add(new Infrastructure.Filters.WebApiExceptionFilter());
 
-			#region formatting
+			#region Formatting
 
 			var xmlFormatter = GlobalConfiguration.Configuration.Formatters.Where(f =>
 			{
