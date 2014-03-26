@@ -21,6 +21,7 @@ namespace WebSignalR.DataAccess.DB
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
+			#region commented
 			//var typesToRegister = Assembly.GetExecutingAssembly().GetTypes()
 			//					.Where(type => !String.IsNullOrEmpty(type.Namespace))
 			//					.Where(type => type.BaseType != null && !type.BaseType.IsGenericType &&
@@ -29,7 +30,8 @@ namespace WebSignalR.DataAccess.DB
 			//{
 			//	dynamic configurationInstance = Activator.CreateInstance(type);
 			//	modelBuilder.Configurations.Add(configurationInstance);
-			//}
+			//} 
+			#endregion
 
 			modelBuilder.Configurations.Add(new RoomMap());
 			modelBuilder.Configurations.Add(new UserMap());

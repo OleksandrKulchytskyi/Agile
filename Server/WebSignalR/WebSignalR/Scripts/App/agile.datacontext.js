@@ -115,6 +115,7 @@ window.agileApp.datacontext = (function () {
 		console.log("Ajax request to the url: ".concat(url));
 
 		var options = {
+			//async:false,
 			dataType: dataType || "json",
 			contentType: "application/json",
 			cache: false,

@@ -105,7 +105,7 @@ namespace WebSignalR.Handlers
 				FormsAuthenticationTicket ticket;
 				UserDto userDto = null;
 
-				using (IUnityOfWork unity = Infrastructure.BootStrapper.Kernel.Get<IUnityOfWork>())
+				using (IUnityOfWork unity = Infrastructure.BootStrapper.serviceLocator.Get<IUnityOfWork>())
 				{
 					IReadOnlyRepository<User> repo = unity.GetRepository<User>();
 					User validatedUser = repo.Get(x => x.Name == strUser).FirstOrDefault();
@@ -119,7 +119,7 @@ namespace WebSignalR.Handlers
 				HttpCookie cookie = new HttpCookie(Infrastructure.Constants.FormsAuthKey, strEncryptedTicket);
 				cookie.HttpOnly = true;//TODO: check cookie settings here!!!
 				context.Response.Cookies.Add(cookie);
-				IPrincipalProvider provider = BootStrapper.Kernel.Get<IPrincipalProvider>();
+				IPrincipalProvider provider = BootStrapper.serviceLocator.Get<IPrincipalProvider>();
 				System.Security.Principal.IPrincipal principal = provider.CreatePrincipal(ticket);
 				if (principal is CustomPrincipal)
 				{
@@ -135,7 +135,7 @@ namespace WebSignalR.Handlers
 
 		private bool CheckPassword(string username, string password)
 		{
-			IEntityValidator validator = Infrastructure.BootStrapper.Kernel.Get<IEntityValidator>("CredentialsValidator");
+			IEntityValidator validator = Infrastructure.BootStrapper.serviceLocator.Get<IEntityValidator>("CredentialsValidator");
 			bool result = false;
 			if (validator != null)
 			{

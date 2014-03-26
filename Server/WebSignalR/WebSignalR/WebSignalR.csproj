@@ -80,11 +80,16 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject">
-      <HintPath>..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Ninject.3.2.0.0\lib\net40\Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject.Web.Common">
-      <HintPath>..\packages\Ninject.Web.Common.3.0.0.7\lib\net40-full\Ninject.Web.Common.dll</HintPath>
+    <Reference Include="Ninject.Extensions.Xml">
+      <HintPath>..\packages\Ninject.Extensions.Xml.3.2.0.0\lib\net40\Ninject.Extensions.Xml.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.Common, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Ninject.Web.Common.3.2.0.0\lib\net40-full\Ninject.Web.Common.dll</HintPath>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -148,8 +153,8 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
-    <Reference Include="WebActivator">
-      <HintPath>..\packages\WebActivator.1.5.3\lib\net40\WebActivator.dll</HintPath>
+    <Reference Include="WebActivatorEx">
+      <HintPath>..\packages\WebActivatorEx.2.0.5\lib\net40\WebActivatorEx.dll</HintPath>
     </Reference>
     <Reference Include="WebGrease">
       <HintPath>..\packages\WebGrease.1.3.0\lib\WebGrease.dll</HintPath>
@@ -238,6 +243,10 @@
     <Content Include="Global.asax" />
     <None Include="Properties\PublishProfiles\Work.pubxml" />
     <Content Include="index.html" />
+    <Content Include="Modules\DataAccessModule.xml" />
+    <Content Include="Modules\ServicesModule.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Scripts\App\account.rolesVM.js" />
     <Content Include="Scripts\App\agile.roomactivityVM.js" />
     <Content Include="Scripts\App\jquery.contextMenu.js" />
@@ -322,8 +331,10 @@
     <Compile Include="Infrastructure\DynamicTrace.cs" />
     <Compile Include="Infrastructure\FileBasedVotesProvider.cs" />
     <Compile Include="Infrastructure\Filters\ValidateHttpAntiForgeryTokenAttribute.cs" />
+    <Compile Include="Infrastructure\Filters\WebApiExceptionFilter.cs" />
     <Compile Include="Infrastructure\ObjectExtensions.cs" />
     <Compile Include="Infrastructure\Services\FormsPrincipalProvider.cs" />
+    <Compile Include="Infrastructure\Services\ServiceLocator.cs" />
     <Compile Include="Infrastructure\Services\UserRoomService.cs" />
     <Compile Include="Infrastructure\Services\SessionService.cs" />
     <Compile Include="Infrastructure\SessionState.cs" />
@@ -370,7 +381,9 @@
       <Name>WebSignalR.DataAccess</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

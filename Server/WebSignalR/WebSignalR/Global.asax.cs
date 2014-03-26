@@ -91,7 +91,7 @@ namespace WebSignalR
 			IPrincipal usr = HttpContext.Current.User; // If we are dealing with an authenticated forms authentication request
 			if (usr.Identity.IsAuthenticated && usr.Identity.AuthenticationType == "Forms")
 			{
-				var provider = BootStrapper.Kernel.Get<IPrincipalProvider>();
+				var provider = BootStrapper.serviceLocator.Get<IPrincipalProvider>();
 				IPrincipal p = provider.CreatePrincipal(usr.Identity as FormsIdentity);
 				HttpContext.Current.User = p;
 				Thread.CurrentPrincipal = p;

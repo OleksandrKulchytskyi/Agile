@@ -45,6 +45,10 @@
       <HintPath>..\packages\EntityFramework.6.0.2\lib\net40\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Ninject.3.2.0.0\lib\net40\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -99,6 +103,7 @@
     <Compile Include="Interfaces\IPrincipalProvider.cs" />
     <Compile Include="Interfaces\IReadOnlyRepository.cs" />
     <Compile Include="Interfaces\IService.cs" />
+    <Compile Include="Interfaces\IServiceLocator.cs" />
     <Compile Include="Interfaces\IUnityOfWork.cs" />
     <Compile Include="Interfaces\IVotesProvider.cs" />
     <Compile Include="IObjectState.cs" />
@@ -106,7 +111,7 @@
     <Compile Include="Services\IRoomService.cs" />
     <Compile Include="Services\IUserRoomService.cs" />
     <Compile Include="Services\IVoteService.cs" />
-	<Compile Include="Services\ISessionService.cs" />
+    <Compile Include="Services\ISessionService.cs" />
     <Compile Include="ViewModels\ChangePasswordViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\RegisterViewModel.cs" />

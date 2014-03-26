@@ -1,5 +1,5 @@
-[assembly: WebActivator.PreApplicationStartMethod(typeof(WebSignalR.App_Start.NinjectWebCommon), "Start")]
-[assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(WebSignalR.App_Start.NinjectWebCommon), "Stop")]
+[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(WebSignalR.App_Start.NinjectWebCommon), "Start")]
+[assembly: WebActivatorEx.ApplicationShutdownMethodAttribute(typeof(WebSignalR.App_Start.NinjectWebCommon), "Stop")]
 
 namespace WebSignalR.App_Start
 {
@@ -38,11 +38,19 @@ namespace WebSignalR.App_Start
 		private static IKernel CreateKernel()
 		{
 			var kernel = new StandardKernel();
-			kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
-			kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
+			try
+			{
+				kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
+				kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
 
-			RegisterServices(kernel);
-			return kernel;
+				RegisterServices(kernel);
+				return kernel;
+			}
+			catch
+			{
+				kernel.Dispose();
+				throw;
+			}
 		}
 
 		/// <summary>

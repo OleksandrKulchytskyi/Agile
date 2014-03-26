@@ -98,6 +98,11 @@ namespace WebSignalR.Hubs
 			if (!Context.User.Identity.IsAuthenticated)
 				return null;
 
+			try
+			{
+				_sessionServ.UpdateSessionActivity(Context.ConnectionId);
+			}
+			catch (Exception ex) { Global.Logger.Error(ex); }
 			Clients.Caller.onStatus("Reconnecting...").Wait();
 			return base.OnReconnected();
 		}
@@ -233,6 +238,26 @@ namespace WebSignalR.Hubs
 		{
 			_roomService.ChangeRoomState(roomName, state);
 			Room room = GetRepository<Room>().Get(x => x.Name == roomName).FirstOrDefault();
+			IRepository<VoteItem> voteRepo = GetRepository<VoteItem>();
+
+			if (room.ItemsToVote != null && state)//in case whe we open room clear all previous user votes
+			{
+				foreach (VoteItem item in room.ItemsToVote)
+				{
+					item.Opened = false;
+					item.Closed = false;
+					if (item.VotedUsers != null)
+						item.VotedUsers.Clear();
+					voteRepo.Update(item);
+				}
+			}
+			try { _unity.Commit(); }
+			catch (Exception ex)
+			{
+				Global.Logger.Error(ex);
+				Clients.Caller.onErrorHandler(ex.Message);
+			}
+
 			RoomDto dto = Mapper.Map<RoomDto>(room);
 			return Clients.Group(roomName).onRoomStateChanged(dto);
 		}
@@ -307,27 +332,31 @@ namespace WebSignalR.Hubs
 			IRepository<User> repoUser = GetRepository<User>();
 			IRepository<UserVote> userVorePero = GetRepository<UserVote>();
 
-			VoteItem vote = repo.Get(x => x.Id == voteItemId).FirstOrDefault();
+			VoteItem voteItem = repo.Get(x => x.Id == voteItemId).FirstOrDefault();
 			User usr = repoUser.Get(x => x.Name == Context.User.Identity.Name).FirstOrDefault();
 			UserVoteDto userVoteDto = null;
-			if (vote != null && usr != null && vote.Opened)
+			if (voteItem != null && usr != null && voteItem.Opened)
 			{
 				UserVote uv = new UserVote();
 				uv.UserId = usr.Id;
-				uv.VoteId = vote.Id;
+				uv.VoteId = voteItem.Id;
 				uv.Mark = mark;
 				userVorePero.Add(uv);
 
-				vote.VotedUsers.Add(uv);
-
+				voteItem.VotedUsers.Add(uv);
 				_unity.Commit();
 				_sessionServ.UpdateSessionActivity(Context.ConnectionId);
 				userVoteDto = Mapper.Map<UserVoteDto>(uv);
-				return Clients.Group(room).onUserVoted(userVoteDto);
+				Task resultTask = Clients.Group(room).onUserVoted(userVoteDto);
+				if (voteItem.VotedUsers.Count == voteItem.HostRoom.ConnectedUsers.Count) //TODO: check logic related to the vote finished event here 
+				{
+					Clients.Group(room).onVoteFinished(voteItem);
+				}
+				return resultTask;
 			}
 			else
 			{
-				if (vote != null && !vote.Opened)
+				if (voteItem != null && !voteItem.Opened)
 					return Clients.Caller.onErrorHandler("Cannot submit vote for non-opend vote item.");
 			}
 

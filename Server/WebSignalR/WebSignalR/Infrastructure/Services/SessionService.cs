@@ -42,7 +42,7 @@ namespace WebSignalR.Infrastructure.Services
 			UserSession session = usRepository.Get(x => x.SessionId == sessionId).FirstOrDefault();
 			if (session != null)
 			{
-				session.LastActivity = DateTime.UtcNow;
+				session.SetLastActivityNow();
 				usRepository.Update(session);
 				_unity.Commit();
 			}

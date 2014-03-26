@@ -10,7 +10,7 @@ namespace WebSignalR.Controllers
 		{
 			get
 			{
-				return Infrastructure.BootStrapper.Kernel.Get<IHubConnectionContext>("AgileHub");
+				return Infrastructure.BootStrapper.serviceLocator.Get<IHubConnectionContext>("AgileHub");
 			}
 		}
 	}

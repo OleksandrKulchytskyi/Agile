@@ -14,7 +14,7 @@ using WebSignalR.Common.Services;
 using WebSignalR.DataAccess.DB;
 using WebSignalR.DataAccess.Repositories;
 
-[assembly: WebActivator.PreApplicationStartMethod(typeof(WebSignalR.Infrastructure.BootStrapper), "PreAppStart")]
+[assembly: WebActivatorEx.PreApplicationStartMethod(typeof(WebSignalR.Infrastructure.BootStrapper), "PreAppStart")]
 namespace WebSignalR.Infrastructure
 {
 	public static class BootStrapper
@@ -25,75 +25,58 @@ namespace WebSignalR.Infrastructure
 		private const string SqlClient = "System.Data.SqlClient";
 		private static int purgeTime = ConfigurationManager.AppSettings["Sessions.PurgeTime"].ParseInt(55);
 
-		internal static IKernel Kernel = null;
+		internal static IServiceLocator serviceLocator;
 		private static IDependencyResolver _signalrResolver = null;
 
 		public static void PreAppStart()
 		{
-			var kernel = new StandardKernel();
+			serviceLocator = Services.ServiceLocator.Default;
+			serviceLocator.InitBindings(IniDIContainer);
 
-			IniDIContainer(kernel);
-
-			Kernel = kernel;
-			_signalrResolver = new DependencyResolvers.NinjectSignalRDependencyResolver(kernel);
+			_signalrResolver = new DependencyResolvers.NinjectSignalRDependencyResolver(serviceLocator.Kernel);
 			App_Start.SignalRConfig.Register(_signalrResolver);
 
-			System.Web.Mvc.DependencyResolver.SetResolver(new DependencyResolvers.NInjectMvcDependencyResolver(kernel));
-			var unityFactory = new Func<IUnityOfWork>(() => kernel.Get<IUnityOfWork>());
+			System.Web.Mvc.DependencyResolver.SetResolver(new DependencyResolvers.NInjectMvcDependencyResolver(serviceLocator.Kernel));
+			var unityFactory = new Func<IUnityOfWork>(() => serviceLocator.Kernel.Get<IUnityOfWork>());
 			_timerClaen = new Timer(_ => Sweep(unityFactory, _signalrResolver), null, _sweepInterval, _sweepInterval);
 		}
 
-		private static void IniDIContainer(StandardKernel kernel)
+		private static void IniDIContainer(IKernel kernel)
 		{
 			kernel.Bind<System.Web.Mvc.IControllerActivator>().To<DependencyResolvers.NinjectMvcControllerActivator>();
-
 			kernel.Bind<Microsoft.AspNet.SignalR.Hubs.IHubConnectionContext>().ToMethod(context =>
 						_signalrResolver.Resolve<Microsoft.AspNet.SignalR.Infrastructure.IConnectionManager>().GetHubContext<Hubs.AgileHub>().Clients).
 						Named("AgileHub");
 
-			kernel.Bind<DatabaseContext>().To<DatabaseContext>();
-			kernel.Bind<IContext>().To<DatabaseContext>();
-			kernel.Bind<IRepository<Room>>().To<GenericRepository<Room>>();
-			kernel.Bind<IRepository<User>>().To<GenericRepository<User>>();
-			kernel.Bind<IRepository<UserSession>>().To<GenericRepository<UserSession>>();
-			kernel.Bind<IRepository<Privileges>>().To<GenericRepository<Privileges>>();
-			kernel.Bind<IRepository<VoteItem>>().To<GenericRepository<VoteItem>>();
-			kernel.Bind<IRepository<UserVote>>().To<GenericRepository<UserVote>>();
-
-			kernel.Bind<IEntityValidator>().To<UserCredentialsValidator>().Named("CredentialsValidator");
-			kernel.Bind<IPrincipalProvider>().To<Infrastructure.Services.FormsPrincipalProvider>().InSingletonScope();
+			serviceLocator.LoadModule("~/Modules/DataAccessModule.xml");
 
 			kernel.Bind<IUnityOfWork>().ToMethod(context =>
 			{
-				var room = kernel.Get<IRepository<Room>>();
-				var user = kernel.Get<IRepository<User>>();
-				var session = kernel.Get<IRepository<UserSession>>();
-				var privileges = kernel.Get<IRepository<Privileges>>();
-				var vote = kernel.Get<IRepository<VoteItem>>();
-				var uv = kernel.Get<IRepository<UserVote>>();
+				IRoomRepository room = kernel.Get<IRoomRepository>();
+				IUserRepository user = kernel.Get<IUserRepository>();
+				ISessionRepository session = kernel.Get<ISessionRepository>();
+				IPrivilegeRepository privileges = kernel.Get<IPrivilegeRepository>();
+				IVoteItemRepository vote = kernel.Get<IVoteItemRepository>();
+				IUserVoteRepository uv = kernel.Get<IUserVoteRepository>();
 				IContext ctx = kernel.Get<IContext>();
 
-				return new WebSignalR.DataAccess.Repositories.UnityOfWork(user, room, privileges, vote, session, uv, ctx);
+				return new UnityOfWork(user, room, privileges, vote, session, uv, ctx);
 			});
 
-			kernel.Bind<ICryptoService>().To<CryptoService>().InSingletonScope();
-			kernel.Bind<IKeyProvider>().ToConstant(new FileBasedKeyProvider());
-			kernel.Bind<IVotesProvider>().ToConstant(new FileBasedVotesProvider()).Named("FileBased");
-			kernel.Bind<IUserRoomService>().To<UserRoomService>();
-			kernel.Bind<ISessionService>().To<Infrastructure.Services.SessionService>();
+			serviceLocator.LoadModule("~/Modules/ServicesModule.xml");
 
 			kernel.Bind<Hubs.AgileHub>().ToMethod(context =>
 			{
 				IUnityOfWork unity = context.Kernel.Get<IUnityOfWork>();
 				ICryptoService crypto = context.Kernel.Get<ICryptoService>();
 				IUserRoomService userRoomSrv = context.Kernel.Get<IUserRoomService>();
-				//ISessionService sessions = context.Kernel.Get<ISessionService>(); //in such way we reached exception ralated to the multiple instance of the IEntityChangeTracker. 
+				//ISessionService sessions = context.Kernel.Get<ISessionService>(); // In such way we reached exception ralated to the multiple instance of the IEntityChangeTracker. 
 				ISessionService sessions = new Infrastructure.Services.SessionService(unity);
 
 				return new Hubs.AgileHub(unity, crypto, userRoomSrv, sessions);
 			});
 
-			var service = new Func<ISessionService>(() => kernel.Get<ISessionService>());
+			var service = new Func<ISessionService>(() => serviceLocator.Get<ISessionService>());
 			ClearConnectedClients(service());
 		}
 
