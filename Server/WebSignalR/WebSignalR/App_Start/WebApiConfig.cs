@@ -24,8 +24,10 @@ namespace WebSignalR
 
 			config.DependencyResolver = new DependencyResolvers.NinjectWebApiDependencyResolver(BootStrapper.serviceLocator.Kernel);
 			//config.Services.Replace(typeof(System.Web.Http.Dispatcher.IHttpControllerActivator),new Activators.CustomApiActivator());
-			config.Services.Replace(typeof(System.Web.Http.Tracing.ITraceWriter), new Infrastructure.DynamicTrace());
+			config.MessageHandlers.Add(new Infrastructure.Handlers.EmptyPostBodyMessageHandler());
 			config.Filters.Add(new Infrastructure.Filters.WebApiExceptionFilter());
+			config.Services.Replace(typeof(System.Web.Http.Tracing.ITraceWriter), new Infrastructure.DynamicTrace());
+
 
 			#region Formatting
 

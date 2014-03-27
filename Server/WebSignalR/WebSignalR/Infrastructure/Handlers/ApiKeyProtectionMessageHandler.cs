@@ -1,0 +1,24 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web;
+
+namespace WebSignalR.Infrastructure.Handlers
+{
+	public class ApiKeyProtectionMessageHandler : DelegatingHandler
+	{
+		protected override System.Threading.Tasks.Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, System.Threading.CancellationToken cancellationToken)
+		{
+			IEnumerable<string> values;
+			request.Headers.TryGetValues("apikey", out values);
+			if (values != null && values.Count() == 1)
+				return base.SendAsync(request, cancellationToken);
+
+			TaskCompletionSource<HttpResponseMessage> tcs = new TaskCompletionSource<HttpResponseMessage>();
+			tcs.SetResult(new HttpResponseMessage(System.Net.HttpStatusCode.Unauthorized) { ReasonPhrase = "Api key is required." });
+			return tcs.Task;
+		}
+	}
+}

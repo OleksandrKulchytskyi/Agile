@@ -14,8 +14,17 @@ namespace WebSignalR.Infrastructure.Filters
 
 	public sealed class WebApiExceptionFilter : ExceptionFilterAttribute
 	{
+		private static Infrastructure.DynamicTracer tracer;
+
+		static WebApiExceptionFilter()
+		{
+			tracer = new DynamicTracer();
+		}
+
 		public override void OnException(HttpActionExecutedContext actionExecutedContext)
 		{
+			tracer.LogToHub(actionExecutedContext.Exception);
+
 			if (actionExecutedContext.Exception is System.Data.DBConcurrencyException)
 			{
 				var businessException = actionExecutedContext.Exception as System.Data.DBConcurrencyException;

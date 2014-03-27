@@ -33,7 +33,6 @@ namespace WebSignalR.Controllers
 			return Request.CreateResponse(HttpStatusCode.OK, user.UserPrivileges.Select(x => AutoMapper.Mapper.Map<PrivilegeDto>(x)).ToList());
 		}
 
-
 		[HttpPost]
 		[ActionName("RegisterUser")]
 		[Infrastructure.Filters.ValidateHttpAntiForgeryToken]

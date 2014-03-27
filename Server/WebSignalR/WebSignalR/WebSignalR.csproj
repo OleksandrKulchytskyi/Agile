@@ -331,9 +331,12 @@
     <Compile Include="Infrastructure\Constants.cs" />
     <Compile Include="Infrastructure\Authorization\CustomPrincipal.cs" />
     <Compile Include="Infrastructure\DynamicTrace.cs" />
+    <Compile Include="Infrastructure\DynamicTracer.cs" />
     <Compile Include="Infrastructure\FileBasedVotesProvider.cs" />
     <Compile Include="Infrastructure\Filters\ValidateHttpAntiForgeryTokenAttribute.cs" />
     <Compile Include="Infrastructure\Filters\WebApiExceptionFilter.cs" />
+    <Compile Include="Infrastructure\Handlers\ApiKeyProtectionMessageHandler.cs" />
+    <Compile Include="Infrastructure\Handlers\EmptyPostBodyMessageHandler.cs" />
     <Compile Include="Infrastructure\ObjectExtensions.cs" />
     <Compile Include="Infrastructure\Services\FormsPrincipalProvider.cs" />
     <Compile Include="Infrastructure\Services\ServiceLocator.cs" />

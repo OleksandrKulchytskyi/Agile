@@ -5,8 +5,8 @@ namespace WebSignalR.Hubs
 {
 	public abstract class SignalRBase<T> where T : Hub
 	{
-		private Lazy<IHubContext> hubLazy =
-			new Lazy<IHubContext>(() => Microsoft.AspNet.SignalR.GlobalHost.ConnectionManager.GetHubContext<T>());
+		private Lazy<IHubContext> hubLazy = new Lazy<IHubContext>(() =>
+			Microsoft.AspNet.SignalR.GlobalHost.ConnectionManager.GetHubContext<T>());
 
 		public IHubContext HubInstance
 		{

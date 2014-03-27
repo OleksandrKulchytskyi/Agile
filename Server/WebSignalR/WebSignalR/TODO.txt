@@ -21,7 +21,6 @@ Authorization: Basic VXNlcjE6ZFhObGNqRT0=
 -User2
 Authorization: Basic VXNlcjI6ZFhObGNqST0=
 
-
 http://localhost:6404/handlers/loginhandler.ashx
 http://localhost/WebSignalR/handlers/loginhandler.ashx
 
@@ -56,3 +55,18 @@ public class YieldInOperator
         }
     }
 }
+ /* should be:
+  * - one Upcase
+  * - one lower case
+  * - one Numeric character 
+  * - 'normal' characters 0-9, a-z
+  *  - min lenght 7 chars (more than 6)
+  *  */
+ if (!Regex.IsMatch(txtDBNewPassword.Text.Trim(), @"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[a-zA-Z0-9@]{6,}$"))
+ {
+     _log.AppendLine(CommonConst.MSG_INCORRECT_PASSWORD);
+     MessageBox.Show(CommonConst.MSG_INCORRECT_PASSWORD, CommonConst.MSG_TITLE, MessageBoxButtons.OK, MessageBoxIcon.Information);
+     return false;
+ }
+
+http://habrahabr.ru/post/215097/
