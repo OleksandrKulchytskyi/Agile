@@ -204,8 +204,8 @@ namespace WebSignalR.Hubs
 
 			try
 			{
-				Room room = _roomService.JoinToRoomBySessionId(roomName, sessionId);
 				Task addTask = Groups.Add(sessionId, roomName);
+				Room room = _roomService.JoinToRoomBySessionId(roomName, sessionId);
 				RoomDto rDto = Mapper.Map<RoomDto>(room);
 				Clients.Caller.onInitRoom(rDto);
 
