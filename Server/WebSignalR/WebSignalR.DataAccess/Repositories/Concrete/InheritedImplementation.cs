@@ -24,6 +24,13 @@ namespace WebSignalR.DataAccess.Repositories
 		{ }
 	}
 
+	public sealed class SessionRoomRepository : GenericRepository<SessionRoom>, ISessionRoomRepository
+	{
+		public SessionRoomRepository(IContext ctx)
+			: base(ctx)
+		{ }
+	}
+
 	public sealed class PrvilegeRepository : GenericRepository<Privileges>, IPrivilegeRepository
 	{
 		public PrvilegeRepository(IContext ctx)

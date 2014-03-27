@@ -55,6 +55,7 @@
     <Compile Include="Mappings\MapBase.cs" />
     <Compile Include="Mappings\PrivilegesMap.cs" />
     <Compile Include="Mappings\RoomMap.cs" />
+    <Compile Include="Mappings\SessionRoomMap.cs" />
     <Compile Include="Mappings\UserMap.cs" />
     <Compile Include="Mappings\UserSessionMap.cs" />
     <Compile Include="Mappings\UserVoteMap.cs" />
@@ -75,6 +76,10 @@
     <Compile Include="Migrations\201403251338152_VoteItem_Finished.Designer.cs">
       <DependentUpon>201403251338152_VoteItem_Finished.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201403271207467_SessionRoom.cs" />
+    <Compile Include="Migrations\201403271207467_SessionRoom.Designer.cs">
+      <DependentUpon>201403271207467_SessionRoom.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\Concrete\IConcreteRepository.cs" />
@@ -83,7 +88,9 @@
     <Compile Include="Repositories\UnityOfWork.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -104,6 +111,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201403251338152_VoteItem_Finished.resx">
       <DependentUpon>201403251338152_VoteItem_Finished.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201403271207467_SessionRoom.resx">
+      <DependentUpon>201403271207467_SessionRoom.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

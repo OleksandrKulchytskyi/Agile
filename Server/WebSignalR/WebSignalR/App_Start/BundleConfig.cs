@@ -58,6 +58,9 @@ namespace WebSignalR
 			bundles.Add(new ScriptBundle("~/bundles/notifyService").Include(
 				"~/Scripts/services/notifyService.js"));
 
+			bundles.Add(new ScriptBundle("~/bundles/wait").Include(
+				"~/Scripts/app/waitInitializer.js"));
+
 			bundles.Add(new ScriptBundle("~/bundles/agile").Include(
 				"~/Scripts/app/common.bindings.js",
 				"~/Scripts/app/agile.datacontext.js",

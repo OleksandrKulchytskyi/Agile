@@ -19,6 +19,10 @@ namespace WebSignalR.DataAccess.Repositories
 	{
 	}
 
+	public interface ISessionRoomRepository : IRepository<SessionRoom>
+	{
+	}
+
 	public interface IUserVoteRepository : IRepository<UserVote>
 	{
 	}

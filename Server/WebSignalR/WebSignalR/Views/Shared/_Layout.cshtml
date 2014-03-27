@@ -19,7 +19,7 @@
 	<div id="body">
 		@RenderBody()
 	</div>
-
+	
 	<footer class="navbar navbar-default navbar-fixed-bottom" role="navigation">
 		<nav>
 			<ul id="menu">
@@ -29,6 +29,10 @@
 		<p>Learn more about <a href="http://go.microsoft.com/fwlink/?LinkId=273732">Single Page Applications</a></p>
 		<p>&copy; @DateTime.Now.Year - Agile ASP.NET MVC Application</p>
 	</footer>
+
+	<div class="waitModal">
+		<!-- Place at bottom of page -->
+	</div>
 
 	@Scripts.Render("~/bundles/jquery")
 	@Scripts.Render("~/bundles/jqueryui")

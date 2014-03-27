@@ -13,14 +13,14 @@ namespace WebSignalR.Common.Entities
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
-		public event PropertyChangingEventHandler PropertyChanging;
-
 		protected void OnPropChanged(string name)
 		{
 			PropertyChangedEventHandler handler = Interlocked.CompareExchange(ref PropertyChanged, null, null);
 			if (handler != null)
 				handler(this, new PropertyChangedEventArgs(name));
 		}
+
+		public event PropertyChangingEventHandler PropertyChanging;
 
 		protected void OnPropChanging(string name)
 		{

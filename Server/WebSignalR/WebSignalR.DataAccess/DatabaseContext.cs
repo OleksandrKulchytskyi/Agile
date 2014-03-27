@@ -36,6 +36,7 @@ namespace WebSignalR.DataAccess.DB
 			modelBuilder.Configurations.Add(new RoomMap());
 			modelBuilder.Configurations.Add(new UserMap());
 			modelBuilder.Configurations.Add(new UserSessionMap());
+			modelBuilder.Configurations.Add(new SessionRoomMap());
 			modelBuilder.Configurations.Add(new VoteItemMap());
 			modelBuilder.Configurations.Add(new UserVoteMap());
 			modelBuilder.Configurations.Add(new PrivilegesMap());

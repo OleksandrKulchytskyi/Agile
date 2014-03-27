@@ -201,10 +201,19 @@ namespace WebSignalR.Hubs
 				Clients.Caller.onInitRoom(rDto);
 
 				_sessionServ.UpdateSessionActivity(sessionId);
-				var user = GetRepository<UserSession>().Get(x => x.SessionId == sessionId).Select(x => x.User).FirstOrDefault();
-				if (user != null)
+				var usRepo = GetRepository<UserSession>();
+
+				UserSession us = usRepo.Get(x => x.SessionId == sessionId).FirstOrDefault();
+				if (us.User != null)
 				{
-					UserDto uDto = Mapper.Map<UserDto>(user);
+					SessionRoom sr = new SessionRoom();
+					sr.SetLoggedInNow();
+					sr.RoomName = roomName;
+					us.SessionRoom = sr;
+					usRepo.Update(us);
+					_unity.Commit();
+
+					UserDto uDto = Mapper.Map<UserDto>(us.User);
 					return Clients.Group(roomName, Context.ConnectionId).onJoinedRoom(uDto);
 				}
 			}
@@ -223,10 +232,19 @@ namespace WebSignalR.Hubs
 			if (!Guid.TryParse(sessionId, out sesID))
 				sessionId = Context.ConnectionId;
 
+			Task removeTask = Groups.Remove(sessionId, roomName);
+
 			_sessionServ.UpdateSessionActivity(sessionId);
 			Room room = _roomService.DisconnecFromRoomBySessionId(roomName, sessionId);
+			var usRepo = GetRepository<UserSession>();
+			var srRepo = GetRepository<SessionRoom>();
+			UserSession us = usRepo.Get(x => x.SessionId == sessionId).FirstOrDefault();
+			if(us!=null && us.SessionRoom!=null)
+			{
+				srRepo.Remove(us.SessionRoom);
+				_unity.Commit();
+			}
 
-			Task removeTask = Groups.Remove(sessionId, roomName);
 			UserDto uDto = Mapper.Map<UserDto>(GetRepository<UserSession>().Get(x => x.SessionId == sessionId).Select(x => x.User).FirstOrDefault());
 			Clients.Group(roomName).onLeftRoom(uDto);
 

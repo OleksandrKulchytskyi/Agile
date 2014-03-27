@@ -72,6 +72,7 @@
   <ItemGroup>
     <Compile Include="DTO\DtoBase.cs" />
     <Compile Include="DTO\PrivilegeDto.cs" />
+    <Compile Include="DTO\SessionRoomDto.cs" />
     <Compile Include="DTO\UserDto.cs" />
     <Compile Include="DTO\UserVoteDto.cs" />
     <Compile Include="DTO\VoteItemDto.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="Entities\EntityBase.cs" />
     <Compile Include="Entities\Privileges.cs" />
     <Compile Include="Entities\Room.cs" />
+    <Compile Include="Entities\SessionRoom.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Entities\UserSession.cs" />
     <Compile Include="Entities\UserVote.cs" />

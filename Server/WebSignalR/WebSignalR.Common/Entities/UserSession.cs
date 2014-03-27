@@ -16,6 +16,8 @@ namespace WebSignalR.Common.Entities
 
 		public virtual User User { get; set; }
 
+		public SessionRoom SessionRoom { get; set; }
+
 		public void SetLastActivityNow()
 		{
 			LastActivity = DateTime.UtcNow;

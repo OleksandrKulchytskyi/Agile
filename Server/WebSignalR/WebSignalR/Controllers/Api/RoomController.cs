@@ -8,6 +8,7 @@ using WebSignalR.Common.DTO;
 using WebSignalR.Common.Entities;
 using WebSignalR.Common.Interfaces;
 using WebSignalR.Common.Services;
+using WebSignalR.DataAccess.Repositories;
 
 namespace WebSignalR.Controllers
 {
@@ -212,6 +213,7 @@ namespace WebSignalR.Controllers
 		{
 			IRepository<User> repoUser = _unity.GetRepository<User>();
 			IRepository<Room> repoRoom = _unity.GetRepository<Room>();
+			IRepository<SessionRoom> srRepo = _unity.GetRepository<SessionRoom>();
 
 			try
 			{
@@ -220,6 +222,10 @@ namespace WebSignalR.Controllers
 				if (usr != null && room != null)
 				{
 					room.ConnectedUsers.Remove(usr);
+					SessionRoom sr = srRepo.Get(x => x.Session.User.Id == userId).FirstOrDefault();
+					if (sr != null)
+						srRepo.Remove(sr);
+
 					_unity.Commit();
 					UserDto userDto = AutoMapper.Mapper.Map<UserDto>(usr);
 					base.AgileHubConnection.Group(room.Name).onLeftRoom(userDto);

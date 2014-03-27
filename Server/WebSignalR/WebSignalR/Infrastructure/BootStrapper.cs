@@ -55,12 +55,13 @@ namespace WebSignalR.Infrastructure
 				IRoomRepository room = kernel.Get<IRoomRepository>();
 				IUserRepository user = kernel.Get<IUserRepository>();
 				ISessionRepository session = kernel.Get<ISessionRepository>();
+				ISessionRoomRepository srRepo = kernel.Get<ISessionRoomRepository>();
 				IPrivilegeRepository privileges = kernel.Get<IPrivilegeRepository>();
 				IVoteItemRepository vote = kernel.Get<IVoteItemRepository>();
 				IUserVoteRepository uv = kernel.Get<IUserVoteRepository>();
 				IContext ctx = kernel.Get<IContext>();
 
-				return new UnityOfWork(user, room, privileges, vote, session, uv, ctx);
+				return new UnityOfWork(user, room, privileges, vote, session, uv,srRepo, ctx);
 			});
 
 			serviceLocator.LoadModule("~/Modules/ServicesModule.xml");

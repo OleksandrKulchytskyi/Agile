@@ -16,6 +16,9 @@
 	<bind service="WebSignalR.DataAccess.Repositories.ISessionRepository, WebSignalR.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
 	  to="WebSignalR.DataAccess.Repositories.SessionRepository, WebSignalR.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
 
+	<bind service="WebSignalR.DataAccess.Repositories.ISessionRoomRepository, WebSignalR.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+	  to="WebSignalR.DataAccess.Repositories.SessionRoomRepository, WebSignalR.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+
 	<bind service="WebSignalR.DataAccess.Repositories.IPrivilegeRepository, WebSignalR.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
 	  to="WebSignalR.DataAccess.Repositories.PrvilegeRepository, WebSignalR.DataAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
 
