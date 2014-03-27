@@ -150,9 +150,18 @@ namespace WebSignalR.Hubs
 			if (Context.User.Identity.IsAuthenticated)
 			{
 				IRepository<UserSession> repoSession = GetRepository<UserSession>();
+				IRepository<SessionRoom> srRepo = GetRepository<SessionRoom>();
 				UserSession us = _sessionServ.GetCurrentSession(Context.User.Identity.Name, Context.ConnectionId);
 				if (us != null)
 				{
+					SessionRoom sr = srRepo.Get(x => x.Id == us.Id).FirstOrDefault();
+					if (sr != null)
+					{
+						UserDto uDto = Mapper.Map<UserDto>(us.User);
+						this.Clients.Group(sr.RoomName).onLeftRoom(uDto);
+						srRepo.Remove(us.SessionRoom);
+					}
+
 					repoSession.Remove(us);
 					_unity.Commit();
 				}
@@ -239,10 +248,14 @@ namespace WebSignalR.Hubs
 			var usRepo = GetRepository<UserSession>();
 			var srRepo = GetRepository<SessionRoom>();
 			UserSession us = usRepo.Get(x => x.SessionId == sessionId).FirstOrDefault();
-			if(us!=null && us.SessionRoom!=null)
+			if (us != null)
 			{
-				srRepo.Remove(us.SessionRoom);
-				_unity.Commit();
+				SessionRoom sr = srRepo.Get(x => x.Id == us.Id).FirstOrDefault();
+				if (sr != null)
+				{
+					srRepo.Remove(us.SessionRoom);
+					_unity.Commit();
+				}
 			}
 
 			UserDto uDto = Mapper.Map<UserDto>(GetRepository<UserSession>().Get(x => x.SessionId == sessionId).Select(x => x.User).FirstOrDefault());
