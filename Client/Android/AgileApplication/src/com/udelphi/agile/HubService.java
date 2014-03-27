@@ -349,6 +349,7 @@ public class HubService {
 
 		voteItem.Closed = jsObj.getBoolean("Closed");
 		voteItem.Opened = jsObj.getBoolean("Opened");
+		voteItem.Finished = jsObj.optBoolean("Finished", false);
 		voteItem.OveralMark = jsObj.getInt("OverallMark");
 		voteItem.HostRoomId = jsObj.getInt("HostRoomId");
 

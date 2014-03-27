@@ -1,0 +1,680 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Ninject.Extensions.Xml</name>
+    </assembly>
+    <members>
+        <member name="T:Ninject.Extensions.Xml.Extensions.ExtensionsForDictionary">
+            <summary>
+            Extension methods for IDictionary{string, TProcessor}
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Extensions.ExtensionsForDictionary.GetProcessor``1(System.Collections.Generic.IDictionary{System.String,``0},System.String,System.String)">
+            <summary>
+            Gets the processor for the specified element.
+            </summary>
+            <typeparam name="TProcessor">The type of the processor.</typeparam>
+            <param name="dictionary">The dictionary.</param>
+            <param name="elementName">Name of the element.</param>
+            <param name="parentElementName">Name of the parent element.</param>
+            <returns>The processor for the specified element.</returns>
+            <exception cref="T:System.Configuration.ConfigurationErrorsException">Thrown in case there is no processor for the specified element.</exception>
+        </member>
+        <member name="T:Ninject.Extensions.Xml.Extensions.ExtensionsForXElement">
+            <summary>
+            Extension methods for <see cref="T:System.Xml.Linq.XElement"/>
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Extensions.ExtensionsForXElement.RequiredAttribute(System.Xml.Linq.XElement,System.Xml.Linq.XName)">
+            <summary>
+            Gets a required attribute from an <see cref="T:System.Xml.Linq.XElement"/>.
+            </summary>
+            <param name="element">The element.</param>
+            <param name="name">The name of the attribute.</param>
+            <returns>The attribute</returns>
+            <exception cref="T:System.Configuration.ConfigurationErrorsException">A required attribute is missing.</exception>
+        </member>
+        <member name="T:Ninject.Extensions.Xml.Processors.AbstractXmlAttributeProcessor">
+            <summary>
+            Abstract base implementation for attribute processors.
+            </summary>
+        </member>
+        <member name="T:Ninject.Extensions.Xml.Processors.IXmlAttributeProcessor">
+            <summary>
+            Processor for a xml attribute.
+            </summary>
+        </member>
+        <member name="T:Ninject.Extensions.Xml.Processors.IXmlNodeProcessor">
+            <summary>
+            Processes an xml node.
+            </summary>
+        </member>
+        <member name="T:Ninject.Extensions.Xml.Processors.IHaveXmlNodeName">
+            <summary>
+            Specifies that the class has a xml node name.
+            </summary>
+        </member>
+        <member name="P:Ninject.Extensions.Xml.Processors.IHaveXmlNodeName.XmlNodeName">
+            <summary>
+            Gets the name of the XML node.
+            </summary>
+            <value>The name of the XML node.</value>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.IXmlNodeProcessor.AppliesTo(Ninject.Extensions.Xml.Processors.IOwnXmlNodeProcessor)">
+            <summary>
+            Specifies if the processor applies to the given owner.
+            </summary>
+            <param name="owner">The owner.</param>
+            <returns>True if the processor is a applicable processor for the specified owner.</returns>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.IXmlAttributeProcessor.Process(System.String,Ninject.Extensions.Xml.Processors.IOwnXmlNodeProcessor,Ninject.Planning.Bindings.IBindingConfigurationSyntax{System.Object})">
+            <summary>
+            Handles the attribute.
+            </summary>
+            <param name="value">The value of the attribute.</param>
+            <param name="owner">The owner of this instance.</param>
+            <param name="syntax">The binding syntax.</param>
+        </member>
+        <member name="P:Ninject.Extensions.Xml.Processors.IXmlAttributeProcessor.Required">
+            <summary>
+            Gets a value indicating whether the attribute processed by this instance is required.
+            </summary>
+            <value><c>true</c> if the attribute processed by this instance is required.; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="F:Ninject.Extensions.Xml.Processors.AbstractXmlAttributeProcessor.parentTag">
+            <summary>
+            The tag that is expected on the owner to apply as child attribute processor.
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.AbstractXmlAttributeProcessor.#ctor(System.String,System.Boolean,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Ninject.Extensions.Xml.Processors.AbstractXmlAttributeProcessor"/> class.
+            </summary>
+            <param name="attributeName">The name of the attribute processed by this processor.</param>
+            <param name="required">if set to <c>true</c> the attribute is required.</param>
+            <param name="parentTag">The tag that is expected on the owner to apply as child attribute processor.</param>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.AbstractXmlAttributeProcessor.AppliesTo(Ninject.Extensions.Xml.Processors.IOwnXmlNodeProcessor)">
+            <summary>
+            Specifies if the processor applies to the given owner.
+            </summary>
+            <param name="owner">The owner.</param>
+            <returns>
+            True if the processor is a applicable processor for the specified owner.
+            </returns>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.AbstractXmlAttributeProcessor.Process(System.String,Ninject.Extensions.Xml.Processors.IOwnXmlNodeProcessor,Ninject.Planning.Bindings.IBindingConfigurationSyntax{System.Object})">
+            <summary>
+            Handles the attribute.
+            </summary>
+            <param name="value">The value of the attribute.</param>
+            <param name="owner">The owner of this instance.</param>
+            <param name="syntax">The binding syntax.</param>
+        </member>
+        <member name="P:Ninject.Extensions.Xml.Processors.AbstractXmlAttributeProcessor.XmlNodeName">
+            <summary>
+            Gets the name of the XML node.
+            </summary>
+            <value>The name of the XML node.</value>
+        </member>
+        <member name="P:Ninject.Extensions.Xml.Processors.AbstractXmlAttributeProcessor.Required">
+            <summary>
+            Gets a value indicating whether the attribute processed by this instance is required.
+            </summary>
+            <value>
+                <c>true</c> if the attribute processed by this instance is required; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="T:Ninject.Extensions.Xml.Processors.AbstractXmlElementProcessor">
+            <summary>
+            Abstract base implementation for element processors
+            </summary>
+        </member>
+        <member name="T:Ninject.Extensions.Xml.Processors.IXmlElementProcessor">
+            <summary>
+            Processor for a xml element
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.IXmlElementProcessor.Process(System.Xml.Linq.XElement,Ninject.Extensions.Xml.Processors.IOwnXmlNodeProcessor,Ninject.Planning.Bindings.IBindingConfigurationSyntax{System.Object})">
+            <summary>
+            Handles the specified element.
+            </summary>
+            <param name="element">The element that shall be processed.</param>
+            <param name="owner">The owner of this instance.</param>
+            <param name="bindingSyntax">The binding syntax.</param>
+        </member>
+        <member name="T:Ninject.Extensions.Xml.Processors.IOwnXmlNodeProcessor">
+            <summary>
+            Specifies that the the class owns xml node processors.
+            </summary>
+        </member>
+        <member name="P:Ninject.Extensions.Xml.Processors.IOwnXmlNodeProcessor.ElementTags">
+            <summary>
+            Gets the tags of the elements that apply to this owner as its children.
+            </summary>
+            <value>The tags of the elements that apply to this owner as its children.</value>
+        </member>
+        <member name="F:Ninject.Extensions.Xml.Processors.AbstractXmlElementProcessor.ownerTag">
+            <summary>
+            The tags of this element used to decide which processor apply as its children.
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.AbstractXmlElementProcessor.#ctor(System.String,System.Collections.Generic.IEnumerable{System.String},System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Ninject.Extensions.Xml.Processors.AbstractXmlElementProcessor"/> class.
+            </summary>
+            <param name="elementName">The name of the element processed by this instance.</param>
+            <param name="tags">The tags of this element used to decide which processor apply as its children.</param>
+            <param name="ownerTag">The tag that the oner must have in order to apply as child processor.</param>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.AbstractXmlElementProcessor.AppliesTo(Ninject.Extensions.Xml.Processors.IOwnXmlNodeProcessor)">
+            <summary>
+            Specifies if the processor applies to the given owner.
+            </summary>
+            <param name="owner">The owner.</param>
+            <returns>
+            True if the processor is a applicable processor for the specified owner.
+            </returns>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.AbstractXmlElementProcessor.Process(System.Xml.Linq.XElement,Ninject.Extensions.Xml.Processors.IOwnXmlNodeProcessor,Ninject.Planning.Bindings.IBindingConfigurationSyntax{System.Object})">
+            <summary>
+            Processes the specified element.
+            </summary>
+            <param name="element">The element that shall be processed.</param>
+            <param name="owner">The owner of this instance.</param>
+            <param name="bindingSyntax">The binding syntax.</param>
+        </member>
+        <member name="P:Ninject.Extensions.Xml.Processors.AbstractXmlElementProcessor.XmlNodeName">
+            <summary>
+            Gets the name of the XML node.
+            </summary>
+            <value>The name of the XML node.</value>
+        </member>
+        <member name="P:Ninject.Extensions.Xml.Processors.AbstractXmlElementProcessor.ElementTags">
+            <summary>
+            Gets the tags of the elements that apply to this owner as its children.
+            </summary>
+            <value>
+            The tags of the elements that apply to this owner as its children.
+            </value>
+        </member>
+        <member name="T:Ninject.Extensions.Xml.Processors.BindingBuilderFactory">
+            <summary>
+            Factory for the binding builder.
+            </summary>
+        </member>
+        <member name="T:Ninject.Extensions.Xml.Processors.IBindingBuilderFactory">
+            <summary>
+            Factory for the binding builder.
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.IBindingBuilderFactory.Create(System.Xml.Linq.XElement,Ninject.Syntax.IBindingRoot)">
+            <summary>
+            Creates a new binding builder and returns its binding syntax.
+            </summary>
+            <param name="element">The element.</param>
+            <param name="module">The module.</param>
+            <returns>The binding syntax of the created binding builder.</returns>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.BindingBuilderFactory.Create(System.Xml.Linq.XElement,Ninject.Syntax.IBindingRoot)">
+            <summary>
+            Creates a new binding builder and returns its binding syntax.
+            </summary>
+            <param name="element">The element.</param>
+            <param name="module">The module.</param>
+            <returns>
+            The binding syntax of the created binding builder.
+            </returns>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.BindingBuilderFactory.HandleToAttribute(System.Xml.Linq.XElement,Ninject.Syntax.IBindingToSyntax{System.Object})">
+            <summary>
+            Tries to handle the to attribute.
+            </summary>
+            <param name="element">The element.</param>
+            <param name="builder">The builder.</param>
+            <returns>True if the To Attribute was found</returns>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.BindingBuilderFactory.HandleToProviderAttribute(System.Xml.Linq.XElement,Ninject.Syntax.IBindingToSyntax{System.Object})">
+            <summary>
+            Tries to handle the ToProvider attribute.
+            </summary>
+            <param name="element">The element.</param>
+            <param name="builder">The builder.</param>
+            <returns>True if the attribute was found.</returns>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.BindingBuilderFactory.GetTypeFromAttributeValue(System.Xml.Linq.XAttribute)">
+            <summary>
+            Gets the type from attribute value.
+            </summary>
+            <param name="attribute">The attribute.</param>
+            <returns>The type specified by the attribute.</returns>
+            <exception cref="T:System.Configuration.ConfigurationErrorsException">Thrown if the type can not be resolved.</exception>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.BindingBuilderFactory.VerifyElementHasExactlyOneToAttribute(System.Xml.Linq.XElement)">
+            <summary>
+            Verifies that the specified element has exactly one "to" attribute.
+            </summary>
+            <param name="element">The element.</param>
+            <exception cref="T:System.Configuration.ConfigurationErrorsException">The 'bind' element does not define either a 'to' or 'toProvider' attribute or it specifies both at the same time.</exception>
+        </member>
+        <member name="T:Ninject.Extensions.Xml.Processors.BindXmlElementProcessor">
+            <summary>
+            Processor for the "Bind" Element
+            </summary>
+        </member>
+        <member name="T:Ninject.Extensions.Xml.Processors.IModuleChildXmlElementProcessor">
+            <summary>
+            Processor for XElements
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.IModuleChildXmlElementProcessor.Handle(Ninject.Syntax.IBindingRoot,System.Xml.Linq.XElement)">
+            <summary>
+            Handles the XElement.
+            </summary>
+            <param name="module">The module.</param>
+            <param name="element">The element.</param>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.BindXmlElementProcessor.#ctor(Ninject.Extensions.Xml.Processors.IBindingBuilderFactory,Ninject.Extensions.Xml.Processors.IChildElementProcessor)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Ninject.Extensions.Xml.Processors.BindXmlElementProcessor"/> class.
+            </summary>
+            <param name="bindingBuilderFactory">The binding builder factory.</param>
+            <param name="childElementProcessor">The child element processor.</param>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.BindXmlElementProcessor.Handle(Ninject.Syntax.IBindingRoot,System.Xml.Linq.XElement)">
+            <summary>
+            Handles the XElement.
+            </summary>
+            <param name="module">The module.</param>
+            <param name="element">The element.</param>
+        </member>
+        <member name="P:Ninject.Extensions.Xml.Processors.BindXmlElementProcessor.XmlNodeName">
+            <summary>
+            Gets the name of the XML node.
+            </summary>
+            <value>The name of the XML node.</value>
+        </member>
+        <member name="P:Ninject.Extensions.Xml.Processors.BindXmlElementProcessor.ElementTags">
+            <summary>
+            Gets the tags of the elements that apply to this owner as its children.
+            </summary>
+            <value>
+            The tags of the elements that apply to this owner as its children.
+            </value>
+        </member>
+        <member name="T:Ninject.Extensions.Xml.Processors.ChildElementProcessor">
+            <summary>
+            Processes the child nodes of an element.
+            </summary>
+        </member>
+        <member name="T:Ninject.Extensions.Xml.Processors.IChildElementProcessor">
+            <summary>
+            ¨Processes the child elements of an xml node.
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.IChildElementProcessor.ProcessAttributes(System.Xml.Linq.XElement,Ninject.Planning.Bindings.IBindingConfigurationSyntax{System.Object})">
+            <summary>
+            Processes the attributes of the given element.
+            </summary>
+            <param name="element">The element.</param>
+            <param name="syntax">The binding syntax.</param>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.IChildElementProcessor.ProcessAttributes(System.Xml.Linq.XElement,Ninject.Planning.Bindings.IBindingConfigurationSyntax{System.Object},System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Processes the attributes of the given element.
+            </summary>
+            <param name="element">The element.</param>
+            <param name="syntax">The syntax.</param>
+            <param name="excludedAttributes">The attributes that are excluded.</param>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.IChildElementProcessor.ProcessChildElements(System.Xml.Linq.XElement,Ninject.Planning.Bindings.IBindingConfigurationSyntax{System.Object})">
+            <summary>
+            Processes the child elements.
+            </summary>
+            <param name="element">The element.</param>
+            <param name="syntax">The syntax.</param>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.IChildElementProcessor.SetOwner(Ninject.Extensions.Xml.Processors.IOwnXmlNodeProcessor)">
+            <summary>
+            Sets the owner.
+            </summary>
+            <param name="owner">The owner.</param>
+        </member>
+        <member name="F:Ninject.Extensions.Xml.Processors.ChildElementProcessor.owner">
+            <summary>
+            The owner of this instance.
+            </summary>
+        </member>
+        <member name="F:Ninject.Extensions.Xml.Processors.ChildElementProcessor.elementProcessors">
+            <summary>
+            The element processors.
+            </summary>
+        </member>
+        <member name="F:Ninject.Extensions.Xml.Processors.ChildElementProcessor.attributeProcessors">
+            <summary>
+            The attribute processors.
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.ChildElementProcessor.#ctor(System.Collections.Generic.IEnumerable{Ninject.Extensions.Xml.Processors.IXmlElementProcessor},System.Collections.Generic.IEnumerable{Ninject.Extensions.Xml.Processors.IXmlAttributeProcessor})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Ninject.Extensions.Xml.Processors.ChildElementProcessor"/> class.
+            </summary>
+            <param name="elementProcessors">The element processors.</param>
+            <param name="attributeProcessors">The attribute processors.</param>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.ChildElementProcessor.ProcessAttributes(System.Xml.Linq.XElement,Ninject.Planning.Bindings.IBindingConfigurationSyntax{System.Object})">
+            <summary>
+            Processes the attributes of the given element.
+            </summary>
+            <param name="element">The element.</param>
+            <param name="syntax">The binding syntax.</param>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.ChildElementProcessor.ProcessAttributes(System.Xml.Linq.XElement,Ninject.Planning.Bindings.IBindingConfigurationSyntax{System.Object},System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Processes the attributes of the given element.
+            </summary>
+            <param name="element">The element.</param>
+            <param name="syntax">The syntax.</param>
+            <param name="excludedAttributes">The attributes that are excluded.</param>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.ChildElementProcessor.ProcessChildElements(System.Xml.Linq.XElement,Ninject.Planning.Bindings.IBindingConfigurationSyntax{System.Object})">
+            <summary>
+            Processes the child elements.
+            </summary>
+            <param name="element">The element.</param>
+            <param name="syntax">The syntax.</param>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.ChildElementProcessor.SetOwner(Ninject.Extensions.Xml.Processors.IOwnXmlNodeProcessor)">
+            <summary>
+            Sets the owner.
+            </summary>
+            <param name="owner">The owner.</param>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.ChildElementProcessor.GetRelevantProcessors``1(Ninject.Extensions.Xml.Processors.IOwnXmlNodeProcessor,System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Gets the relevant processors.
+            </summary>
+            <typeparam name="TNodeType">The type of the node type.</typeparam>
+            <param name="owner">The owner.</param>
+            <param name="nodeProcessors">The node processors.</param>
+            <returns>The relevant processors for the given owner.</returns>
+        </member>
+        <member name="T:Ninject.Extensions.Xml.Processors.MetadataXmlElementProcessor">
+            <summary>
+            Processor for metadata elements.
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.MetadataXmlElementProcessor.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Ninject.Extensions.Xml.Processors.MetadataXmlElementProcessor"/> class.
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.MetadataXmlElementProcessor.Process(System.Xml.Linq.XElement,Ninject.Extensions.Xml.Processors.IOwnXmlNodeProcessor,Ninject.Planning.Bindings.IBindingConfigurationSyntax{System.Object})">
+            <summary>
+            Processes the specified element.
+            </summary>
+            <param name="element">The element that shall be processed.</param>
+            <param name="owner">The owner of this instance.</param>
+            <param name="syntax">The binding syntax.</param>
+        </member>
+        <member name="T:Ninject.Extensions.Xml.Processors.NameXmlAttributeProcessor">
+            <summary>
+            Processor for the name attribute
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.NameXmlAttributeProcessor.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Ninject.Extensions.Xml.Processors.NameXmlAttributeProcessor"/> class.
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.NameXmlAttributeProcessor.Process(System.String,Ninject.Extensions.Xml.Processors.IOwnXmlNodeProcessor,Ninject.Planning.Bindings.IBindingConfigurationSyntax{System.Object})">
+            <summary>
+            Handles the attribute.
+            </summary>
+            <param name="value">The value of the attribute.</param>
+            <param name="owner">The owner of this instance.</param>
+            <param name="syntax">The binding syntax.</param>
+        </member>
+        <member name="T:Ninject.Extensions.Xml.Processors.ScopeXmlAttributeProcessor">
+            <summary>
+            Processes the scope attribute.
+            </summary>
+        </member>
+        <member name="F:Ninject.Extensions.Xml.Processors.ScopeXmlAttributeProcessor.scopeHandlers">
+            <summary>
+            Maps the scope names to the processor that is responsible.
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.ScopeXmlAttributeProcessor.#ctor(System.Collections.Generic.IEnumerable{Ninject.Extensions.Xml.Scopes.IScopeHandler})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Ninject.Extensions.Xml.Processors.ScopeXmlAttributeProcessor"/> class.
+            </summary>
+            <param name="scopeHandlers">
+            The scope processors.
+            </param>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.ScopeXmlAttributeProcessor.Process(System.String,Ninject.Extensions.Xml.Processors.IOwnXmlNodeProcessor,Ninject.Planning.Bindings.IBindingConfigurationSyntax{System.Object})">
+            <summary>
+            Handles the attribute.
+            </summary>
+            <param name="value">The value of the attribute.</param>
+            <param name="owner">The owner of this instance.</param>
+            <param name="syntax">The binding syntax.</param>
+            <exception cref="T:System.Configuration.ConfigurationErrorsException">An unknown scope value was found.</exception>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Processors.ScopeXmlAttributeProcessor.GetInvalidScopeErrorMessage(System.String,System.String)">
+            <summary>
+            Gets the invalid scope error message.
+            </summary>
+            <param name="scope">The scope.</param>
+            <param name="parentElementName">The name of the parent element.</param>
+            <returns>The error message.</returns>
+        </member>
+        <member name="T:Ninject.Extensions.Xml.Processors.Tags">
+            <summary>
+            The tags of the processors in this extension.
+            </summary>
+        </member>
+        <member name="F:Ninject.Extensions.Xml.Processors.Tags.Binding">
+            <summary>
+            Defines that the processor is for bindings.
+            </summary>
+        </member>
+        <member name="F:Ninject.Extensions.Xml.Processors.Tags.HasScope">
+            <summary>
+            Defines that the binding can have a scope
+            </summary>
+        </member>
+        <member name="F:Ninject.Extensions.Xml.Processors.Tags.HasMetadata">
+            <summary>
+            Defines the the binding can have meta data.
+            </summary>
+        </member>
+        <member name="F:Ninject.Extensions.Xml.Processors.Tags.HasCondition">
+            <summary>
+            Defines that the binding can have conditions.
+            </summary>
+        </member>
+        <member name="F:Ninject.Extensions.Xml.Processors.Tags.HasName">
+            <summary>
+            Defines that the binding can have a name.
+            </summary>
+        </member>
+        <member name="T:Ninject.Extensions.Xml.Scopes.IScopeHandler">
+            <summary>
+            Processor for a specific scope type.
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Scopes.IScopeHandler.SetScope(Ninject.Syntax.IBindingInSyntax{System.Object})">
+            <summary>
+            Sets the scope using the given syntax.
+            </summary>
+            <param name="syntax">The syntax that is used to set the scope.</param>
+        </member>
+        <member name="P:Ninject.Extensions.Xml.Scopes.IScopeHandler.ScopeName">
+            <summary>
+            Gets the name of the scope processed by this instance.
+            </summary>
+            <value>The name of the scope processed by this instance.</value>
+        </member>
+        <member name="T:Ninject.Extensions.Xml.Scopes.SingletonScopeHandler">
+            <summary>
+            The processor for the singleton scope
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Scopes.SingletonScopeHandler.SetScope(Ninject.Syntax.IBindingInSyntax{System.Object})">
+            <summary>
+            Sets the scope using the given syntax.
+            </summary>
+            <param name="syntax">The syntax that is used to set the scope.</param>
+        </member>
+        <member name="P:Ninject.Extensions.Xml.Scopes.SingletonScopeHandler.ScopeName">
+            <summary>
+            Gets the name of the scope processed by this instance.
+            </summary>
+            <value>The name of the scope processed by this instance.</value>
+        </member>
+        <member name="T:Ninject.Extensions.Xml.Scopes.ThreadScopeHandler">
+            <summary>
+            The processor for the thread scope
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Scopes.ThreadScopeHandler.SetScope(Ninject.Syntax.IBindingInSyntax{System.Object})">
+            <summary>
+            Sets the scope using the given syntax.
+            </summary>
+            <param name="syntax">The syntax that is used to set the scope.</param>
+        </member>
+        <member name="P:Ninject.Extensions.Xml.Scopes.ThreadScopeHandler.ScopeName">
+            <summary>
+            Gets the name of the scope processed by this instance.
+            </summary>
+            <value>The name of the scope processed by this instance.</value>
+        </member>
+        <member name="T:Ninject.Extensions.Xml.Scopes.TransientScopeHandler">
+            <summary>
+            The processor for the transient scope
+            </summary>
+        </member>
+        <member name="F:Ninject.Extensions.Xml.Scopes.TransientScopeHandler.Name">
+            <summary>
+            The identification name of the transient scope.
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.Scopes.TransientScopeHandler.SetScope(Ninject.Syntax.IBindingInSyntax{System.Object})">
+            <summary>
+            Sets the scope using the given syntax.
+            </summary>
+            <param name="syntax">The syntax that is used to set the scope.</param>
+        </member>
+        <member name="P:Ninject.Extensions.Xml.Scopes.TransientScopeHandler.ScopeName">
+            <summary>
+            Gets the name of the scope processed by this instance.
+            </summary>
+            <value>The name of the scope processed by this instance.</value>
+        </member>
+        <member name="T:Ninject.Extensions.Xml.XmlExtensionModule">
+            <summary>
+            Ninject module for the xml extension.
+            </summary>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.XmlExtensionModule.Load">
+            <summary>
+            Loads the module into the kernel.
+            </summary>
+        </member>
+        <member name="P:Ninject.Extensions.Xml.XmlExtensionModule.Name">
+            <summary>
+            Gets the module's name. Only a single module with a given name can be loaded at one time.
+            </summary>
+            <value></value>
+        </member>
+        <member name="T:Ninject.Extensions.Xml.XmlModule">
+            <summary>
+            Ninject module used for the modules in the xml configurations.
+            </summary>
+        </member>
+        <member name="F:Ninject.Extensions.Xml.XmlModule.name">
+            <summary>
+            The name of the module.
+            </summary>
+        </member>
+        <member name="F:Ninject.Extensions.Xml.XmlModule.moduleElement">
+            <summary>
+            The module xml element.
+            </summary>
+        </member>
+        <member name="F:Ninject.Extensions.Xml.XmlModule.elementProcessors">
+            <summary>
+            Gets the element processors.
+            </summary>
+            <value>The element processors.</value>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.XmlModule.#ctor(System.Xml.Linq.XElement,System.Collections.Generic.IDictionary{System.String,Ninject.Extensions.Xml.Processors.IModuleChildXmlElementProcessor})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Ninject.Extensions.Xml.XmlModule"/> class.
+            </summary>
+            <param name="moduleElement">The module xml element.</param>
+            <param name="elementProcessors">The element processors.</param>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.XmlModule.Load">
+            <summary>
+            Loads the module into the kernel.
+            </summary>
+        </member>
+        <member name="P:Ninject.Extensions.Xml.XmlModule.Name">
+            <summary>
+            Gets the module's name. Only a single module with a given name can be loaded at one time.
+            </summary>
+            <value>The name of the module.</value>
+        </member>
+        <member name="T:Ninject.Extensions.Xml.XmlModuleLoaderPlugin">
+            <summary>
+            Module loader for modules defined in xml.
+            </summary>
+        </member>
+        <member name="F:Ninject.Extensions.Xml.XmlModuleLoaderPlugin.Extensions">
+            <summary>
+            The extensions processed by this module loader.
+            </summary>
+        </member>
+        <member name="F:Ninject.Extensions.Xml.XmlModuleLoaderPlugin.kernel">
+            <summary>
+            The ninject kernel.
+            </summary>
+            <value>The kernel.</value>
+        </member>
+        <member name="F:Ninject.Extensions.Xml.XmlModuleLoaderPlugin.elementProcessors">
+            <summary>
+            Gets the xml element processors.
+            </summary>
+            <value>The xml element processors.</value>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.XmlModuleLoaderPlugin.#ctor(Ninject.IKernel,System.Collections.Generic.IEnumerable{Ninject.Extensions.Xml.Processors.IModuleChildXmlElementProcessor})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Ninject.Extensions.Xml.XmlModuleLoaderPlugin"/> class.
+            </summary>
+            <param name="kernel">The kernel.</param>
+            <param name="elementProcessors">The element processors.</param>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.XmlModuleLoaderPlugin.LoadModules(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Loads modules from the specified files.
+            </summary>
+            <param name="filenames">The names of the files to load modules from.</param>
+        </member>
+        <member name="M:Ninject.Extensions.Xml.XmlModuleLoaderPlugin.GetModules(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Gets the modules.
+            </summary>
+            <param name="filenames">The filenames to be processed.</param>
+            <returns>The modules found by this module loader.</returns>
+        </member>
+        <member name="P:Ninject.Extensions.Xml.XmlModuleLoaderPlugin.SupportedExtensions">
+            <summary>
+            Gets the file extensions that the plugin understands how to load.
+            </summary>
+            <value>The file extensions supported by this loader.</value>
+        </member>
+    </members>
+</doc>

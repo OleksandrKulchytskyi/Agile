@@ -21,7 +21,7 @@ namespace WebSignalR.Infrastructure.Services
 
 		private class DefaultServiceLocator : IServiceLocator
 		{
-			private readonly IKernel kernel;  // Ninject kernel
+			private readonly IKernel kernel;
 
 			public DefaultServiceLocator()
 			{
@@ -29,20 +29,35 @@ namespace WebSignalR.Infrastructure.Services
 				//kernel.Components.Add<Ninject.Planning.Bindings.Resolvers.IMissingBindingResolver, DefaultImplBindingResolver>();
 			}
 
-			public T Get<T>()
-			{
-				return kernel.Get<T>();
-			}
-
 			public IKernel Kernel
 			{
 				get { return kernel; }
+			}
+
+			public void LoadModule(string path)
+			{
+				kernel.Load(resolvePath(path));
+			}
+
+			private string resolvePath(string path)
+			{
+				string compounded = string.Empty;
+				if (System.Web.HttpContext.Current != null)
+					compounded = System.Web.HttpContext.Current.Server.MapPath(path);
+				else
+					compounded = System.Web.Hosting.HostingEnvironment.MapPath(path);
+				return compounded;
 			}
 
 			public void InitBindings(Action<IKernel> initializer)
 			{
 				if (initializer != null)
 					initializer(kernel);
+			}
+
+			public T Get<T>()
+			{
+				return kernel.Get<T>();
 			}
 
 			public T Get<T>(string named)
@@ -68,6 +83,5 @@ namespace WebSignalR.Infrastructure.Services
 				return Type.GetType(typeName);
 			}
 		}
-
 	}
 }
