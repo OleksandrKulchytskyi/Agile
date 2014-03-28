@@ -318,6 +318,24 @@ public class HubService {
 					}
 			}
 		});
+		
+		hubProxy.On("onVoteFinished", new HubOnDataCallback() {
+			@Override
+			public void OnReceived(JSONArray args) {
+				Log.d("onVoteFinished callback", args.toString());
+				VoteItem voteItem = null;
+				try {
+					JSONObject jsObj = (JSONObject) args.get(0);
+					voteItem = parseVoteItem(jsObj);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				if (voteItem != null)
+					for (IOnVoteItemStateListener listener : _onVoteItemListeners) {
+						listener.onVoteFinished(voteItem);
+					}
+			}
+		});
 
 	}
 

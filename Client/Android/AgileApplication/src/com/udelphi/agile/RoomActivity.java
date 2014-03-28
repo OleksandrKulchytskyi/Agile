@@ -7,13 +7,11 @@ import org.json.*;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.*;
@@ -56,8 +54,14 @@ public class RoomActivity extends BaseActivity implements IOnRoomStateListener,
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 				VoteItem vi = (VoteItem) arg0.getAdapter().getItem(arg2) ;
-				if (vi.Opened)
-					startActivity(new Intent(RoomActivity.this, VoteItemActivity.class));
+				if (vi.Opened){
+					Intent voteIntent = new Intent(RoomActivity.this, VoteItemActivity.class);
+					voteIntent.putParcelableArrayListExtra("Users", (ArrayList<? extends Parcelable>)_usrList);
+					voteIntent.putExtra("Room", ((Room)AgileApplication.container.get("SelectedRoom")).Name);
+					voteIntent.putExtra("VoteId", vi.Id);
+					voteIntent.putExtra("Question", vi.Content);
+					startActivity(voteIntent);
+				}
 			}
 		});
 	}
