@@ -3,6 +3,7 @@
 	datacontext.userViewModel = userViewModel;
 	datacontext.userConnectionState = userConnectionState;
 	datacontext.roomDtoModel = roomDtoModel;
+	datacontext.voteItemModel = voteItemViewModel;
 
 	function userConnectionState(data) {
 		var self = this;

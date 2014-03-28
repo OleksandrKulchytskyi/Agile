@@ -359,11 +359,11 @@ namespace WebSignalR.Hubs
 		[SignalRAuth(Roles = "User")]
 		public Task VoteForItem(string room, int voteItemId, int mark)
 		{
-			IRepository<VoteItem> repo = GetRepository<VoteItem>();
+			IRepository<VoteItem> voteItemRepo = GetRepository<VoteItem>();
 			IRepository<User> repoUser = GetRepository<User>();
 			IRepository<UserVote> userVorePero = GetRepository<UserVote>();
 
-			VoteItem voteItem = repo.Get(x => x.Id == voteItemId).FirstOrDefault();
+			VoteItem voteItem = voteItemRepo.Get(x => x.Id == voteItemId).FirstOrDefault();
 			User usr = repoUser.Get(x => x.Name == Context.User.Identity.Name).FirstOrDefault();
 			UserVoteDto userVoteDto = null;
 			if (voteItem != null && usr != null && voteItem.Opened)
@@ -373,16 +373,21 @@ namespace WebSignalR.Hubs
 				uv.VoteId = voteItem.Id;
 				uv.Mark = mark;
 				userVorePero.Add(uv);
-
 				voteItem.VotedUsers.Add(uv);
-				_unity.Commit();
+				
 				_sessionServ.UpdateSessionActivity(Context.ConnectionId);
 				userVoteDto = Mapper.Map<UserVoteDto>(uv);
 				Task resultTask = Clients.Group(room).onUserVoted(userVoteDto);
 				if (voteItem.VotedUsers.Count == voteItem.HostRoom.ConnectedUsers.Count) //TODO: check logic related to the vote finished event here 
 				{
-					Clients.Group(room).onVoteFinished(voteItem);
+					voteItem.Finished = true;
+					voteItemRepo.Update(voteItem);
+
+					var map = Mapper.Map<VoteItemDto>(voteItem);
+					Clients.Group(room).onVoteFinished(map);
 				}
+
+				_unity.Commit();
 				return resultTask;
 			}
 			else

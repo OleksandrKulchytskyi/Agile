@@ -5,6 +5,13 @@ ko.bindingHandlers.validate = {
 	}
 };
 
+//obsArray().setAt(42, 'the answer');
+ko.observableArray.fn.setAt = function (index, value) {
+	this.valueWillMutate();
+	this()[index] = value;
+	this.valueHasMutated();
+}
+
 // Controls whether or not the text in a textbox is selected based on a model property
 ko.bindingHandlers.selected = {
 	init: function (elem, valueAccessor) {

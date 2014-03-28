@@ -479,20 +479,6 @@ agileHub.client.onUserVoted = function (userVoteDto) {
 	}
 }
 
-agileHub.client.onVoteItemClosed = function (voteItemDto) {
-	var id = voteItemDto.Id;
-	var mark = voteItemDto.OverallMark;
-	var voteRow = $('#activityTable tr[id="' + id + '"]');
-	var cells = $(voteRow).children('td');
-	$(cells).css('background-color', '#000');
-	for (var i = 0; i < cells.length; i++) {
-		if (i == 0)
-			continue;
-		$(cells[i]).val(mark);
-		$(cells[i]).text(mark);
-	}
-}
-
 agileHub.client.onVoteItemOpened = function (voteItemDto) {
 	var id = voteItemDto.Id;
 	var voteRow = $('#activityTable tr[id="' + id + '"]');
@@ -504,6 +490,35 @@ agileHub.client.onVoteItemOpened = function (voteItemDto) {
 			continue;
 		$(cells[i]).val("");
 		$(cells[i]).text("");
+	}
+}
+
+agileHub.client.onVoteFinished = function (voteItemDto) {
+	agileApp.notifyService.info("onVoteFinished ", {}, true);
+
+	var mark = voteItemDto.OverallMark;
+	var voteRow = $('#activityTable tr[id="' + voteItemDto.Id + '"]');
+	var cells = $(voteRow).children('td');
+	$(cells).css('background-color', '#000');
+	for (var i = 0; i < cells.length; i++) {
+		if (i == 0)
+			continue;
+		$(cells[i]).val(mark);
+		$(cells[i]).text(mark);
+	}
+}
+
+agileHub.client.onVoteItemClosed = function (voteItemDto) {
+	var id = voteItemDto.Id;
+	var mark = voteItemDto.OverallMark;
+	var voteRow = $('#activityTable tr[id="' + id + '"]');
+	var cells = $(voteRow).children('td');
+	$(cells).css('background-color', '#000');
+	for (var i = 0; i < cells.length; i++) {
+		if (i == 0)
+			continue;
+		$(cells[i]).val(mark);
+		$(cells[i]).text(mark);
 	}
 }
 
@@ -528,71 +543,59 @@ function handleUsers(usersObservale) {
 
 function handleVotes(roomObs) {
 
+	console.log("handling votes");
+
 	var headerRow = $('#activityTable thead tr')[0];
+	var votesContainer = $('#activityTable tbody tr');
 	var voteItems = $('#activityTable tbody tr')
 	var users = $(headerRow).find('th');
+
+	console.log("Room vote items length: " + roomObs.itemsToVote().length);
+	console.log("Room users length: " + roomObs.connectedUsers().length);
 
 	if (roomObs.itemsToVote().length === voteItems.length &&
 		users.length - 1 == roomObs.connectedUsers().length) {
 		console.log("all equals");
 		return
 	}
-
 	if (users.length - 1 === voteItems.length - 1)
+		return;
 
-		if (users.length === 1) return;
-	if (voteItems.length === 0) return;
+	//if (voteItems.length === 0) return;
 
 	var userId;
 	var voteId;
 	var voteItemRow;
 
 	//foreach vote item
-	for (var v = 0; v < voteItems.length; v++) {
-		var voteItemRow = $(voteItems[v]);
-		voteId = voteItemRow.attr('id');
-		//foreach user for vote item
-		for (var u = 1; u < users.length; u++) {
-			var user = $(users[u]);
-			userId = user.attr('id');
-			addCellToRow(voteItemRow, userId, voteId);
+	var roomVotes = roomObs.itemsToVote();
+	for (var i = 0; i < roomVotes.length; i++) {
+		var found = false;
+		var roomVote = roomVotes[i];
+
+		for (var v = 0; v < voteItems.length; v++) {
+			var voteItemRow = $(voteItems[v]);
+			if (roomVote.id == voteItemRow.attr('id')) {
+				found = true;
+				break;
+			}
+		}
+
+		if (!found) {
+			mainVM.roomDtoState().itemsToVote.push(roomVote);
+			for (var u = 1; u < users.length; u++) {
+				var user = $(users[u]);
+				userId = user.attr('id');
+				voteId = roomVote.id;
+				console.log("UserID is:" + userId);
+				console.log("VoteID is:" + voteId);
+				var addedRow = $('#activityTable tr[id="' + voteId + '"]');
+				if (addedRow != null) {
+					addCellToRow(addedRow, userId, voteId);
+				}
+			}
 		}
 	}
-
-	//var usersRow = $('#activityTable thead tr')[0];
-	//var voteItems = $('#activityTable tbody tr')
-	//var users = $(usersRow).find('th');
-
-	//if (users.length == 1) return;
-	//if (voteItems.length == 0) return;
-
-	//var userId;
-	//var voteId;
-	//var voteItemRow;
-
-	//var forPurge = [];
-	////remove deleted votes
-	//$(voteItems).each(function (indx, row) {
-	//	var id = $(row).attr('id');
-	//	if (!room.containsVote(id))
-	//		forPurge.push(id);
-	//});
-
-	//for (var i = 0; i < forPurge.length; i++) {
-	//	$("#activityTable > tbody > tr:" + i).remove();
-	//}
-
-	////foreach vote item
-	//for (var v = 0; v < voteItems.length; v++) {
-	//	var voteItemRow = $(voteItems[v]);
-	//	voteId = voteItemRow.attr('id');
-	//	//foreach user for vote item
-	//	for (var u = 1; u < users.length; u++) {
-	//		var user = $(users[u]);
-	//		userId = user.attr('id');
-	//		addCellToRow(voteItemRow, userId, voteId);
-	//	}
-	//}
 }
 
 function getCelInRowById(row, cellId) {
