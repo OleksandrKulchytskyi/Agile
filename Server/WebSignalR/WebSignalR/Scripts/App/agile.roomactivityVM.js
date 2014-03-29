@@ -494,8 +494,6 @@ agileHub.client.onVoteItemOpened = function (voteItemDto) {
 }
 
 agileHub.client.onVoteFinished = function (voteItemDto) {
-    agileApp.notifyService.info("onVoteFinished ", {}, true);
-
     var voteRow = $('#activityTable tr[id="' + voteItemDto.Id + '"]');
     var cells = $(voteRow).children('td');
 
