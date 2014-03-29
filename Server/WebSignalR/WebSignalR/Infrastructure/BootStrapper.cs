@@ -61,7 +61,7 @@ namespace WebSignalR.Infrastructure
 				IUserVoteRepository uv = kernel.Get<IUserVoteRepository>();
 				IContext ctx = kernel.Get<IContext>();
 
-				return new UnityOfWork(user, room, privileges, vote, session, uv,srRepo, ctx);
+				return new UnityOfWork(user, room, privileges, vote, session, uv, srRepo, ctx);
 			});
 
 			serviceLocator.LoadModule("~/Modules/ServicesModule.xml");
@@ -213,14 +213,15 @@ namespace WebSignalR.Infrastructure
 				.ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
 
 
-			Mapper.CreateMap<VoteItem, VoteItemDto>()//TODO: check here !! in JS model ve got only integers, needs to be redesigned
+			Mapper.CreateMap<VoteItem, VoteItemDto>()
 				.ForMember(d => d.Opened, opt => opt.MapFrom(s => s.Opened))
 				.ForMember(dest => dest.HostRoomId, opt => opt.MapFrom(src => src.HostRoom.Id))
-				.ForMember(dest => dest.VotedUsers, opt => opt.Ignore())
+				.ForMember(dest => dest.VotedUsers, opt => opt.MapFrom(src => src.VotedUsers.Select(x => Mapper.Map<UserVoteDto>(x))))
 				.IgnoreAllNonExisting();
 
 			Mapper.CreateMap<VoteItemDto, VoteItem>()
-				.ForMember(dest => dest.VotedUsers, opt => opt.MapFrom(src => src.VotedUsers.Select(x => new UserVote() { Id = x }).ToList()))
+				.ForMember(dest => dest.VotedUsers, opt => opt.MapFrom(src => src.VotedUsers.Select(x => 
+					new UserVote() { Id = x.Id, Mark = x.Mark, UserId = x.UserId, VoteId = x.VoteItemId }).ToList()))
 				.ForSourceMember(src => src.HostRoomId, opt => opt.Ignore())
 				.IgnoreAllNonExisting();
 

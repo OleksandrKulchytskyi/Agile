@@ -6,7 +6,7 @@ namespace WebSignalR.Common.DTO
 	{
 		public VoteItemDto()
 		{
-			VotedUsers = new List<int>();
+			VotedUsers = new List<UserVoteDto>();
 		}
 
 		public string Content { get; set; }
@@ -23,6 +23,6 @@ namespace WebSignalR.Common.DTO
 
 		public int HostRoomId { get; set; }
 
-		public List<int> VotedUsers { get; set; }
+		public List<UserVoteDto> VotedUsers { get; set; }
 	}
 }

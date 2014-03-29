@@ -69,4 +69,9 @@ public class YieldInOperator
      return false;
  }
 
+@echo off
+redis-cli -h localhost -p 6380 -a Columbia03
+;;SUBSCRIBE WebSignalR
+pause
+
 http://habrahabr.ru/post/215097/
