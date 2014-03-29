@@ -15,7 +15,16 @@ namespace WebSignalR.App_Start
 				Resolver = resolver,
 				EnableJavaScriptProxies = true,
 			};
+
 			RouteTable.Routes.MapHubs(hubConfig);
+
+			if (bool.Parse(System.Configuration.ConfigurationManager.AppSettings["Redis.Enable"]))
+			{
+				string server = System.Configuration.ConfigurationManager.AppSettings["Redis.Server"];
+				string port = System.Configuration.ConfigurationManager.AppSettings["Redis.Port"];
+				string password = System.Configuration.ConfigurationManager.AppSettings["Redis.Password"];
+				GlobalHost.DependencyResolver.UseRedis(server, int.Parse(port), password, "WebSignalR");
+			}
 
 			IConfigurationManager configManager = resolver.Resolve<IConfigurationManager>();
 			configManager.ConnectionTimeout = TimeSpan.FromSeconds(30);
@@ -23,7 +32,7 @@ namespace WebSignalR.App_Start
 
 			IHubPipeline hubPipeline = resolver.Resolve<IHubPipeline>();
 			hubPipeline.AddModule(new Hubs.Pipelines.LogErrorPipelineModule());
-			
+
 			System.Web.Http.GlobalConfiguration.Configuration.Formatters.JsonFormatter.
 				SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
 

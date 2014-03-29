@@ -270,6 +270,7 @@ namespace WebSignalR.Hubs
 			_roomService.ChangeRoomState(roomName, state);
 			Room room = GetRepository<Room>().Get(x => x.Name == roomName).FirstOrDefault();
 			IRepository<VoteItem> voteRepo = GetRepository<VoteItem>();
+			IRepository<UserVote> userVotesRepo = GetRepository<UserVote>();
 
 			if (room.ItemsToVote != null && state)//in case whe we open room clear all previous user votes
 			{
@@ -277,8 +278,13 @@ namespace WebSignalR.Hubs
 				{
 					item.Opened = false;
 					item.Closed = false;
-					if (item.VotedUsers != null)
-						item.VotedUsers.Clear();
+					item.Finished = false;
+					if (item.VotedUsers != null && item.VotedUsers.Count > 0)
+					{
+						foreach (UserVote uv in item.VotedUsers)
+							userVotesRepo.Remove(uv);
+					}
+					item.VotedUsers.Clear();
 					voteRepo.Update(item);
 				}
 			}
@@ -374,7 +380,7 @@ namespace WebSignalR.Hubs
 				uv.Mark = mark;
 				userVorePero.Add(uv);
 				voteItem.VotedUsers.Add(uv);
-				
+
 				_sessionServ.UpdateSessionActivity(Context.ConnectionId);
 				userVoteDto = Mapper.Map<UserVoteDto>(uv);
 				Task resultTask = Clients.Group(room).onUserVoted(userVoteDto);
