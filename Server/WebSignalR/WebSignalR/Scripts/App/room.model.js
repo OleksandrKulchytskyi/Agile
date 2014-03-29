@@ -57,8 +57,8 @@
 		data = data || {};
 		console.log(data);
 		self.id = data.Id;
-		self.userId = ko.observable(data.User.Id || data.UserId);
-		self.voteId = ko.observable(data.VoteItem.Id || data.VoteItemId);
+		self.userId = ko.observable(data.UserId);
+		self.voteId = ko.observable(data.VoteItemId);
 		self.mark = ko.observable(data.Mark);
 
 		self.toJson = function () {
