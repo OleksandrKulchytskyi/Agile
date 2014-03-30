@@ -70,6 +70,7 @@ public class YieldInOperator
  }
 
  //Iteresting solution with scaleout regardng SignalR
+ http://roycornelissen.wordpress.com/2013/03/11/an-nservicebus-backplane-for-signalr/
  http://www.brendanwhelan.net/2013/scalable-server-push-notifications-with-signalr-and-redis
  https://github.com/mdevilliers/SignalR.RabbitMq
  http://www.codeproject.com/Articles/637762/ASP-NET-SignalR-Basis-Step-by-Step-Part
