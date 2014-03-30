@@ -69,6 +69,8 @@ public class YieldInOperator
      return false;
  }
 
+ http://www.brendanwhelan.net/2013/scalable-server-push-notifications-with-signalr-and-redis
+
 @echo off
 redis-cli -h localhost -p 6380 -a Columbia03
 ;;SUBSCRIBE WebSignalR

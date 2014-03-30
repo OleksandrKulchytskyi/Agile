@@ -215,8 +215,7 @@
                         agileApp.notifyService.warning("Please select vote item first.", {}, true);
                         return;
                     }
-
-                    if (selectedVoteItem().opened==false) {
+                    if (selectedVoteItem().opened == false) {
                         agileApp.notifyService.warning("Vote cannot be accepted for non-opened vote item.", {}, true);
                         return;
                     }
@@ -242,8 +241,8 @@
             open: function () {
                 if (selectedVoteItem()) {
                     var data = selectedVoteItem().content();
-                    console.log(data);
                     $('#submitVoteForm #voteItemContent').text(data);
+                    $('#submitVoteForm #txtVoteItemMark').val('');
                 }
             },
             close: function () {
@@ -508,11 +507,11 @@ agileHub.client.onVoteFinished = function (voteItemDto) {
     for (var i = 0; i < userVotes.length; i++) {
         var uv = userVotes[i];
 
-        var cell= $(voteRow).filter(function (index) {
+        var cell = $(voteRow).filter(function (index) {
             return $(this).attr('id') == uv.VoteItemId + "_" + uv.UserId;
         });
         if (cell != null) {
-            $(cells[i+1]).removeClass('userVotedStyle');
+            $(cells[i + 1]).removeClass('userVotedStyle');
             $(cells[i + 1]).val(uv.Mark);
             $(cells[i + 1]).text(uv.Mark);
             $(cells[i + 1]).css('background-color', '#12F50E');
