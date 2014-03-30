@@ -179,6 +179,7 @@
     <Content Include="Content\images\bg_header.jpg" />
     <Content Include="Content\images\bullet1.gif" />
     <Content Include="Content\images\bullet2.gif" />
+    <Content Include="Content\images\Check.png" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
     <Content Include="Content\images\Wait.gif" />

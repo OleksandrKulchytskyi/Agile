@@ -215,6 +215,12 @@
                         agileApp.notifyService.warning("Please select vote item first.", {}, true);
                         return;
                     }
+
+                    if (selectedVoteItem().opened==false) {
+                        agileApp.notifyService.warning("Vote cannot be accepted for non-opened vote item.", {}, true);
+                        return;
+                    }
+
                     var mark = $('#submitVoteForm input[id="txtVoteItemMark"]').val();
                     if (isNaN(mark)) {
                         agileApp.notifyService.warning("Mark value must be a digit.", {}, true);
@@ -472,10 +478,11 @@ agileHub.client.onUserVoted = function (userVoteDto) {
     console.log("cell id " + cellId);
     var cell = getCelInRowById(voteRow, cellId);
     if (cell != null) {
-        $(cell).css('background-color', 'lightblue')
-        var mark = userVoteDto.Mark;
-        $(cell).val(mark);
-        $(cell).text(mark);
+        //$(cell).css('background-color', 'lightblue')
+        //var mark = userVoteDto.Mark;
+        //$(cell).val(mark);
+        //$(cell).text(mark);
+        $(cell).addClass('userVotedStyle');
     }
 }
 
@@ -497,10 +504,19 @@ agileHub.client.onVoteFinished = function (voteItemDto) {
     var voteRow = $('#activityTable tr[id="' + voteItemDto.Id + '"]');
     var cells = $(voteRow).children('td');
 
-    for (var i = 0; i < cells.length; i++) {
-        if (i == 0)
-            continue;
-        $(cells[i]).css('background-color', '#12F50E');
+    var userVotes = voteItemDto.VotedUsers;
+    for (var i = 0; i < userVotes.length; i++) {
+        var uv = userVotes[i];
+
+        var cell= $(voteRow).filter(function (index) {
+            return $(this).attr('id') == uv.VoteItemId + "_" + uv.UserId;
+        });
+        if (cell != null) {
+            $(cells[i+1]).removeClass('userVotedStyle');
+            $(cells[i + 1]).val(uv.Mark);
+            $(cells[i + 1]).text(uv.Mark);
+            $(cells[i + 1]).css('background-color', '#12F50E');
+        }
     }
 }
 
@@ -512,10 +528,10 @@ agileHub.client.onVoteItemClosed = function (voteItemDto) {
 
     for (var i = 0; i < cells.length; i++) {
         if (i == 0) {
-            $(cells[i]).css('background-color', '#AFB2AF')
+            $(cells[i]).css('background-color', '#AFB2AF');
             continue;
         }
-
+        $(cells[i]).removeClass('userVotedStyle');
         $(cells[i]).css('background-color', '#12F50E');
         $(cells[i]).val(mark);
         $(cells[i]).text(mark);

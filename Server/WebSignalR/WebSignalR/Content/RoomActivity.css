@@ -69,3 +69,13 @@ th.specalt {
 	font: bold 10px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
 	color: #797268;
 }
+
+
+.userVotedStyle {
+    border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+    background: url(images/Check.png) left top no-repeat;
+}
+
+/*background:  url(images/Wait.gif) 50% 50% no-repeat;
+}*/
