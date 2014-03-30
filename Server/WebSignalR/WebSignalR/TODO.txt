@@ -69,7 +69,9 @@ public class YieldInOperator
      return false;
  }
 
+ //Iteresting solution with scaleout regardng SignalR
  http://www.brendanwhelan.net/2013/scalable-server-push-notifications-with-signalr-and-redis
+ https://github.com/mdevilliers/SignalR.RabbitMq
 
 @echo off
 redis-cli -h localhost -p 6380 -a Columbia03
