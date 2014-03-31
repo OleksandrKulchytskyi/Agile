@@ -347,7 +347,6 @@ $.connection.hub.stateChanged(function (change) {
 	else if (timeout && change.newState === $.signalR.connectionState.connected) {
 		mainVM.mySession().sessionId = $.connection.hub.id;
 		window.agileApp.notifyService.warning('Server reconnected, reinitialize', {}, true);
-		//$.connection.auctionHub.initialize();
 		clearTimeout(timeout);
 		timeout = null;
 	}
@@ -362,7 +361,6 @@ agileHub.client.onUserLogged = function (user) {
 	mainVM.setLoggedUser(user);
 	if ($("#userId").val() === "0")
 		$("#userId").val(mainVM.loggedUser().id);
-	//window.agileApp.notifyService.info("User e", null, true);
 }
 
 agileHub.client.onErrorHandler = function (exMsg) {
@@ -373,7 +371,6 @@ agileHub.client.onErrorHandler = function (exMsg) {
 	//	$("#error").fadeOut(3000);
 	//});
 	//agileHub.connection.stop();
-	//chat.connection.stop();
 }
 
 agileHub.client.onState = function (state) {
@@ -477,10 +474,6 @@ agileHub.client.onUserVoted = function (userVoteDto) {
 	console.log("cell id " + cellId);
 	var cell = getCelInRowById(voteRow, cellId);
 	if (cell != null) {
-		//$(cell).css('background-color', 'lightblue')
-		//var mark = userVoteDto.Mark;
-		//$(cell).val(mark);
-		//$(cell).text(mark);
 		$(cell).addClass('userVotedStyle');
 	}
 }
@@ -665,6 +658,6 @@ function logHubInvokeExc(e) {
 		agileApp.notifyService.error("Could not inoke hub server method! " + data, null, true);
 	}
 	else {
-		agileApp.notifyService.error(e, null, true);
+		agileApp.notifyService.error(e, {}, true);
 	}
 };

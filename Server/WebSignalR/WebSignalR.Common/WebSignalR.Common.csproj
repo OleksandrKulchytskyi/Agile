@@ -102,6 +102,7 @@
     <Compile Include="Interfaces\IEntity.cs" />
     <Compile Include="Interfaces\IKeyProvider.cs" />
     <Compile Include="Interfaces\IPage.cs" />
+    <Compile Include="Interfaces\IPagedList.cs" />
     <Compile Include="Interfaces\IPrincipalProvider.cs" />
     <Compile Include="Interfaces\IReadOnlyRepository.cs" />
     <Compile Include="Interfaces\IService.cs" />

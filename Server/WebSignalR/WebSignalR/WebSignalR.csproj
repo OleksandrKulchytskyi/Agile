@@ -345,6 +345,7 @@
     <Compile Include="Infrastructure\Handlers\ApiKeyProtectionMessageHandler.cs" />
     <Compile Include="Infrastructure\Handlers\EmptyPostBodyMessageHandler.cs" />
     <Compile Include="Infrastructure\ObjectExtensions.cs" />
+    <Compile Include="Infrastructure\PagedList.cs" />
     <Compile Include="Infrastructure\Services\FormsPrincipalProvider.cs" />
     <Compile Include="Infrastructure\Services\ServiceLocator.cs" />
     <Compile Include="Infrastructure\Services\UserRoomService.cs" />
