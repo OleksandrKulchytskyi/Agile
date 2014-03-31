@@ -28,22 +28,6 @@ namespace WebSignalR.App_Start
 
 			RouteTable.Routes.MapHubs(hubConfig);
 
-			#region temp validation
-			//try
-			//{
-			//	object bus = GlobalHost.DependencyResolver.Resolve<Microsoft.AspNet.SignalR.Messaging.IMessageBus>();
-			//	if (bus != null)
-			//	{
-
-			//	}
-			//}
-			//catch (Exception)
-			//{
-
-			//	throw;
-			//} 
-			#endregion
-
 			IConfigurationManager configManager = resolver.Resolve<IConfigurationManager>();
 			configManager.ConnectionTimeout = TimeSpan.FromSeconds(30);
 			configManager.DisconnectTimeout = TimeSpan.FromSeconds(30);
