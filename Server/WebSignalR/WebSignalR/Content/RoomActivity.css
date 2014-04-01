@@ -75,6 +75,8 @@ th.specalt {
     border-right: 1px solid #C1DAD7;
 	border-bottom: 1px solid #C1DAD7;
     background: url(images/Check.png) left top no-repeat;
+	background-repeat:no-repeat;
+	background-position: center center;
 }
 
 /*background:  url(images/Wait.gif) 50% 50% no-repeat;

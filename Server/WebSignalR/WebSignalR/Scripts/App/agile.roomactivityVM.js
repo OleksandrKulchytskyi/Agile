@@ -535,23 +535,25 @@ agileHub.client.onRoomDeleted = function (roomDto) {
 }
 
 function handleUsers(usersObservale) {
-	console.log(usersObservale);
-	var rows = $('#activityTable thead tr');
 
-	var columns;
-	for (var i = 0; i < rows.length; i++) {
-		columns = $(rows[i]).find('th');
-		for (var j = 0; j < columns.length; j++) {
-			if (j == 0)
-				continue;
-			console.log($(columns[j]).html());
+	var usersState = usersObservale();
+	var existing = mainVM.roomDtoState().connectedUsers();
+	if (usersState.length != existing.length) {
+		for (var i = 0; i < usersState.length; i++) {
+			var found = false;
+			for (var e = 0; e < length; e++) {
+				if (usersState[i].id == existing[e].id) {
+					found = true;
+					break;
+				}
+			}
+			if (!found)
+				mainVM.roomDtoState().connectedUsers.push(usersState[i]);
 		}
 	}
 }
 
 function handleVotes(roomObs) {
-
-	console.log("handling votes");
 
 	var headerRow = $('#activityTable thead tr')[0];
 	var votesContainer = $('#activityTable tbody tr');
@@ -563,7 +565,6 @@ function handleVotes(roomObs) {
 
 	if (roomObs.itemsToVote().length === voteItems.length &&
 		users.length - 1 == roomObs.connectedUsers().length) {
-		console.log("all equals");
 		return
 	}
 	if (users.length - 1 === voteItems.length - 1)
@@ -593,8 +594,6 @@ function handleVotes(roomObs) {
 				var user = $(users[u]);
 				userId = user.attr('id');
 				voteId = roomVote.id;
-				console.log("UserID is:" + userId);
-				console.log("VoteID is:" + voteId);
 				var addedRow = $('#activityTable tr[id="' + voteId + '"]');
 				if (addedRow != null) {
 					addCellToRow(addedRow, userId, voteId);
