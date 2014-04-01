@@ -59,6 +59,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="..\SolutionVersion.cs">
+      <Link>SolutionVersion.cs</Link>
+    </Compile>
     <Compile Include="ILog.cs" />
     <Compile Include="SubscribeCallbackView.xaml.cs">
       <DependentUpon>SubscribeCallbackView.xaml</DependentUpon>

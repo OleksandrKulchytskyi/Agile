@@ -11,6 +11,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSignalR.Test", "WebSigna
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSignalR.TestHarness", "WebSignalR.TestHarness\WebSignalR.TestHarness.csproj", "{AA9F60DB-9891-4F68-99F2-A04B69D63823}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Version", "Version", "{0A281A7B-77E9-4FA8-ACB5-BE2AA1DD2AF6}"
+	ProjectSection(SolutionItems) = preProject
+		SolutionVersion.cs = SolutionVersion.cs
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
