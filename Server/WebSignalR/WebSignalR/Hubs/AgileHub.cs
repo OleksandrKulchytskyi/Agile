@@ -231,7 +231,7 @@ namespace WebSignalR.Hubs
 				Clients.Caller.onErrorHandler(ex.Message);
 				throw;
 			}
-			return EmptyTask;
+			return Infrastructure.TaskHelper.Empty;
 		}
 
 		[SignalRAuth(Roles = "User")]
@@ -330,7 +330,7 @@ namespace WebSignalR.Hubs
 
 				return Clients.Group(room.Name).onRoomStateChanged(Mapper.Map<RoomDto>(room));
 			}
-			return EmptyTask;
+			return Infrastructure.TaskHelper.Empty;
 		}
 
 		[SignalRAuth(Roles = "ScrumMaster")]
@@ -359,7 +359,7 @@ namespace WebSignalR.Hubs
 
 				return Clients.Group(room.Name).onRoomStateChanged(Mapper.Map<RoomDto>(room));
 			}
-			return EmptyTask;
+			return Infrastructure.TaskHelper.Empty;
 		}
 
 		[SignalRAuth(Roles = "User")]
@@ -402,7 +402,7 @@ namespace WebSignalR.Hubs
 					return Clients.Caller.onErrorHandler("Cannot submit vote for non-opend vote item.");
 			}
 
-			return EmptyTask;
+			return Infrastructure.TaskHelper.Empty;
 		}
 
 		[SignalRAuth(Roles = "ScrumMaster")]
@@ -457,14 +457,5 @@ namespace WebSignalR.Hubs
 				_unity.Dispose();
 			base.Dispose(disposing);
 		}
-
-		private Task EmptyTask
-		{
-			get
-			{
-				return Task.Factory.StartNew(() => { });
-			}
-		}
-
 	}
 }

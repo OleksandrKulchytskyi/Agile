@@ -58,6 +58,7 @@ namespace WebSignalR
 					//ContractResolver = new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver()
 				};
 			}
+			config.Formatters.Add(new Infrastructure.Formatters.CsvMediaTypeFormatter());
 			#endregion formatting
 		}
 	}

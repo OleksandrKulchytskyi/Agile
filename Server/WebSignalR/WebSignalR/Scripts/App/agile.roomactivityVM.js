@@ -541,7 +541,7 @@ function handleUsers(usersObservale) {
 	if (usersState.length != existing.length) {
 		for (var i = 0; i < usersState.length; i++) {
 			var found = false;
-			for (var e = 0; e < length; e++) {
+			for (var e = 0; e < existing.length; e++) {
 				if (usersState[i].id == existing[e].id) {
 					found = true;
 					break;
@@ -549,6 +549,18 @@ function handleUsers(usersObservale) {
 			}
 			if (!found)
 				mainVM.roomDtoState().connectedUsers.push(usersState[i]);
+		}
+
+		for (var i = 0; i < existing.length; i++) {
+			var found = false;
+			for (var e = 0; e < usersState.length; e++) {
+				if (existing[i].id == usersState[e].id) {
+					found = true;
+					break;
+				}
+			}
+			if (!found)
+				mainVM.roomDtoState().connectedUsers.remove(usersState[i]);
 		}
 	}
 }

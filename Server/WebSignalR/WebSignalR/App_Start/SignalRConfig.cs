@@ -19,9 +19,10 @@ namespace WebSignalR.App_Start
 
 			if (bool.Parse(System.Configuration.ConfigurationManager.AppSettings["Redis.Enable"]))
 			{
+				var crypto= Infrastructure.BootStrapper.serviceLocator.Get<WebSignalR.Common.Interfaces.ICrypto>();
 				string server = System.Configuration.ConfigurationManager.AppSettings["Redis.Server"];
 				string port = System.Configuration.ConfigurationManager.AppSettings["Redis.Port"];
-				string password = System.Configuration.ConfigurationManager.AppSettings["Redis.Password"];
+				string password = crypto.Decrypt(System.Configuration.ConfigurationManager.AppSettings["Redis.Password"]);
 				var scaleout = new RedisScaleoutConfiguration(server, int.Parse(port), password, "WebSignalR");
 				GlobalHost.DependencyResolver.UseRedis(scaleout);
 			}

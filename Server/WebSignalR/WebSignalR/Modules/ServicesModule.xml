@@ -11,6 +11,10 @@
 	<bind service="WebSignalR.Common.Interfaces.ICryptoService, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
 			  to="WebSignalR.Common.Infrastructure.CryptoService, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
 
+	<bind service="WebSignalR.Common.Interfaces.ICrypto, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+			  to="WebSignalR.Infrastructure.CommonCryptoHelper, WebSignalR, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+				scope="thread"/>
+
 	<bind service="WebSignalR.Common.Interfaces.IKeyProvider, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
 			  to="WebSignalR.Common.Infrastructure.FileBasedKeyProvider, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"/>
 

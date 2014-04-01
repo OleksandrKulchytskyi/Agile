@@ -8,10 +8,8 @@ using System.Linq;
 using System.Threading;
 using WebSignalR.Common.DTO;
 using WebSignalR.Common.Entities;
-using WebSignalR.Common.Infrastructure;
 using WebSignalR.Common.Interfaces;
 using WebSignalR.Common.Services;
-using WebSignalR.DataAccess.DB;
 using WebSignalR.DataAccess.Repositories;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(WebSignalR.Infrastructure.BootStrapper), "PreAppStart")]

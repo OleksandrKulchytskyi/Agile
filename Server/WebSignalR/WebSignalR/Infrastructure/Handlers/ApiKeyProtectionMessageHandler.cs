@@ -16,9 +16,8 @@ namespace WebSignalR.Infrastructure.Handlers
 			if (values != null && values.Count() == 1)
 				return base.SendAsync(request, cancellationToken);
 
-			TaskCompletionSource<HttpResponseMessage> tcs = new TaskCompletionSource<HttpResponseMessage>();
-			tcs.SetResult(new HttpResponseMessage(System.Net.HttpStatusCode.Unauthorized) { ReasonPhrase = "Api key is required." });
-			return tcs.Task;
+			return Infrastructure.TaskHelper.FromResult<HttpResponseMessage>(new
+				HttpResponseMessage(System.Net.HttpStatusCode.Unauthorized) { ReasonPhrase = "Api key is required." });
 		}
 	}
 }

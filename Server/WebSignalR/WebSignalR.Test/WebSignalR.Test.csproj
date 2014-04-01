@@ -53,8 +53,18 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="CryptoTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WebSignalR.Common\WebSignalR.Common.csproj">
+      <Project>{30f872d9-563d-4ed9-ae99-9ef0c9a8f7c7}</Project>
+      <Name>WebSignalR.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WebSignalR\WebSignalR.csproj">
+      <Project>{dabcd860-540b-4b6c-b2c4-f460417e21a7}</Project>
+      <Name>WebSignalR</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

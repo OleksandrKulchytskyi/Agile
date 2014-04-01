@@ -20,9 +20,8 @@ namespace WebSignalR.Infrastructure.Handlers
 					System.Diagnostics.Debug.WriteLine("Empty body has been detected in the POST request.");
 #endif
 					Global.Logger.Warn("Empty body has been detected in the POST request.");
-					TaskCompletionSource<HttpResponseMessage> tcs = new TaskCompletionSource<HttpResponseMessage>();
-					tcs.SetResult(new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest) { ReasonPhrase = "Empty body not allowed for the POST request." });
-					return tcs.Task;
+					return Infrastructure.TaskHelper.FromResult<HttpResponseMessage>(new 
+							HttpResponseMessage(System.Net.HttpStatusCode.BadRequest) { ReasonPhrase = "Empty body not allowed for the POST request." });
 				}
 			}
 
