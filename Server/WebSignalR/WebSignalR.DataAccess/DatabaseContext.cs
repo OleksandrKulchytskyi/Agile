@@ -1,45 +1,36 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Linq;
 using WebSignalR.Common.Interfaces;
-using WebSignalR.DataAccess.Mappings;
 
 namespace WebSignalR.DataAccess.DB
 {
 	public class DatabaseContext : DbContext, IContext
 	{
-		public DatabaseContext()
-			: base("ConnectionSettings")
-		{
-		}
-
 		public DatabaseContext(string connection)
 			: base(connection)
 		{
 		}
 
+		public DatabaseContext(ICrypto crypto)
+			: base(crypto.Decrypt(System.Configuration.ConfigurationManager.ConnectionStrings["ConnectionSettings"].ConnectionString))
+		{
+		}
+
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
-			#region commented
-			//var typesToRegister = Assembly.GetExecutingAssembly().GetTypes()
-			//					.Where(type => !String.IsNullOrEmpty(type.Namespace))
-			//					.Where(type => type.BaseType != null && !type.BaseType.IsGenericType &&
-			//									type.BaseType.GetGenericTypeDefinition() == typeof(Mappings.MapBase<>));
-			//foreach (var type in typesToRegister)
-			//{
-			//	dynamic configurationInstance = Activator.CreateInstance(type);
-			//	modelBuilder.Configurations.Add(configurationInstance);
-			//} 
-			#endregion
+			var typesToRegister = System.Reflection.Assembly.GetExecutingAssembly().GetTypes()
+								.Where(type => !String.IsNullOrEmpty(type.Namespace) && type.Namespace.EndsWith("Mappings")
+												&& type.BaseType.GetGenericTypeDefinition() == typeof(Mappings.MapBase<>));
 
-			modelBuilder.Configurations.Add(new RoomMap());
-			modelBuilder.Configurations.Add(new UserMap());
-			modelBuilder.Configurations.Add(new UserSessionMap());
-			modelBuilder.Configurations.Add(new SessionRoomMap());
-			modelBuilder.Configurations.Add(new VoteItemMap());
-			modelBuilder.Configurations.Add(new UserVoteMap());
-			modelBuilder.Configurations.Add(new PrivilegesMap());
+			foreach (var type in typesToRegister)
+			{
+				dynamic configurationInstance = Activator.CreateInstance(type);
+				modelBuilder.Configurations.Add(configurationInstance);
+			}
 			//Database.SetInitializer(new MigrateDatabaseToLatestVersion<DatabaseContext, Migrations.Configuration>());
 			base.OnModelCreating(modelBuilder);
 		}
@@ -54,7 +45,43 @@ namespace WebSignalR.DataAccess.DB
 
 		public void RollbackChanges()
 		{
-			//TODO: add implemetations here
+			var changedEntries = ChangeTracker.Entries().Where(x => x.State != EntityState.Unchanged).ToList();
+			foreach (var entry in changedEntries)
+			{
+				switch (entry.State)
+				{
+					// Under the covers, changing the state of an entity from Modified to Unchanged first sets the values of all  
+					// properties to the original values that were read from the database when it was queried, and then marks the  
+					// entity as Unchanged. This will also reject changes to FK relationships since the original value of the FK will be restored. 
+					case EntityState.Modified:
+						entry.State = EntityState.Unchanged;
+						break;
+					case EntityState.Added:
+						entry.State = EntityState.Detached;
+						break;
+					// If the EntityState is the Deleted, reload the date from the database.   
+					case EntityState.Deleted:
+						entry.Reload();
+						break;
+					default: break;
+				}
+			}
+
+			//foreach (var entry in changedEntries.Where(x => x.State == EntityState.Modified))
+			//{
+			//	entry.CurrentValues.SetValues(entry.OriginalValues);
+			//	entry.State = EntityState.Unchanged;
+			//}
+
+			//foreach (var entry in changedEntries.Where(x => x.State == EntityState.Added))
+			//{
+			//	entry.State = EntityState.Detached;
+			//}
+
+			//foreach (var entry in changedEntries.Where(x => x.State == EntityState.Deleted))
+			//{
+			//	entry.State = EntityState.Unchanged;
+			//}
 		}
 
 		public System.Data.Common.DbTransaction BeginTransaction()

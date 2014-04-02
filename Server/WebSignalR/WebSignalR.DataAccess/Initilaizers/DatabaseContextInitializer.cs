@@ -1,12 +1,13 @@
-﻿using WebSignalR.DataAccess.DB;
+﻿using WebSignalR.Common.Interfaces;
+using WebSignalR.DataAccess.DB;
 
 namespace WebSignalR.DataAccess.Initilaizers
 {
 	public class DatabaseContextInitializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<DatabaseContext>
 	{
-		public DatabaseContextInitializer()
+		public DatabaseContextInitializer(ICrypto crypto)
 		{
-			using (var dep = new DatabaseContext())
+			using (var dep = new DatabaseContext(crypto))
 			{
 				this.InitializeDatabase(dep);
 				this.Seed(dep);

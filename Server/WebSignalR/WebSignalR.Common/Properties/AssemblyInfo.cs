@@ -7,9 +7,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("WebSignalR.Common")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Aricent")]
+
 [assembly: AssemblyProduct("WebSignalR.Common")]
-[assembly: AssemblyCopyright("Copyright © Aricent 2014")]
+
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

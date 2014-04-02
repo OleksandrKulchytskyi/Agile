@@ -10,9 +10,7 @@ using System.Windows;
 [assembly: AssemblyTitle("WebSignalR.TestHarness")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Aricent")]
 [assembly: AssemblyProduct("WebSignalR.TestHarness")]
-[assembly: AssemblyCopyright("Copyright © Aricent 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
