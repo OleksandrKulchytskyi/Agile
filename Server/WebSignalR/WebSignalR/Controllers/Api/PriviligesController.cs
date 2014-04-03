@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using WebSignalR.Common.DTO;
 using WebSignalR.Common.Entities;
+using WebSignalR.Common.Extension;
 using WebSignalR.Common.Interfaces;
 using WebSignalR.Infrastructure.Authorization;
 
@@ -18,6 +19,7 @@ namespace WebSignalR.Controllers
 
 		public PrivilegesController(IUnityOfWork unity)
 		{
+			Ensure.Argument.NotNull(unity, "unity");
 			_unity = unity;
 		}
 

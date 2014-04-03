@@ -17,6 +17,7 @@ namespace WebSignalR.Controllers
 
 		public UserController(IUnityOfWork unity)
 		{
+			Ensure.Argument.NotNull(unity, "unity");
 			_unity = unity;
 		}
 

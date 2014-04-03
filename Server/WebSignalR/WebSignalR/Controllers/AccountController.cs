@@ -21,6 +21,7 @@ namespace WebSignalR.Controllers
 	{
 		public AccountController(IUnityOfWork unity)
 		{
+			Ensure.Argument.NotNull(unity, "unity");
 			base._unity = unity;
 		}
 

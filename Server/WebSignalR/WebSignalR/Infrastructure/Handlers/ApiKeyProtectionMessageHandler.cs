@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
+using WebSignalR.Common.Extension;
 
 namespace WebSignalR.Infrastructure.Handlers
 {
@@ -16,7 +17,7 @@ namespace WebSignalR.Infrastructure.Handlers
 			if (values != null && values.Count() == 1)
 				return base.SendAsync(request, cancellationToken);
 
-			return Infrastructure.TaskHelper.FromResult<HttpResponseMessage>(new
+			return TaskHelper.FromResult<HttpResponseMessage>(new
 				HttpResponseMessage(System.Net.HttpStatusCode.Unauthorized) { ReasonPhrase = "Api key is required." });
 		}
 	}

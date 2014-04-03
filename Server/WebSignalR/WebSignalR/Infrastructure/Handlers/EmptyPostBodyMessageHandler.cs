@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
+using WebSignalR.Common.Extension;
 
 namespace WebSignalR.Infrastructure.Handlers
 {
@@ -20,7 +21,7 @@ namespace WebSignalR.Infrastructure.Handlers
 					System.Diagnostics.Debug.WriteLine("Empty body has been detected in the POST request.");
 #endif
 					Global.Logger.Warn("Empty body has been detected in the POST request.");
-					return Infrastructure.TaskHelper.FromResult<HttpResponseMessage>(new 
+					return TaskHelper.FromResult<HttpResponseMessage>(new 
 							HttpResponseMessage(System.Net.HttpStatusCode.BadRequest) { ReasonPhrase = "Empty body not allowed for the POST request." });
 				}
 			}

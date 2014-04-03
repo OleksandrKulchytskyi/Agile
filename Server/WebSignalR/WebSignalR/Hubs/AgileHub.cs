@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using WebSignalR.Common.DTO;
 using WebSignalR.Common.Entities;
+using WebSignalR.Common.Extension;
 using WebSignalR.Common.Interfaces;
 using WebSignalR.Common.Services;
 using WebSignalR.Infrastructure;
@@ -231,7 +232,7 @@ namespace WebSignalR.Hubs
 				Clients.Caller.onErrorHandler(ex.Message);
 				throw;
 			}
-			return Infrastructure.TaskHelper.Empty;
+			return TaskHelper.Empty;
 		}
 
 		[SignalRAuth(Roles = "User")]
@@ -330,7 +331,7 @@ namespace WebSignalR.Hubs
 
 				return Clients.Group(room.Name).onRoomStateChanged(Mapper.Map<RoomDto>(room));
 			}
-			return Infrastructure.TaskHelper.Empty;
+			return TaskHelper.Empty;
 		}
 
 		[SignalRAuth(Roles = "ScrumMaster")]
@@ -359,7 +360,7 @@ namespace WebSignalR.Hubs
 
 				return Clients.Group(room.Name).onRoomStateChanged(Mapper.Map<RoomDto>(room));
 			}
-			return Infrastructure.TaskHelper.Empty;
+			return TaskHelper.Empty;
 		}
 
 		[SignalRAuth(Roles = "User")]
@@ -402,7 +403,7 @@ namespace WebSignalR.Hubs
 					return Clients.Caller.onErrorHandler("Cannot submit vote for non-opend vote item.");
 			}
 
-			return Infrastructure.TaskHelper.Empty;
+			return TaskHelper.Empty;
 		}
 
 		[SignalRAuth(Roles = "ScrumMaster")]

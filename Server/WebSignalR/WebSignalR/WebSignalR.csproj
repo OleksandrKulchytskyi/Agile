@@ -348,7 +348,11 @@
     <Compile Include="Infrastructure\Filters\WebApiExceptionFilter.cs" />
     <Compile Include="Infrastructure\Formatters\CsvMediaTypeFormatter.cs" />
     <Compile Include="Infrastructure\Handlers\ApiKeyProtectionMessageHandler.cs" />
+    <Compile Include="Infrastructure\Handlers\CompressionHandler.cs" />
+    <Compile Include="Infrastructure\Handlers\DecompressionHandler.cs" />
     <Compile Include="Infrastructure\Handlers\EmptyPostBodyMessageHandler.cs" />
+    <Compile Include="Infrastructure\Handlers\RequireHttpsHandler.cs" />
+    <Compile Include="Infrastructure\Http\CompressedContent.cs" />
     <Compile Include="Infrastructure\ObjectExtensions.cs" />
     <Compile Include="Infrastructure\PagedList.cs" />
     <Compile Include="Infrastructure\Services\FormsPrincipalProvider.cs" />
@@ -356,7 +360,6 @@
     <Compile Include="Infrastructure\Services\UserRoomService.cs" />
     <Compile Include="Infrastructure\Services\SessionService.cs" />
     <Compile Include="Infrastructure\SessionState.cs" />
-    <Compile Include="Infrastructure\TaskHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Hubs\AgileHub.cs" />
     <Compile Include="ViewModels\ChangeRolesViewModel.cs" />

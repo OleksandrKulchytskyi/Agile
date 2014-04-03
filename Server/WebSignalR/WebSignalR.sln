@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Version", "Version", "{0A28
 		SolutionVersion.cs = SolutionVersion.cs
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSignalR.Bus", "WebSignalR.Bus\WebSignalR.Bus.csproj", "{9ABF08C9-95B8-4291-8A0D-FFADA0BF863D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,10 @@ Global
 		{AA9F60DB-9891-4F68-99F2-A04B69D63823}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA9F60DB-9891-4F68-99F2-A04B69D63823}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA9F60DB-9891-4F68-99F2-A04B69D63823}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9ABF08C9-95B8-4291-8A0D-FFADA0BF863D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9ABF08C9-95B8-4291-8A0D-FFADA0BF863D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9ABF08C9-95B8-4291-8A0D-FFADA0BF863D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9ABF08C9-95B8-4291-8A0D-FFADA0BF863D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

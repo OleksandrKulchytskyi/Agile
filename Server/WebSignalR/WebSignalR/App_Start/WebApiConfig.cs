@@ -24,6 +24,9 @@ namespace WebSignalR
 
 			config.DependencyResolver = new DependencyResolvers.NinjectWebApiDependencyResolver(BootStrapper.serviceLocator.Kernel);
 			//config.Services.Replace(typeof(System.Web.Http.Dispatcher.IHttpControllerActivator),new Activators.CustomApiActivator());
+			if (System.Configuration.ConfigurationManager.AppSettings["Response.Compression"].IndexOf("true") != -1)
+				config.MessageHandlers.Insert(0, new WebSignalR.Infrastructure.Handlers.CompressionHandler()); // first runs last
+			
 			config.MessageHandlers.Add(new Infrastructure.Handlers.EmptyPostBodyMessageHandler());
 			config.Filters.Add(new Infrastructure.Filters.WebApiExceptionFilter());
 			config.Services.Replace(typeof(System.Web.Http.Tracing.ITraceWriter), new Infrastructure.DynamicTrace());

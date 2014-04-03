@@ -58,8 +58,13 @@
     </Compile>
     <Compile Include="CryptoTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="BusUnitTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\WebSignalR.Bus\WebSignalR.Bus.csproj">
+      <Project>{9abf08c9-95b8-4291-8a0d-ffada0bf863d}</Project>
+      <Name>WebSignalR.Bus</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WebSignalR.Common\WebSignalR.Common.csproj">
       <Project>{30f872d9-563d-4ed9-ae99-9ef0c9a8f7c7}</Project>
       <Name>WebSignalR.Common</Name>
@@ -68,6 +73,9 @@
       <Project>{dabcd860-540b-4b6c-b2c4-f460417e21a7}</Project>
       <Name>WebSignalR</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

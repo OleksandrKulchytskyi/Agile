@@ -6,9 +6,9 @@ using System.Net.Http;
 using System.Web.Http;
 using WebSignalR.Common.DTO;
 using WebSignalR.Common.Entities;
+using WebSignalR.Common.Extension;
 using WebSignalR.Common.Interfaces;
 using WebSignalR.Common.Services;
-using WebSignalR.DataAccess.Repositories;
 
 namespace WebSignalR.Controllers
 {
@@ -20,6 +20,8 @@ namespace WebSignalR.Controllers
 
 		public RoomController(IUnityOfWork unity, IUserRoomService userRoomService)
 		{
+			Ensure.Argument.NotNull(unity, "unity");
+			Ensure.Argument.NotNull(userRoomService, "userRoomService");
 			_unity = unity;
 			_userRoomService = userRoomService;
 		}

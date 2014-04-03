@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebSignalR.Common.DTO;
 using WebSignalR.Common.Entities;
+using WebSignalR.Common.Extension;
 using WebSignalR.Common.Interfaces;
 
 namespace WebSignalR.Controllers
@@ -14,6 +15,7 @@ namespace WebSignalR.Controllers
 	{
 		public RoomActivityController(IUnityOfWork unity)
 		{
+			Ensure.Argument.NotNull(unity, "unity");
 			base._unity = unity;
 		}
 

@@ -45,9 +45,21 @@
       <HintPath>..\packages\EntityFramework.6.0.2\lib\net40\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Ninject.3.2.0.0\lib\net40\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.4.0.30506.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.WebRequest.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -89,8 +101,15 @@
     <Compile Include="Entities\UserVote.cs" />
     <Compile Include="Entities\VoteItem.cs" />
     <Compile Include="Extension\Common.cs" />
+    <Compile Include="Extension\Ensure.cs" />
+    <Compile Include="Extension\StreamExtensions.cs" />
+    <Compile Include="Extension\StringExtensions.cs" />
+    <Compile Include="Extension\TaskHelper.cs" />
+    <Compile Include="Extension\TypeExtension.cs" />
+    <Compile Include="Handlers\DecompressionHandler.cs" />
     <Compile Include="Infrastructure\AnnotationsEntityValidator.cs" />
     <Compile Include="Infrastructure\AnnotationsEntityValidatorFactory.cs" />
+    <Compile Include="Infrastructure\Compressor.cs" />
     <Compile Include="Infrastructure\CryptoHelper.cs" />
     <Compile Include="Infrastructure\CryptoService.cs" />
     <Compile Include="Infrastructure\Exceptions\ApplicationValidationException.cs" />
@@ -98,6 +117,9 @@
     <Compile Include="Infrastructure\MethodHandler.cs" />
     <Compile Include="Infrastructure\Page.cs" />
     <Compile Include="Infrastructure\UserCredentialsValidator.cs" />
+    <Compile Include="Interfaces\Bus\IBus.cs" />
+    <Compile Include="Interfaces\Bus\IHandle.cs" />
+    <Compile Include="Interfaces\ICompressor.cs" />
     <Compile Include="Interfaces\IEntityValidator.cs" />
     <Compile Include="Infrastructure\SafeCollection.cs" />
     <Compile Include="Interfaces\ICryptoService.cs" />
