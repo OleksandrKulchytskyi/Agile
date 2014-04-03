@@ -402,6 +402,10 @@
       <Project>{6f5e8b7e-94dd-44a5-ad21-7cd5c6b553ca}</Project>
       <Name>WebSignalR.DataAccess</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WebSignalR.PluginManager\WebSignalR.PluginManager.csproj">
+      <Project>{4e16eb47-f185-49ac-8bdd-0b25b08b686c}</Project>
+      <Name>WebSignalR.PluginManager</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
