@@ -18,7 +18,7 @@ namespace WebSignalR.DataAccess.Repositories
 		public UnityOfWork(IRepository<User> userRepo, IRepository<Room> roomRepo,
 							IRepository<Privileges> privilegeRepo, IRepository<VoteItem> voteRepo,
 							IRepository<UserSession> sessionRepo, IRepository<UserVote> userVoteRepo,
-							ISessionRoomRepository srRepo,IContext context)
+							ISessionRoomRepository srRepo, IContext context)
 		{
 			_context = context;
 			_repositories = new Dictionary<Type, object>();
