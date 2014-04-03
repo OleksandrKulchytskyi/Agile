@@ -126,6 +126,7 @@
     <Compile Include="Interfaces\IContext.cs" />
     <Compile Include="Interfaces\IEntity.cs" />
     <Compile Include="Interfaces\IKeyProvider.cs" />
+    <Compile Include="Interfaces\IModule.cs" />
     <Compile Include="Interfaces\IPage.cs" />
     <Compile Include="Interfaces\IPagedList.cs" />
     <Compile Include="Interfaces\IPrincipalProvider.cs" />
