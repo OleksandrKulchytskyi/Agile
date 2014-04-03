@@ -12,7 +12,7 @@ namespace WebSignalR.DataAccess.Repositories
 		private bool _disposed = false;
 		private readonly IContext _context;
 
-		private Dictionary<Type, object> _repositories = null;
+		private readonly Dictionary<Type, object> _repositories = null;
 		private DbTransaction _transaction = null;
 
 		public UnityOfWork(IRepository<User> userRepo, IRepository<Room> roomRepo,
