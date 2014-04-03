@@ -81,3 +81,6 @@ redis-cli -h localhost -p 6380 -a Columbia03
 pause
 
 http://habrahabr.ru/post/215097/
+
+!!!!!! Plugins inside ASP MVC
+http://habrahabr.ru/post/202776/
