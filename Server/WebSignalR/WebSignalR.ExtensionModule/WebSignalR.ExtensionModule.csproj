@@ -7,12 +7,12 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{30F872D9-563D-4ED9-AE99-9EF0C9A8F7C7}</ProjectGuid>
+    <ProjectGuid>{1AA3296F-79F1-4841-999A-334BF02F6AD6}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WebSignalR.Common</RootNamespace>
-    <AssemblyName>WebSignalR.Common</AssemblyName>
+    <RootNamespace>WebSignalR.ExtensionModule</RootNamespace>
+    <AssemblyName>WebSignalR.ExtensionModule</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
@@ -38,19 +38,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.6.0.2\lib\net40\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\packages\EntityFramework.6.0.2\lib\net40\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Ninject.3.2.0.0\lib\net40\Ninject.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.dll</HintPath>
@@ -70,6 +60,12 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.4.0.30506.0\lib\net40\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.4.0.20710.0\lib\net40\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
@@ -82,70 +78,9 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\SolutionVersion.cs">
-      <Link>SolutionVersion.cs</Link>
-    </Compile>
-    <Compile Include="DTO\DtoBase.cs" />
-    <Compile Include="DTO\PrivilegeDto.cs" />
-    <Compile Include="DTO\SessionRoomDto.cs" />
-    <Compile Include="DTO\UserDto.cs" />
-    <Compile Include="DTO\UserVoteDto.cs" />
-    <Compile Include="DTO\VoteItemDto.cs" />
-    <Compile Include="DTO\RoomDto.cs" />
-    <Compile Include="Entities\EntityBase.cs" />
-    <Compile Include="Entities\Privileges.cs" />
-    <Compile Include="Entities\Room.cs" />
-    <Compile Include="Entities\SessionRoom.cs" />
-    <Compile Include="Entities\User.cs" />
-    <Compile Include="Entities\UserSession.cs" />
-    <Compile Include="Entities\UserVote.cs" />
-    <Compile Include="Entities\VoteItem.cs" />
-    <Compile Include="Extension\Common.cs" />
-    <Compile Include="Extension\Ensure.cs" />
-    <Compile Include="Extension\StreamExtensions.cs" />
-    <Compile Include="Extension\StringExtensions.cs" />
-    <Compile Include="Extension\TaskHelper.cs" />
-    <Compile Include="Extension\TypeExtension.cs" />
-    <Compile Include="Handlers\DecompressionHandler.cs" />
-    <Compile Include="Infrastructure\AnnotationsEntityValidator.cs" />
-    <Compile Include="Infrastructure\AnnotationsEntityValidatorFactory.cs" />
-    <Compile Include="Infrastructure\Compressor.cs" />
-    <Compile Include="Infrastructure\CryptoHelper.cs" />
-    <Compile Include="Infrastructure\CryptoService.cs" />
-    <Compile Include="Infrastructure\Exceptions\ApplicationValidationException.cs" />
-    <Compile Include="Infrastructure\FileBasedKeyProvider.cs" />
-    <Compile Include="Infrastructure\MethodHandler.cs" />
-    <Compile Include="Infrastructure\Page.cs" />
-    <Compile Include="Infrastructure\UserCredentialsValidator.cs" />
-    <Compile Include="Interfaces\Bus\IBus.cs" />
-    <Compile Include="Interfaces\Bus\IHandle.cs" />
-    <Compile Include="Interfaces\ICompressor.cs" />
-    <Compile Include="Interfaces\IEntityValidator.cs" />
-    <Compile Include="Infrastructure\SafeCollection.cs" />
-    <Compile Include="Interfaces\ICryptoService.cs" />
-    <Compile Include="Interfaces\IContext.cs" />
-    <Compile Include="Interfaces\IEntity.cs" />
-    <Compile Include="Interfaces\IKeyProvider.cs" />
-    <Compile Include="Interfaces\IMessgaePipeline.cs" />
-    <Compile Include="Interfaces\IModule.cs" />
-    <Compile Include="Interfaces\IPage.cs" />
-    <Compile Include="Interfaces\IPagedList.cs" />
-    <Compile Include="Interfaces\IPrincipalProvider.cs" />
-    <Compile Include="Interfaces\IReadOnlyRepository.cs" />
-    <Compile Include="Interfaces\IService.cs" />
-    <Compile Include="Interfaces\IServiceLocator.cs" />
-    <Compile Include="Interfaces\IUnityOfWork.cs" />
-    <Compile Include="Interfaces\IVotesProvider.cs" />
-    <Compile Include="IObjectState.cs" />
-    <Compile Include="Messages\ProvideCsvMessage.cs" />
+    <Compile Include="Controllers\Api\DataController.cs" />
+    <Compile Include="ExtensionModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\IRoomService.cs" />
-    <Compile Include="Services\IUserRoomService.cs" />
-    <Compile Include="Services\IVoteService.cs" />
-    <Compile Include="Services\ISessionService.cs" />
-    <Compile Include="ViewModels\ChangePasswordViewModel.cs" />
-    <Compile Include="ViewModels\LoginViewModel.cs" />
-    <Compile Include="ViewModels\RegisterViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -155,6 +90,12 @@
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WebSignalR.Common\WebSignalR.Common.csproj">
+      <Project>{30f872d9-563d-4ed9-ae99-9ef0c9a8f7c7}</Project>
+      <Name>WebSignalR.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -171,7 +112,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>0</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:10174/</IISUrl>
+          <IISUrl>http://localhost:2788/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
@@ -181,6 +122,9 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /Y "$(TargetPath)" "$(SolutionDir)\WebSignalR\Plugins"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

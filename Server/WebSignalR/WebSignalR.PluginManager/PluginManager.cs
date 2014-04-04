@@ -25,6 +25,11 @@ namespace WebSignalR.PluginManager
 			return Modules.Select(m => m.Key).ToList();
 		}
 
+		public IEnumerable<KeyValuePair<IModule, Assembly>> GetModulesWithAssemblies()
+		{
+			return Modules.ToList();
+		}
+
 		public IModule GetModule(string name)
 		{
 			return GetModules().Where(m => m.Name == name).FirstOrDefault();

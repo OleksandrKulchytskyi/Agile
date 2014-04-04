@@ -251,6 +251,7 @@
     <Content Include="Global.asax" />
     <None Include="Properties\PublishProfiles\Work.pubxml" />
     <Content Include="index.html" />
+    <Content Include="Modules\BusModule.xml" />
     <Content Include="Modules\DataAccessModule.xml" />
     <Content Include="Modules\ServicesModule.xml">
       <SubType>Designer</SubType>
@@ -310,8 +311,10 @@
     <Compile Include="App_Start\NInjectResolver.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Api\ApiHubController.cs" />
     <Compile Include="Controllers\Api\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HubController.cs" />
     <Compile Include="Controllers\MvcController.cs" />
     <Compile Include="Controllers\Api\PriviligesController.cs" />
     <Compile Include="Controllers\RoomActivityController.cs" />
@@ -341,12 +344,14 @@
     <Compile Include="Infrastructure\CommonCryptoHelper.cs" />
     <Compile Include="Infrastructure\Constants.cs" />
     <Compile Include="Infrastructure\Authorization\CustomPrincipal.cs" />
+    <Compile Include="Infrastructure\CustomWebApiAssemblyResolver.cs" />
     <Compile Include="Infrastructure\DynamicTrace.cs" />
     <Compile Include="Infrastructure\DynamicTracer.cs" />
     <Compile Include="Infrastructure\FileBasedVotesProvider.cs" />
     <Compile Include="Infrastructure\Filters\ValidateHttpAntiForgeryTokenAttribute.cs" />
     <Compile Include="Infrastructure\Filters\WebApiExceptionFilter.cs" />
     <Compile Include="Infrastructure\Formatters\CsvMediaTypeFormatter.cs" />
+    <Compile Include="Infrastructure\Formatters\JsonpMediaTypeFormatter.cs" />
     <Compile Include="Infrastructure\Handlers\ApiKeyProtectionMessageHandler.cs" />
     <Compile Include="Infrastructure\Handlers\CompressionHandler.cs" />
     <Compile Include="Infrastructure\Handlers\DecompressionHandler.cs" />
@@ -394,6 +399,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\WebSignalR.Bus\WebSignalR.Bus.csproj">
+      <Project>{9abf08c9-95b8-4291-8a0d-ffada0bf863d}</Project>
+      <Name>WebSignalR.Bus</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WebSignalR.Common\WebSignalR.Common.csproj">
       <Project>{30f872d9-563d-4ed9-ae99-9ef0c9a8f7c7}</Project>
       <Name>WebSignalR.Common</Name>

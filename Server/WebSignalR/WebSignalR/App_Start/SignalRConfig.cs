@@ -19,7 +19,7 @@ namespace WebSignalR.App_Start
 
 			if (bool.Parse(System.Configuration.ConfigurationManager.AppSettings["Redis.Enable"]))
 			{
-				var crypto= Infrastructure.BootStrapper.serviceLocator.Get<WebSignalR.Common.Interfaces.ICrypto>();
+				var crypto = Infrastructure.BootStrapper.serviceLocator.Get<WebSignalR.Common.Interfaces.ICrypto>();
 				string server = System.Configuration.ConfigurationManager.AppSettings["Redis.Server"];
 				string port = System.Configuration.ConfigurationManager.AppSettings["Redis.Port"];
 				string password = crypto.Decrypt(System.Configuration.ConfigurationManager.AppSettings["Redis.Password"]);

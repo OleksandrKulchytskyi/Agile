@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSignalR.Bus", "WebSignal
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSignalR.PluginManager", "WebSignalR.PluginManager\WebSignalR.PluginManager.csproj", "{4E16EB47-F185-49AC-8BDD-0B25B08B686C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSignalR.ExtensionModule", "WebSignalR.ExtensionModule\WebSignalR.ExtensionModule.csproj", "{1AA3296F-79F1-4841-999A-334BF02F6AD6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +56,10 @@ Global
 		{4E16EB47-F185-49AC-8BDD-0B25B08B686C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E16EB47-F185-49AC-8BDD-0B25B08B686C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E16EB47-F185-49AC-8BDD-0B25B08B686C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AA3296F-79F1-4841-999A-334BF02F6AD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AA3296F-79F1-4841-999A-334BF02F6AD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AA3296F-79F1-4841-999A-334BF02F6AD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AA3296F-79F1-4841-999A-334BF02F6AD6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
