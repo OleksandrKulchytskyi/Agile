@@ -30,6 +30,11 @@ namespace WebSignalR.Common.Extension
 			return tcs.Task;
 		}
 
+		public static Task FromAction<T>(Action<T> action, T input)
+		{
+			return Task.Factory.StartNew(() => action(input));
+		}
+
 		// Asynchronous NON-BLOCKING method
 		public static Task Delay(double milliseconds)
 		{
@@ -134,7 +139,6 @@ namespace WebSignalR.Common.Extension
 			task.ContinueWith(ant => tcs.SetCanceled(), TaskContinuationOptions.OnlyOnCanceled);
 			return tcs.Task;
 		}
-
 
 		// Then extesions
 		public static Task Then(this Task task, Action successor)
@@ -400,6 +404,5 @@ namespace WebSignalR.Common.Extension
 				return tcs.Task;
 			}
 		}
-
 	}
 }

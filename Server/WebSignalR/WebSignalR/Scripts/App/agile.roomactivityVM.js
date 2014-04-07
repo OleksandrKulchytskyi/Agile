@@ -3,6 +3,7 @@
 	/// <field name="roomList" value="[new datacontext.roomList()]"></field>
 	var userList = ko.observableArray(),
 		voteList = ko.observableArray(),
+		baseUrl = ko.observable(),
 		error = ko.observable(),
 		isUserAdmin = ko.observable(),
 		loggedUser = ko.observable(),
@@ -55,6 +56,27 @@
 		},
 		submitVoteForItem = function () {
 			$("#voteForItemDialog").dialog('open');
+		},
+		generateCsv = function () {
+			if (!!window.EventSource) {
+				var sseAddress = $('#txtBaseAddress2').val() + 'api/data/GetRoomVotes?roomid=' + $('#roomId').val();
+				console.log(sseAddress);
+				var source = new EventSource(sseAddress);
+				source.addEventListener('message', function (e) {
+					var json = JSON.parse(e.data);
+					agileApp.notifyService.success(json, {}, true);
+				}, false);
+				source.addEventListener('open', function (e) {
+					agileApp.notifyService.success("SSE opened.", {}, true);
+				}, false);
+				source.addEventListener('error', function (e) {
+					if (e.readyState == EventSource.CLOSED) {
+						agileApp.notifyService.error("SSE open failed.", {}, true);
+					}
+				}, false);
+			} else {
+				agileApp.notifyService.error("Sorry, but your browser doesn't support SSE.", {}, true);
+			}
 		};
 
 	function initDialogs() {
@@ -271,7 +293,8 @@
 		openVoteItem: openVoteItem,
 		closeVoteItem: closeVoteItem,
 		changeRoomState: changeRoomState,
-		submitVoteForItem: submitVoteForItem
+		submitVoteForItem: submitVoteForItem,
+		generateCsv: generateCsv
 	};
 })(ko, agileApp.datacontext, agileApp.notifyService);
 
@@ -280,6 +303,7 @@ var mainVM = window.agileApp.roomActivityViewModel;
 var agileHub = $.connection.agileHub;
 
 $('#txtBaseAddress').val(agileApp.baseAddress);
+agileApp.notifyService.info($('#txtBaseAddress').val(), {}, true);
 
 //$(window).unload(function () {
 //	alert("Handler for .unload() called.");

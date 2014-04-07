@@ -120,6 +120,8 @@
     <Compile Include="Interfaces\Bus\IBus.cs" />
     <Compile Include="Interfaces\Bus\IHandle.cs" />
     <Compile Include="Interfaces\ICompressor.cs" />
+    <Compile Include="Interfaces\ICsvProvider.cs" />
+    <Compile Include="Interfaces\ICsvStatePusher.cs" />
     <Compile Include="Interfaces\IEntityValidator.cs" />
     <Compile Include="Infrastructure\SafeCollection.cs" />
     <Compile Include="Interfaces\ICryptoService.cs" />

@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using WebSignalR.Common.Interfaces;
 
 namespace WebSignalR.Common.Messages
 {
-	public class ProvideCsvMessage
+	public class ProvideCsvMessage : IBroadcastMessage
 	{
 		public int RoomId
 		{

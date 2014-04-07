@@ -9,6 +9,7 @@ using WebSignalR.Common.DTO;
 using WebSignalR.Common.Entities;
 using WebSignalR.Common.Extension;
 using WebSignalR.Common.Interfaces;
+using WebSignalR.Common.Interfaces.Bus;
 using WebSignalR.Common.Services;
 using WebSignalR.Infrastructure;
 using WebSignalR.Infrastructure.Authorization;
@@ -23,6 +24,7 @@ namespace WebSignalR.Hubs
 		private static readonly string _versionString = _version.ToString();
 
 		private readonly IUnityOfWork _unity;
+		private readonly IBus _bus;
 		private readonly ICryptoService _cryptoService;
 		private readonly IUserRoomService _roomService;
 		private readonly ISessionService _sessionServ;
@@ -46,12 +48,13 @@ namespace WebSignalR.Hubs
 			}
 		}
 
-		public AgileHub(IUnityOfWork unity, ICryptoService crypto, IUserRoomService roomService, ISessionService sessionServ)
+		public AgileHub(IUnityOfWork unity, ICryptoService crypto, IUserRoomService roomService, ISessionService sessionServ, IBus messageBus)
 		{
 			_unity = unity;
 			_cryptoService = crypto;
 			_roomService = roomService;
 			_sessionServ = sessionServ;
+			_bus = messageBus;
 		}
 
 		public override Task OnConnected()

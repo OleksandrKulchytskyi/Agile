@@ -360,7 +360,9 @@
     <Compile Include="Infrastructure\Http\CompressedContent.cs" />
     <Compile Include="Infrastructure\ObjectExtensions.cs" />
     <Compile Include="Infrastructure\PagedList.cs" />
+    <Compile Include="Infrastructure\Services\CsvProvider.cs" />
     <Compile Include="Infrastructure\Services\FormsPrincipalProvider.cs" />
+    <Compile Include="Infrastructure\Services\CsvStatePusher.cs" />
     <Compile Include="Infrastructure\Services\ServiceLocator.cs" />
     <Compile Include="Infrastructure\Services\UserRoomService.cs" />
     <Compile Include="Infrastructure\Services\SessionService.cs" />

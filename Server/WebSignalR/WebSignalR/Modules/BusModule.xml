@@ -4,4 +4,12 @@
 	<bind service="WebSignalR.Common.Interfaces.Bus.IBus, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
 		  to="WebSignalR.Bus.InMemoryBus, WebSignalR.Bus, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
 		  scope="singleton"/>
+
+	<bind service="WebSignalR.Common.Interfaces.ICsvProvider, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+		  to="WebSignalR.Infrastructure.Services.CsvProvider, WebSignalR, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+		  scope="singleton"/>
+
+	<bind service="WebSignalR.Common.Interfaces.ICsvStatePusher, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+		  to="WebSignalR.Infrastructure.Services.CsvStatePusher, WebSignalR, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
+		  scope="singleton"/> 
 </module>

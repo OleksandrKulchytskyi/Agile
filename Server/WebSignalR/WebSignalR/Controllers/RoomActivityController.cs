@@ -36,7 +36,9 @@ namespace WebSignalR.Controllers
 			ViewData["User"] = User as Infrastructure.CustomPrincipal;
 			ViewData["UserId"] = (User as Infrastructure.CustomPrincipal).UserId;
 			ViewData["IsAdmin"] = (User as Infrastructure.CustomPrincipal).IsInRole("Admin");
-
+			string baseAddress = Request.Url.GetLeftPart(UriPartial.Authority) + Url.Content("~");
+			//string baseAddress2 = new Uri(Request.Url, Url.Content("~")).ToString();
+			TempData["baseAddress"] = baseAddress;
 			return View();
 		}
 

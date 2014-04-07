@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using WebSignalR.Common.Extension;
 using WebSignalR.Common.Interfaces;
 
 namespace WebSignalR.Bus
 {
-	public class ObservableContainer<T> : IObservable<T> where T : class
+	public class ObservableContainer<T> : IObservable<T> where T : IBroadcastMessage
 	{
 		private List<IObserver<T>> _observers;
 
@@ -26,7 +24,7 @@ namespace WebSignalR.Bus
 			return new Unsubscribe(_observers, observer);
 		}
 
-		public virtual void OnNext(T value)
+		public virtual void Broadcast(T value)
 		{
 			foreach (var item in _observers)
 			{
@@ -56,7 +54,7 @@ namespace WebSignalR.Bus
 		}
 	}
 
-	public class CommonObserver<T> : IObserver<T> where T : class
+	public class CommonObserver<T> : IObserver<T> where T : IBroadcastMessage
 	{
 		public T LastValue
 		{
@@ -80,37 +78,39 @@ namespace WebSignalR.Bus
 
 	public class MessagePipeline : IMessgaePipeline
 	{
-		private readonly ConcurrentDictionary<Type, ObservableContainer<object>> _container;
+		private readonly ConcurrentDictionary<Type, ObservableContainer<IBroadcastMessage>> _container;
 
 		public MessagePipeline()
 		{
-			_container = new ConcurrentDictionary<Type, ObservableContainer<object>>();
+			_container = new ConcurrentDictionary<Type, ObservableContainer<IBroadcastMessage>>();
 		}
 
-		public IDisposable Subscribe<T>(IObserver<T> observer) where T : class
+		public IDisposable Subscribe<T>(IObserver<T> observer) where T : IBroadcastMessage
 		{
 			Ensure.Argument.NotNull(observer, "observer");
 
-			ObservableContainer<object> observable;
+			ObservableContainer<IBroadcastMessage> observable;
 			if (_container.TryGetValue(typeof(T), out observable))
 			{
-				return observable.Subscribe((observer as IObserver<object>));
+				return observable.Subscribe((observer as IObserver<IBroadcastMessage>));
 			}
 			else
 			{
-				observable = new ObservableContainer<object>();
-				IDisposable disp = observable.Subscribe((observer as IObserver<object>));
+				observable = new ObservableContainer<IBroadcastMessage>();
+				IDisposable disp = observable.Subscribe((observer as IObserver<IBroadcastMessage>));
 				_container.TryAdd(typeof(T), observable);
 				return disp;
 			}
 		}
 
-		public void Publish<T>(T value) where T : class
+		public void Publish<T>(T value) where T : IBroadcastMessage
 		{
-			ObservableContainer<object> observable;
+			Ensure.Argument.NotNull(value, "value");
+
+			ObservableContainer<IBroadcastMessage> observable;
 			if (_container.TryGetValue(typeof(T), out observable))
 			{
-				observable.OnNext(value);
+				observable.Broadcast(value);
 			}
 		}
 

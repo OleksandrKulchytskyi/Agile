@@ -7,6 +7,7 @@
 	var isAdmin = (bool)ViewData["IsAdmin"];
 	var roomId = (int)ViewData["RoomId"];
 	var roomName = (string)ViewData["RoomName"];
+	var baseAddressUrl = (string)TempData["baseAddress"];
 }
 @functions{
 	public string GetAntiForgeryToken()
@@ -31,6 +32,7 @@
 	//data-bind="attr: {id: id}
 	<p class="error" data-bind="text: error"></p>
 	<input id="antiForgeryToken" type="hidden" value="@GetAntiForgeryToken()" />
+	<input id="txtBaseAddress2" type="hidden" value="@baseAddressUrl"/>	
 	<input id="txtBaseAddress" type="hidden" />	
 	<input id="userId" type="hidden" value="@uid" />
 	<input id="isAdmin" type="hidden" value="@isAdmin" />
@@ -48,6 +50,7 @@
 					<a class="btn btn-default" data-bind="click: closeVoteItem">Close vote</a>
 					<a class="btn btn-default" data-bind="click: changeRoomState">Change room state</a>
 					<a class="btn btn-default" data-bind="click: submitVoteForItem">Vote for selected</a>
+					<a class="btn btn-default" data-bind="click: generateCsv">Get Csv document</a>
 				</div>
 			</div>
 		</div>
@@ -61,6 +64,10 @@
 	</div>
 	<div id="changeRoomStateDialog" title="Change room state">
 		@Html.Partial("_ChangeRoomState")
+	</div>
+	<div id="csvPanel" title="Change room state">
+		<ul id="csvStateList">
+		</ul>
 	</div>
 	}
 	else if (User.IsInRole("User"))

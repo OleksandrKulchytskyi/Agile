@@ -46,6 +46,7 @@ namespace WebSignalR.Infrastructure
 						_signalrResolver.Resolve<Microsoft.AspNet.SignalR.Infrastructure.IConnectionManager>().GetHubContext<Hubs.AgileHub>().Clients).
 						Named("AgileHub");
 
+			serviceLocator.LoadModule("~/Modules/BusModule.xml");
 			serviceLocator.LoadModule("~/Modules/DataAccessModule.xml");
 
 			kernel.Bind<IUnityOfWork>().ToMethod(context =>
@@ -64,6 +65,12 @@ namespace WebSignalR.Infrastructure
 
 			serviceLocator.LoadModule("~/Modules/ServicesModule.xml");
 
+			ICsvProvider provider = serviceLocator.Get<ICsvProvider>();
+			if (provider != null)
+			{
+				provider.Init();
+			}
+
 			kernel.Bind<Hubs.AgileHub>().ToMethod(context =>
 			{
 				IUnityOfWork unity = context.Kernel.Get<IUnityOfWork>();
@@ -71,8 +78,8 @@ namespace WebSignalR.Infrastructure
 				IUserRoomService userRoomSrv = context.Kernel.Get<IUserRoomService>();
 				//ISessionService sessions = context.Kernel.Get<ISessionService>(); // In such way we reached exception ralated to the multiple instance of the IEntityChangeTracker. 
 				ISessionService sessions = new Infrastructure.Services.SessionService(unity);
-
-				return new Hubs.AgileHub(unity, crypto, userRoomSrv, sessions);
+				Common.Interfaces.Bus.IBus bus = context.Kernel.Get<Common.Interfaces.Bus.IBus>();
+				return new Hubs.AgileHub(unity, crypto, userRoomSrv, sessions, bus);
 			});
 
 			var service = new Func<ISessionService>(() => serviceLocator.Get<ISessionService>());
@@ -218,7 +225,7 @@ namespace WebSignalR.Infrastructure
 				.IgnoreAllNonExisting();
 
 			Mapper.CreateMap<VoteItemDto, VoteItem>()
-				.ForMember(dest => dest.VotedUsers, opt => opt.MapFrom(src => src.VotedUsers.Select(x => 
+				.ForMember(dest => dest.VotedUsers, opt => opt.MapFrom(src => src.VotedUsers.Select(x =>
 					new UserVote() { Id = x.Id, Mark = x.Mark, UserId = x.UserId, VoteId = x.VoteItemId }).ToList()))
 				.ForSourceMember(src => src.HostRoomId, opt => opt.Ignore())
 				.IgnoreAllNonExisting();
