@@ -6,7 +6,12 @@ namespace WebSignalR.Infrastructure.Services
 {
 	public class CsvStatePusher : ICsvStatePusher
 	{
-		private static readonly ConcurrentQueue<StreamWriter> _streammessage = new ConcurrentQueue<StreamWriter>();
+		private static readonly ConcurrentQueue<StreamWriter> _streammessage;
+
+		static CsvStatePusher()
+		{
+			_streammessage = new ConcurrentQueue<StreamWriter>();
+		}
 
 		public void OnStreamAvailable(Stream stream)
 		{

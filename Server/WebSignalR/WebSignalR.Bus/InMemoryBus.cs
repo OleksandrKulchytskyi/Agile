@@ -19,8 +19,15 @@ namespace WebSignalR.Bus
 		private readonly ActionBlock<SendMessageRequest> messageProcessor;
 		private int _subscriptions;
 
+		public Guid Id
+		{
+			get;
+			private set;
+		}
+
 		public InMemoryBus()
 		{
+			Id = Guid.NewGuid();
 			// Only ever accessed from (single threaded) ActionBlock, so it is thread safe
 			List<Subscription> subscriptions = new List<Subscription>();
 

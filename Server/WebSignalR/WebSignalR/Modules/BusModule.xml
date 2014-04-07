@@ -11,5 +11,5 @@
 
 	<bind service="WebSignalR.Common.Interfaces.ICsvStatePusher, WebSignalR.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
 		  to="WebSignalR.Infrastructure.Services.CsvStatePusher, WebSignalR, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"
-		  scope="singleton"/> 
+		  scope="singleton"/>
 </module>

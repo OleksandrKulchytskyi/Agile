@@ -60,9 +60,10 @@
 		generateCsv = function () {
 			if (!!window.EventSource) {
 				var sseAddress = $('#txtBaseAddress2').val() + 'api/data/GetRoomVotes?roomid=' + $('#roomId').val();
-				console.log(sseAddress);
+
 				var source = new EventSource(sseAddress);
 				source.addEventListener('message', function (e) {
+					console.log(e.data);
 					var json = JSON.parse(e.data);
 					agileApp.notifyService.success(json, {}, true);
 				}, false);
@@ -74,7 +75,8 @@
 						agileApp.notifyService.error("SSE open failed.", {}, true);
 					}
 				}, false);
-			} else {
+			}
+			else {
 				agileApp.notifyService.error("Sorry, but your browser doesn't support SSE.", {}, true);
 			}
 		};

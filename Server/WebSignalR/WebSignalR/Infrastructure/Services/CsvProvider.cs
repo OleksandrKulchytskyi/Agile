@@ -4,6 +4,7 @@ using WebSignalR.Common.Entities;
 using WebSignalR.Common.Extension;
 using WebSignalR.Common.Interfaces;
 using WebSignalR.Common.Interfaces.Bus;
+using WebSignalR.Common.Messages;
 
 namespace WebSignalR.Infrastructure.Services
 {
@@ -27,43 +28,54 @@ namespace WebSignalR.Infrastructure.Services
 
 		public void Init()
 		{
-			_msgPipeline.Subscribe<Common.Messages.ProvideCsvMessage>(HandleMessage);
 			_appDataPath = System.Web.Hosting.HostingEnvironment.MapPath("~/App_Data");
+			_msgPipeline.Subscribe<ProvideCsvMessage>(HandleMessage);
+			_msgPipeline.Subscribe<TestMessage>(HandleTestMessage);
+		}
+
+		private void HandleTestMessage(TestMessage msg)
+		{
+			if (msg != null)
+			{
+				
+			}
 		}
 
 		private void HandleMessage(Common.Messages.ProvideCsvMessage message)
 		{
 			if (message != null)
 			{
-				TaskHelper.FromAction<Common.Messages.ProvideCsvMessage>(provideCsv, message).
+				TaskHelper.FromAction<ProvideCsvMessage>(provideCsv, message).
 					ContinueWithEx(t => { if (t.IsFaulted) Global.Logger.Error(t.Exception); });
 			}
 		}
 
-		private void provideCsv(Common.Messages.ProvideCsvMessage message)
+		private void provideCsv(ProvideCsvMessage message)
 		{
 			CsvStateChanged state = new CsvStateChanged();
 
 			switch (message.State)
 			{
-				case WebSignalR.Common.Messages.CsvReadyState.Init:
+				case CsvReadyState.Init:
 					message.OutputId = Guid.NewGuid();
 					message.State = Common.Messages.CsvReadyState.Processing;
 					_msgPipeline.SendAsync(message);
-					state.State = WebSignalR.Common.Messages.CsvReadyState.Init.ToString();
+					state.State = CsvReadyState.Init.ToString();
 					break;
-				case WebSignalR.Common.Messages.CsvReadyState.Processing:
+
+				case CsvReadyState.Processing:
 					if (_appDataPath.IsNotNullOrEmpty())
 					{
-						state.State = WebSignalR.Common.Messages.CsvReadyState.Processing.ToString();
+						state.State = CsvReadyState.Processing.ToString();
 						message.State = Common.Messages.CsvReadyState.Collecting;
 						string fpath = System.IO.Path.Combine(_appDataPath, message.OutputId.ToString("N")) + ".csv";
 						using (var stream = System.IO.File.Create(fpath)) { }
 						_msgPipeline.SendAsync(message);
 					}
 					break;
-				case WebSignalR.Common.Messages.CsvReadyState.Collecting:
-					state.State = WebSignalR.Common.Messages.CsvReadyState.Collecting.ToString();
+
+				case CsvReadyState.Collecting:
+					state.State = CsvReadyState.Collecting.ToString();
 					IReadOnlyRepository<Room> roomPepo = GetRepository<Room>();
 					Room room = roomPepo.Get(x => x.Id == message.RoomId).FirstOrDefault();
 					System.Text.StringBuilder sb = null;
@@ -101,10 +113,12 @@ namespace WebSignalR.Infrastructure.Services
 					message.State = Common.Messages.CsvReadyState.Ready;
 					_msgPipeline.SendAsync(message);
 					break;
-				case WebSignalR.Common.Messages.CsvReadyState.Ready:
+
+				case CsvReadyState.Ready:
 					state.FileId = message.OutputId.ToString("N");
-					state.State = WebSignalR.Common.Messages.CsvReadyState.Ready.ToString();
+					state.State = CsvReadyState.Ready.ToString();
 					break;
+
 				default:
 					break;
 

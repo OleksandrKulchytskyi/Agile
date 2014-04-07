@@ -65,6 +65,12 @@ namespace WebSignalR.Infrastructure
 
 			serviceLocator.LoadModule("~/Modules/ServicesModule.xml");
 
+
+			WebSignalR.Common.Interfaces.Bus.IBus bus2 = serviceLocator.Get<WebSignalR.Common.Interfaces.Bus.IBus>();
+			if (bus2 != null)
+			{
+				System.Diagnostics.Debug.WriteLine(bus2.Id);
+			}
 			ICsvProvider provider = serviceLocator.Get<ICsvProvider>();
 			if (provider != null)
 			{

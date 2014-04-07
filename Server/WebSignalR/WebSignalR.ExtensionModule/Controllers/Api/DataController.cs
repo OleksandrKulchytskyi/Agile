@@ -17,19 +17,23 @@ namespace WebSignalR.ExtensionModule.Controllers.Api
 		// Content type for our body
 		private static readonly MediaTypeHeaderValue _mediaType = MediaTypeHeaderValue.Parse("text/csv");
 
-		private readonly IUnityOfWork _unity;
 		private readonly IBus _bus;
 		private readonly ICsvStatePusher _pusher;
 
-		public DataController(IUnityOfWork unity, IBus bus, ICsvStatePusher push)
+		public DataController(IBus bus, ICsvStatePusher push)
 		{
-			WebSignalR.Common.Extension.Ensure.Argument.NotNull(unity, "unity");
 			WebSignalR.Common.Extension.Ensure.Argument.NotNull(bus, "bus");
 			WebSignalR.Common.Extension.Ensure.Argument.NotNull(push, "push");
 
-			_unity = unity;
 			_bus = bus;
 			_pusher = push;
+		}
+
+		[HttpGet]
+		public HttpResponseMessage SubmitTest([FromUri]string data, [FromUri]int query)
+		{
+			_bus.SendAsync<TestMessage>(new TestMessage() { Data = "{Hello world}" });
+			return Request.CreateResponse(HttpStatusCode.OK, new { Data = data, QueryId = query });
 		}
 
 		public HttpResponseMessage GetRoomVotes(int roomId)
@@ -38,10 +42,20 @@ namespace WebSignalR.ExtensionModule.Controllers.Api
 			if (this.User != null)
 				message.Issuer = User.Identity.Name;
 
-			_bus.SendAsync(message);
+			_bus.SendAsync<ProvideCsvMessage>(message).
+				ContinueWith(t =>
+				{
+					if (t.IsCompleted)
+					{
+						System.Diagnostics.Debug.WriteLine("Message has been published.");
+					}
+					else if (t.IsFaulted)
+					{
+						System.Diagnostics.Debug.WriteLine("Exception has been occurred. {0}{1}", Environment.NewLine, t.Exception.ToString());
+					}
+				});
 			HttpResponseMessage response = Request.CreateResponse();
 			response.Content = new PushStreamContent(Cast, "text/event-stream");
-
 			return response;
 		}
 
@@ -152,7 +166,6 @@ namespace WebSignalR.ExtensionModule.Controllers.Api
 
 		protected override void Dispose(bool disposing)
 		{
-			_unity.Dispose();
 			base.Dispose(disposing);
 		}
 	}
