@@ -14,13 +14,14 @@ namespace WebSignalR.Infrastructure.Services
 		private readonly IUnityOfWork _unity;
 		private readonly ICsvStatePusher _pusher;
 		private string _appDataPath;
+		private readonly string extension = ".csv";
 
 		public CsvProvider(IBus bus, IUnityOfWork unity, ICsvStatePusher pusher)
 		{
 			Ensure.Argument.NotNull(bus, "bus");
 			Ensure.Argument.NotNull(unity, "unity");
 			Ensure.Argument.NotNull(pusher, "pusher");
-			
+
 			_msgPipeline = bus;
 			_unity = unity;
 			_pusher = pusher;
@@ -30,15 +31,6 @@ namespace WebSignalR.Infrastructure.Services
 		{
 			_appDataPath = System.Web.Hosting.HostingEnvironment.MapPath("~/App_Data");
 			_msgPipeline.Subscribe<ProvideCsvMessage>(HandleMessage);
-			_msgPipeline.Subscribe<TestMessage>(HandleTestMessage);
-		}
-
-		private void HandleTestMessage(TestMessage msg)
-		{
-			if (msg != null)
-			{
-				
-			}
 		}
 
 		private void HandleMessage(Common.Messages.ProvideCsvMessage message)
@@ -57,6 +49,7 @@ namespace WebSignalR.Infrastructure.Services
 			switch (message.State)
 			{
 				case CsvReadyState.Init:
+					TaskHelper.Delay(TimeSpan.FromMilliseconds(50)).Wait();
 					message.OutputId = Guid.NewGuid();
 					message.State = Common.Messages.CsvReadyState.Processing;
 					_msgPipeline.SendAsync(message);
@@ -64,17 +57,19 @@ namespace WebSignalR.Infrastructure.Services
 					break;
 
 				case CsvReadyState.Processing:
+					TaskHelper.Delay(TimeSpan.FromMilliseconds(50)).Wait();
 					if (_appDataPath.IsNotNullOrEmpty())
 					{
 						state.State = CsvReadyState.Processing.ToString();
 						message.State = Common.Messages.CsvReadyState.Collecting;
-						string fpath = System.IO.Path.Combine(_appDataPath, message.OutputId.ToString("N")) + ".csv";
+						string fpath = System.IO.Path.Combine(_appDataPath, message.OutputId.ToString("N")) + extension;
 						using (var stream = System.IO.File.Create(fpath)) { }
 						_msgPipeline.SendAsync(message);
 					}
 					break;
 
 				case CsvReadyState.Collecting:
+					TaskHelper.Delay(TimeSpan.FromMilliseconds(50)).Wait();
 					state.State = CsvReadyState.Collecting.ToString();
 					IReadOnlyRepository<Room> roomPepo = GetRepository<Room>();
 					Room room = roomPepo.Get(x => x.Id == message.RoomId).FirstOrDefault();
@@ -95,7 +90,7 @@ namespace WebSignalR.Infrastructure.Services
 					}
 					if (_appDataPath.IsNotNullOrEmpty())
 					{
-						string fpath = System.IO.Path.Combine(_appDataPath, message.OutputId.ToString("N"));
+						string fpath = System.IO.Path.Combine(_appDataPath, message.OutputId.ToString("N") + extension);
 						using (var stream = System.IO.File.OpenWrite(fpath))
 						{
 							using (System.IO.StreamWriter sw = new System.IO.StreamWriter(stream))
@@ -115,6 +110,7 @@ namespace WebSignalR.Infrastructure.Services
 					break;
 
 				case CsvReadyState.Ready:
+					TaskHelper.Delay(TimeSpan.FromMilliseconds(50)).Wait();
 					state.FileId = message.OutputId.ToString("N");
 					state.State = CsvReadyState.Ready.ToString();
 					break;
@@ -135,7 +131,7 @@ namespace WebSignalR.Infrastructure.Services
 
 		public bool IsReady(Guid id)
 		{
-			throw new NotImplementedException();
+			return false;
 		}
 
 		private IRepository<TEntity> GetRepository<TEntity>() where TEntity : EntityBase

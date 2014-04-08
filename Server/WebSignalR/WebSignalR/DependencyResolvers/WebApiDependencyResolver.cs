@@ -6,44 +6,58 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http.Dependencies;
+using WebSignalR.Common.Extension;
 
 namespace WebSignalR.DependencyResolvers
 {
 	public class NinjectDependencyScope : IDependencyScope
 	{
-		private IResolutionRoot resolutionRoot;
-		private bool _dispoded = false;
+		const int NOTDISPOSED = 0;
+		const int DISPOSED = 1;
+
+		private readonly IResolutionRoot resolutionRoot;
+		private int _state = NOTDISPOSED;
 
 		internal NinjectDependencyScope(IResolutionRoot kernel)
 		{
-			if (kernel == null)
-				throw new ArgumentNullException("kernel parameter cannot be a null.");
+			Ensure.Argument.NotNull(kernel, "kernel");
 			this.resolutionRoot = kernel;
 		}
 
 		public object GetService(Type serviceType)
 		{
-			if (resolutionRoot == null && _dispoded)
+			if (IsDisposed())
 				throw new ObjectDisposedException("this", "This scope has already been disposed");
 
 			return resolutionRoot.Resolve(this.CreateRequest(serviceType)).FirstOrDefault();
-
-			//return resolutionRoot.TryGet(serviceType);
 		}
 
 		public IEnumerable<object> GetServices(Type serviceType)
 		{
-			if (resolutionRoot == null && _dispoded)
+			if (IsDisposed())
 				throw new ObjectDisposedException("this", "This scope has already been disposed");
 
 			return resolutionRoot.Resolve(this.CreateRequest(serviceType)).ToList();
+		}
 
-			//return resolutionRoot.GetAll(serviceType);
+		private bool IsDisposed()
+		{
+			return (System.Threading.Interlocked.CompareExchange(ref _state, DISPOSED, DISPOSED) == DISPOSED);
 		}
 
 		private IRequest CreateRequest(Type reqType)
 		{
 			return resolutionRoot.CreateRequest(reqType, null, new Parameter[0], true, true);
+		}
+
+		private bool TypeIsSystemAssembly(Type service)
+		{
+			if (service.Namespace != null)
+			{
+				return service.Namespace.StartsWith("System", StringComparison.InvariantCultureIgnoreCase);
+			}
+
+			return false;
 		}
 
 		#region IDisposable
@@ -56,28 +70,25 @@ namespace WebSignalR.DependencyResolvers
 
 		protected virtual void Dispose(bool disposing)
 		{
-			if (!_dispoded)
+			if (System.Threading.Interlocked.Exchange(ref _state, DISPOSED) == NOTDISPOSED)
 			{
-				_dispoded = true;
-
 				if (disposing)
 				{
-					IDisposable disposable = resolutionRoot as IDisposable;
-					if (disposable != null && !_dispoded)
-					{
-						disposable.Dispose();
-						resolutionRoot = null;
-					}
+					//Omit below since we do not have to dispose single IKernel object
+					//IDisposable disposable = resolutionRoot as IDisposable;
+					//if (disposable != null)
+					//{
+					//	disposable.Dispose();
+					//}
 				}
 			}
 		}
-
 		#endregion IDisposable
 	}
 
 	public class NinjectWebApiDependencyResolver : NinjectDependencyScope, IDependencyResolver
 	{
-		private IKernel _kernel;
+		private readonly IKernel _kernel;
 
 		public NinjectWebApiDependencyResolver(IKernel kernel)
 			: base(kernel)
@@ -87,7 +98,9 @@ namespace WebSignalR.DependencyResolvers
 
 		public IDependencyScope BeginScope()
 		{
-			return new NinjectDependencyScope(_kernel.BeginBlock());
+			//Omit below since we do not have stable singleton instances in WebApi
+			//return new NinjectDependencyScope(_kernel.BeginBlock());
+			return new NinjectDependencyScope(_kernel);
 		}
 	}
 }

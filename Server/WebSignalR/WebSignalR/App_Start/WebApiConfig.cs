@@ -23,6 +23,7 @@ namespace WebSignalR
 			);
 
 			config.DependencyResolver = new DependencyResolvers.NinjectWebApiDependencyResolver(BootStrapper.serviceLocator.Kernel);
+
 			//config.Services.Replace(typeof(System.Web.Http.Dispatcher.IHttpControllerActivator),new Activators.CustomApiActivator());
 			if (System.Configuration.ConfigurationManager.AppSettings["Response.Compression"].IndexOf("true") != -1)
 				config.MessageHandlers.Insert(0, new WebSignalR.Infrastructure.Handlers.CompressionHandler()); // first runs last
@@ -33,7 +34,6 @@ namespace WebSignalR
 
 			System.Web.Http.Dispatcher.IAssembliesResolver assemblyResolver = new CustomWebApiAssemblyResolver();
 			config.Services.Replace(typeof(System.Web.Http.Dispatcher.IAssembliesResolver), assemblyResolver);
-
 
 			#region Formatting
 

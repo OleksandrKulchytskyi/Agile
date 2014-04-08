@@ -63,18 +63,44 @@
 
 				var source = new EventSource(sseAddress);
 				source.addEventListener('message', function (e) {
-					console.log(e.data);
 					var json = JSON.parse(e.data);
-					agileApp.notifyService.success(json, {}, true);
+					handleJson(json);
 				}, false);
 				source.addEventListener('open', function (e) {
+					$("#csvStateList").empty();
 					agileApp.notifyService.success("SSE opened.", {}, true);
+
 				}, false);
 				source.addEventListener('error', function (e) {
 					if (e.readyState == EventSource.CLOSED) {
 						agileApp.notifyService.error("SSE open failed.", {}, true);
 					}
 				}, false);
+
+				function handleJson(json) {
+					$("#csvStateList").append($("<li/>").text(json.State));
+					if (json.State === "Ready") {
+						var address = $('#txtBaseAddress2').val() + 'api/data/Download?lengthOnly=false&fileId=' + json.FileId;
+
+						var newLink = $("<a />", {
+							id: json.FileId,
+							name: "link" + json.FileId,
+							href: address,
+							text: "Download file"
+						});
+						newLink.attr("target", "_blank");
+						//newLink.click(function () {
+						//	var fileLink = $(this).find("a");
+						//	console.log(fileLink);
+						//	fileLink.attr("target", "_blank");
+						//	window.open(fileLink.attr("href"));
+						//	return false;
+						//});
+						var newLi = $("<li/>");
+						$("#csvStateList").append(newLink.appendTo(newLi));
+					}
+
+				}
 			}
 			else {
 				agileApp.notifyService.error("Sorry, but your browser doesn't support SSE.", {}, true);

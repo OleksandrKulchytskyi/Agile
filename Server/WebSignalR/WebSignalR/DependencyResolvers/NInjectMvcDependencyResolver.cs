@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using WebSignalR.Common.Extension;
 
 namespace WebSignalR.DependencyResolvers
 {
@@ -14,6 +15,7 @@ namespace WebSignalR.DependencyResolvers
 
 		public NInjectMvcDependencyResolver(IKernel kernel)
 		{
+			Ensure.Argument.NotNull(kernel, "kernel");
 			_kernel = kernel;
 		}
 

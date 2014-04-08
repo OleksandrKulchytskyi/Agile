@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using WebSignalR.Common.Extension;
 
 namespace WebSignalR.DependencyResolvers
 {
@@ -11,6 +12,7 @@ namespace WebSignalR.DependencyResolvers
 
 		public NinjectSignalRDependencyResolver(IKernel kernel)
 		{
+			Ensure.Argument.NotNull(kernel, "kernel");
 			_kernel = kernel;
 		}
 

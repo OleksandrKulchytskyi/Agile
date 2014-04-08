@@ -30,12 +30,6 @@ namespace WebSignalR.ExtensionModule.Controllers.Api
 		}
 
 		[HttpGet]
-		public HttpResponseMessage SubmitTest([FromUri]string data, [FromUri]int query)
-		{
-			_bus.SendAsync<TestMessage>(new TestMessage() { Data = "{Hello world}" });
-			return Request.CreateResponse(HttpStatusCode.OK, new { Data = data, QueryId = query });
-		}
-
 		public HttpResponseMessage GetRoomVotes(int roomId)
 		{
 			var message = new ProvideCsvMessage() { RoomId = roomId, State = Common.Messages.CsvReadyState.Init, OutputId = Guid.NewGuid() };
@@ -64,16 +58,17 @@ namespace WebSignalR.ExtensionModule.Controllers.Api
 			_pusher.OnStreamAvailable(stream);
 		}
 
-		public HttpResponseMessage Download([FromUri]string filenameId, [FromUri]bool isLengthOnly)
+		[HttpGet]
+		public HttpResponseMessage Download([FromUri]bool lengthOnly, [FromUri]string fileId)
 		{
-			string fname = filenameId + ".csv";
+			string fname = fileId + ".csv";
 			string path = HttpContext.Current.Server.MapPath("~/App_Data/" + fname);
 			if (!File.Exists(path))
 			{
-				Request.CreateErrorResponse(HttpStatusCode.NotFound, new HttpError("The file does not exist."));
+				return Request.CreateErrorResponse(HttpStatusCode.NotFound, new HttpError("The file does not exist."));
 			}
 
-			if (isLengthOnly)
+			if (lengthOnly)
 			{
 				using (FileStream fs = File.Open(path, FileMode.Open))
 				{
@@ -148,13 +143,11 @@ namespace WebSignalR.ExtensionModule.Controllers.Api
 				if (responseStream.CanSeek)
 					responseStream.Position = 0;
 
-				HttpResponseMessage response = new HttpResponseMessage();
-				//response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-				//response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
-				//response.Content.Headers.ContentDisposition.FileName = fname;
-				response.StatusCode = fullContent ? HttpStatusCode.OK : HttpStatusCode.PartialContent;
+				HttpResponseMessage response = Request.CreateResponse(fullContent ? HttpStatusCode.OK : HttpStatusCode.PartialContent);
 				response.Content = new StreamContent(responseStream);
 				response.Content.Headers.ContentType = _mediaType;
+				response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
+				response.Content.Headers.ContentDisposition.FileName = fname;
 
 				return response;
 			}

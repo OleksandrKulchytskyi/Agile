@@ -6,14 +6,6 @@ namespace WebSignalR.Infrastructure
 {
 	public class CustomWebApiAssemblyResolver : DefaultAssembliesResolver
 	{
-		public CustomWebApiAssemblyResolver()
-		{
-			var asmblies = GetAssemblies();
-			if (asmblies != null)
-			{
-			}
-		}
-
 		public override ICollection<Assembly> GetAssemblies()
 		{
 			ICollection<Assembly> baseAssemblies = base.GetAssemblies();
