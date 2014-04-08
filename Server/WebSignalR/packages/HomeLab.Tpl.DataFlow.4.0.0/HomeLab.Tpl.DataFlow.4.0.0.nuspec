@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>HomeLab.Tpl.DataFlow</id>
+    <version>4.0.0</version>
+    <authors>OKulchytskyi</authors>
+    <owners>OKulchytskyi</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Tpl.DataFlow for .net 4.0</description>
+    <summary>Extensions library fro TPL in .net 4.0</summary>
+    <copyright>UDelphi works 2014</copyright>
+    <tags>'TPL' 'DataFlow' 'Net4'</tags>
+  </metadata>
+</package>
