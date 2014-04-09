@@ -64,12 +64,11 @@
 				var source = new EventSource(sseAddress);
 				source.addEventListener('message', function (e) {
 					var json = JSON.parse(e.data);
-					handleJson(json);
+					handleJson(json, source);
 				}, false);
 				source.addEventListener('open', function (e) {
 					$("#csvStateList").empty();
 					agileApp.notifyService.success("SSE opened.", {}, true);
-
 				}, false);
 				source.addEventListener('error', function (e) {
 					if (e.readyState == EventSource.CLOSED) {
@@ -77,7 +76,8 @@
 					}
 				}, false);
 
-				function handleJson(json) {
+				function handleJson(json, sse) {
+					$("#csvStateList").empty();
 					$("#csvStateList").append($("<li/>").text(json.State));
 					if (json.State === "Ready") {
 						var address = $('#txtBaseAddress2').val() + 'api/data/Download?lengthOnly=false&fileId=' + json.FileId;
@@ -89,17 +89,22 @@
 							text: "Download file"
 						});
 						newLink.attr("target", "_blank");
-						//newLink.click(function () {
-						//	var fileLink = $(this).find("a");
-						//	console.log(fileLink);
-						//	fileLink.attr("target", "_blank");
-						//	window.open(fileLink.attr("href"));
-						//	return false;
-						//});
+
+						newLink.click(function (e) {
+							var myUrl = $('#txtBaseAddress2').val() + 'api/data/Delete?fileId=' + $(this).attr('id');
+							console.log(myUrl);
+							$.ajax({
+								type: 'DELETE',
+								url: myUrl,
+								async: true,
+								cache: false
+							});
+						});
+
 						var newLi = $("<li/>");
 						$("#csvStateList").append(newLink.appendTo(newLi));
+						sse.close();
 					}
-
 				}
 			}
 			else {
@@ -331,7 +336,6 @@ var mainVM = window.agileApp.roomActivityViewModel;
 var agileHub = $.connection.agileHub;
 
 $('#txtBaseAddress').val(agileApp.baseAddress);
-agileApp.notifyService.info($('#txtBaseAddress').val(), {}, true);
 
 //$(window).unload(function () {
 //	alert("Handler for .unload() called.");
@@ -437,7 +441,6 @@ agileHub.client.onState = function (state) {
 }
 
 agileHub.client.onInitRoom = function (roomDto) {
-	agileApp.notifyService.info("Initializing view datacontext.", {}, true);
 	mainVM.setRoomDtoState(roomDto);
 	ko.applyBindings(mainVM);// Initiate the Knockout bindings
 

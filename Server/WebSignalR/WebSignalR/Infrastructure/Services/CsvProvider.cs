@@ -37,19 +37,19 @@ namespace WebSignalR.Infrastructure.Services
 		{
 			if (message != null)
 			{
-				TaskHelper.FromAction<ProvideCsvMessage>(provideCsv, message).
+				TaskHelper.FromAction<ProvideCsvMessage>(provideCsvInternal, message).
 					ContinueWithEx(t => { if (t.IsFaulted) Global.Logger.Error(t.Exception); });
 			}
 		}
 
-		private void provideCsv(ProvideCsvMessage message)
+		private void provideCsvInternal(ProvideCsvMessage message)
 		{
 			CsvStateChanged state = new CsvStateChanged();
 
 			switch (message.State)
 			{
 				case CsvReadyState.Init:
-					TaskHelper.Delay(TimeSpan.FromMilliseconds(50)).Wait();
+					TaskHelper.Delay(TimeSpan.FromSeconds(1)).Wait();
 					message.OutputId = Guid.NewGuid();
 					message.State = Common.Messages.CsvReadyState.Processing;
 					_msgPipeline.SendAsync(message);
@@ -57,7 +57,7 @@ namespace WebSignalR.Infrastructure.Services
 					break;
 
 				case CsvReadyState.Processing:
-					TaskHelper.Delay(TimeSpan.FromMilliseconds(50)).Wait();
+					TaskHelper.Delay(TimeSpan.FromSeconds(1)).Wait();
 					if (_appDataPath.IsNotNullOrEmpty())
 					{
 						state.State = CsvReadyState.Processing.ToString();
@@ -69,7 +69,7 @@ namespace WebSignalR.Infrastructure.Services
 					break;
 
 				case CsvReadyState.Collecting:
-					TaskHelper.Delay(TimeSpan.FromMilliseconds(50)).Wait();
+					TaskHelper.Delay(TimeSpan.FromSeconds(1)).Wait();
 					state.State = CsvReadyState.Collecting.ToString();
 					IReadOnlyRepository<Room> roomPepo = GetRepository<Room>();
 					Room room = roomPepo.Get(x => x.Id == message.RoomId).FirstOrDefault();
@@ -110,7 +110,7 @@ namespace WebSignalR.Infrastructure.Services
 					break;
 
 				case CsvReadyState.Ready:
-					TaskHelper.Delay(TimeSpan.FromMilliseconds(50)).Wait();
+					TaskHelper.Delay(TimeSpan.FromSeconds(1)).Wait();
 					state.FileId = message.OutputId.ToString("N");
 					state.State = CsvReadyState.Ready.ToString();
 					break;
@@ -123,15 +123,48 @@ namespace WebSignalR.Infrastructure.Services
 				_pusher.Notify(state);
 		}
 
+		public bool IsReady(Guid id)
+		{
+			if (!string.IsNullOrEmpty(_appDataPath))
+			{
+				var files = System.IO.Directory.GetFiles(_appDataPath, "*" + extension).Where(x => x.IndexOf(id.ToString("N"),
+					StringComparison.OrdinalIgnoreCase) != -1).ToList();
+				if (files.Count > 0)
+				{
+					bool result = true;
+					System.IO.FileStream fs = null;
+					try
+					{
+						fs = System.IO.File.OpenRead(files[1]);
+					}
+					catch (System.IO.IOException ex)
+					{
+						result = false;
+					}
+					finally { if (fs != null) fs.Dispose(); }
+					return result;
+				}
+			}
+			return false;
+		}
+
+		public void Purge(Guid id)
+		{
+			if (string.IsNullOrEmpty(_appDataPath))
+				return;
+
+			string file = System.IO.Path.Combine(_appDataPath, id.ToString("N") + extension);
+			if (System.IO.File.Exists(file))
+			{
+				try { System.IO.File.Delete(file); }
+				catch { }
+			}
+		}
+
 		private class CsvStateChanged : IBroadcastMessage
 		{
 			public string FileId { get; set; }
 			public string State { get; set; }
-		}
-
-		public bool IsReady(Guid id)
-		{
-			return false;
 		}
 
 		private IRepository<TEntity> GetRepository<TEntity>() where TEntity : EntityBase

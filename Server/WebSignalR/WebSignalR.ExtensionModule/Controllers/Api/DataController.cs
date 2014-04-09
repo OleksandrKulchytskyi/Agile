@@ -19,14 +19,17 @@ namespace WebSignalR.ExtensionModule.Controllers.Api
 
 		private readonly IBus _bus;
 		private readonly ICsvStatePusher _pusher;
+		private readonly ICsvProvider _csvProvider;
 
-		public DataController(IBus bus, ICsvStatePusher push)
+		public DataController(IBus bus, ICsvStatePusher push, ICsvProvider provider)
 		{
 			WebSignalR.Common.Extension.Ensure.Argument.NotNull(bus, "bus");
 			WebSignalR.Common.Extension.Ensure.Argument.NotNull(push, "push");
+			WebSignalR.Common.Extension.Ensure.Argument.NotNull(provider, "provider");
 
 			_bus = bus;
 			_pusher = push;
+			_csvProvider = provider;
 		}
 
 		[HttpGet]
@@ -155,6 +158,13 @@ namespace WebSignalR.ExtensionModule.Controllers.Api
 			{
 				return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
 			}
+		}
+
+		[HttpDelete]
+		public HttpResponseMessage Delete([FromUri]Guid fileId)
+		{
+			_csvProvider.Purge(fileId);
+			return Request.CreateResponse(HttpStatusCode.OK, "File has been deleted.");
 		}
 
 		protected override void Dispose(bool disposing)

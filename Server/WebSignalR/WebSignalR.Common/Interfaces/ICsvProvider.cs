@@ -10,5 +10,6 @@ namespace WebSignalR.Common.Interfaces
 		void Init();
 
 		bool IsReady(Guid id);
+		void Purge(Guid id);
 	}
 }
