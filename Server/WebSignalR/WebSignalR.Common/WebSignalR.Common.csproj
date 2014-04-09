@@ -133,6 +133,7 @@
     <Compile Include="Interfaces\IPage.cs" />
     <Compile Include="Interfaces\IPagedList.cs" />
     <Compile Include="Interfaces\IPrincipalProvider.cs" />
+    <Compile Include="Interfaces\IPurge.cs" />
     <Compile Include="Interfaces\IReadOnlyRepository.cs" />
     <Compile Include="Interfaces\IService.cs" />
     <Compile Include="Interfaces\IServiceLocator.cs" />

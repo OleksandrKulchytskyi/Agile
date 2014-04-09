@@ -116,6 +116,7 @@ namespace WebSignalR
 
 		protected void Application_End(object sender, EventArgs e)
 		{
+			BootStrapper.serviceLocator.Get<IPurge>().Dispose();
 			Logger.Info("Application_End()");
 			LogManager.Shutdown();
 		}

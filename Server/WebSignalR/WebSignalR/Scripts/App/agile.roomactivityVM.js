@@ -98,7 +98,7 @@
 								url: myUrl,
 								async: true,
 								cache: false
-							});
+							}).done(function () { $("#csvStateList").empty(); });
 						});
 
 						var newLi = $("<li/>");

@@ -13,18 +13,22 @@ namespace WebSignalR.Infrastructure.Services
 		private readonly IBus _msgPipeline;
 		private readonly IUnityOfWork _unity;
 		private readonly ICsvStatePusher _pusher;
+		private readonly IPurge cleaner;
 		private string _appDataPath;
 		private readonly string extension = ".csv";
 
-		public CsvProvider(IBus bus, IUnityOfWork unity, ICsvStatePusher pusher)
+
+		public CsvProvider(IBus bus, IUnityOfWork unity, ICsvStatePusher pusher, IPurge purge)
 		{
 			Ensure.Argument.NotNull(bus, "bus");
 			Ensure.Argument.NotNull(unity, "unity");
 			Ensure.Argument.NotNull(pusher, "pusher");
+			Ensure.Argument.NotNull(purge, "purge");
 
 			_msgPipeline = bus;
 			_unity = unity;
 			_pusher = pusher;
+			cleaner = purge;
 		}
 
 		public void Init()
@@ -150,15 +154,7 @@ namespace WebSignalR.Infrastructure.Services
 
 		public void Purge(Guid id)
 		{
-			if (string.IsNullOrEmpty(_appDataPath))
-				return;
-
-			string file = System.IO.Path.Combine(_appDataPath, id.ToString("N") + extension);
-			if (System.IO.File.Exists(file))
-			{
-				try { System.IO.File.Delete(file); }
-				catch { }
-			}
+			cleaner.AddPurgeTask(id);
 		}
 
 		private class CsvStateChanged : IBroadcastMessage
