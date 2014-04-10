@@ -58,8 +58,8 @@
 			$("#voteForItemDialog").dialog('open');
 		},
 		generateCsv = function () {
+			var sseAddress = $('#txtBaseAddress2').val() + 'api/data/GetRoomVotes?roomid=' + $('#roomId').val();
 			if (!!window.EventSource) {
-				var sseAddress = $('#txtBaseAddress2').val() + 'api/data/GetRoomVotes?roomid=' + $('#roomId').val();
 
 				var source = new EventSource(sseAddress);
 				source.addEventListener('message', function (e) {
@@ -108,8 +108,25 @@
 				}
 			}
 			else {
-				agileApp.notifyService.error("Sorry, but your browser doesn't support SSE.", {}, true);
+				// not supported!
+				agileApp.notifyService.warning("Sorry, but your browser doesn't support SSE.", {}, true);
+
+				console.log("xdR");
+				var xdr = new XDomainRequest();
+				xdr.open("GET", sseAddress);
+				xdr.send();
+				xdr.onload = function () {
+					console.log(xdr);
+					var data = JSON.parse(xdr.responseText);
+					console.log(data);
+				}
+				xdr.onprogress = function () {
+					console.log(xdr.responseText);
+					var data = JSON.parse(xdr.responseText);
+					console.log(data);
+				}
 			}
+
 		};
 
 	function initDialogs() {
