@@ -6,11 +6,11 @@ using WebSignalR.Common.Interfaces;
 
 namespace WebSignalR.Bus
 {
-	public class ObservableContainer<T> : IObservable<T> where T : IBroadcastMessage
+	public class MessageStream<T> : IObservable<T> where T : IBroadcastMessage
 	{
 		private List<IObserver<T>> _observers;
 
-		public ObservableContainer()
+		public MessageStream()
 		{
 			_observers = new List<IObserver<T>>();
 		}
@@ -21,7 +21,7 @@ namespace WebSignalR.Bus
 			if (!_observers.Contains(observer))
 				_observers.Add(observer);
 
-			return new Unsubscribe(_observers, observer);
+			return new StreamUnsubscriber(_observers, observer);
 		}
 
 		public virtual void Broadcast(T value)
@@ -32,12 +32,21 @@ namespace WebSignalR.Bus
 			}
 		}
 
-		private class Unsubscribe : IDisposable
+		public void EndTransmission()
+		{
+			foreach (var observer in _observers.ToArray())
+				if (_observers.Contains(observer))
+					observer.OnCompleted();
+
+			_observers.Clear();
+		}
+
+		private class StreamUnsubscriber : IDisposable
 		{
 			private readonly List<IObserver<T>> _observers;
 			private readonly IObserver<T> _curentObserver;
 
-			public Unsubscribe(List<IObserver<T>> observers, IObserver<T> observer)
+			public StreamUnsubscriber(List<IObserver<T>> observers, IObserver<T> observer)
 			{
 				Ensure.Argument.NotNull(observer, "observer");
 				Ensure.Argument.NotNull(observers, "observers");
@@ -78,25 +87,25 @@ namespace WebSignalR.Bus
 
 	public class MessagePipeline : IMessgaePipeline
 	{
-		private readonly ConcurrentDictionary<Type, ObservableContainer<IBroadcastMessage>> _container;
+		private readonly ConcurrentDictionary<Type, MessageStream<IBroadcastMessage>> _container;
 
 		public MessagePipeline()
 		{
-			_container = new ConcurrentDictionary<Type, ObservableContainer<IBroadcastMessage>>();
+			_container = new ConcurrentDictionary<Type, MessageStream<IBroadcastMessage>>();
 		}
 
 		public IDisposable Subscribe<T>(IObserver<T> observer) where T : IBroadcastMessage
 		{
 			Ensure.Argument.NotNull(observer, "observer");
 
-			ObservableContainer<IBroadcastMessage> observable;
+			MessageStream<IBroadcastMessage> observable;
 			if (_container.TryGetValue(typeof(T), out observable))
 			{
 				return observable.Subscribe((observer as IObserver<IBroadcastMessage>));
 			}
 			else
 			{
-				observable = new ObservableContainer<IBroadcastMessage>();
+				observable = new MessageStream<IBroadcastMessage>();
 				IDisposable disp = observable.Subscribe((observer as IObserver<IBroadcastMessage>));
 				_container.TryAdd(typeof(T), observable);
 				return disp;
@@ -107,7 +116,7 @@ namespace WebSignalR.Bus
 		{
 			Ensure.Argument.NotNull(value, "value");
 
-			ObservableContainer<IBroadcastMessage> observable;
+			MessageStream<IBroadcastMessage> observable;
 			if (_container.TryGetValue(typeof(T), out observable))
 			{
 				observable.Broadcast(value);
