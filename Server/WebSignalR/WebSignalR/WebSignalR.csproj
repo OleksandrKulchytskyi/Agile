@@ -247,6 +247,7 @@
     <Content Include="Handlers\LoginHandler.ashx" />
     <Content Include="Handlers\LogoutHandler.ashx" />
     <Content Include="Content\toastr.less" />
+    <Content Include="ConnectionStrings.config" />
     <None Include="Properties\PublishProfiles\Test.pubxml" />
     <Content Include="Global.asax" />
     <None Include="Properties\PublishProfiles\Work.pubxml" />
