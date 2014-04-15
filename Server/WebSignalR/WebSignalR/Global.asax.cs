@@ -1,7 +1,5 @@
 ﻿using log4net;
-using Ninject;
 using System;
-using System.Collections.Generic;
 using System.Security.Principal;
 using System.Threading;
 using System.Web;
@@ -17,24 +15,7 @@ namespace WebSignalR
 {
 	public class Global : HttpApplication
 	{
-		private static List<string> _sessionInfo;
-		private static readonly object padlock = new object();
 		public static log4net.ILog Logger = null;
-
-		public static List<string> Sessions
-		{
-			get
-			{
-				lock (padlock)
-				{
-					if (_sessionInfo == null)
-					{
-						_sessionInfo = new List<string>();
-					}
-					return _sessionInfo;
-				}
-			}
-		}
 
 		protected void Application_Start(object sender, EventArgs e)
 		{
@@ -55,16 +36,6 @@ namespace WebSignalR
 		private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
 			Logger.Error("UnhandledException", e.ExceptionObject as Exception);
-		}
-
-		protected void Session_Start(object sender, EventArgs e)
-		{
-			Sessions.Add(Session.SessionID);
-		}
-
-		protected void Session_End(object sender, EventArgs e)
-		{
-			Sessions.Remove(Session.SessionID);
 		}
 
 		protected void Application_BeginRequest(object sender, EventArgs e)
