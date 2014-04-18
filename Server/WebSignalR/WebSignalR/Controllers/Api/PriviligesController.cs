@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using WebSignalR.Common.DTO;
 using WebSignalR.Common.Entities;
@@ -24,19 +25,26 @@ namespace WebSignalR.Controllers
 		}
 
 		[HttpGet]
-		public IEnumerable<PrivilegeDto> GetPrivileges()
+		public async Task<IEnumerable<PrivilegeDto>> GetPrivileges()
 		{
+			IEnumerable<PrivilegeDto> Dtos = Enumerable.Empty<PrivilegeDto>();
 			try
 			{
-				IReadOnlyRepository<Privileges> repo = _unity.GetRepository<Privileges>();
-				IEnumerable<PrivilegeDto> privileges = repo.GetAll().Select(p => AutoMapper.Mapper.Map<PrivilegeDto>(p));
-				return privileges;
+				Dtos = await
+				TaskHelper.FromMethod<IEnumerable<PrivilegeDto>>(() =>
+				{
+					IReadOnlyRepository<Privileges> repo = _unity.GetRepository<Privileges>();
+					IEnumerable<PrivilegeDto> privileges = repo.GetAll().Select(p => AutoMapper.Mapper.Map<PrivilegeDto>(p));
+					return privileges;
+				});
 			}
 			catch (Exception ex)
 			{
 				Global.Logger.Error(ex);
 				throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.InternalServerError) { Content = new StringContent(ex.Message) });
 			}
+
+			return Dtos;
 		}
 
 		[HttpPut]
