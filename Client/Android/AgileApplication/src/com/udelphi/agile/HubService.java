@@ -318,6 +318,24 @@ public class HubService {
 					}
 			}
 		});
+		
+		hubProxy.On("onVoteFinished", new HubOnDataCallback() {
+			@Override
+			public void OnReceived(JSONArray args) {
+				Log.d("onVoteFinished callback", args.toString());
+				VoteItem voteItem = null;
+				try {
+					JSONObject jsObj = (JSONObject) args.get(0);
+					voteItem = parseVoteItem(jsObj);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				if (voteItem != null)
+					for (IOnVoteItemStateListener listener : _onVoteItemListeners) {
+						listener.onVoteFinished(voteItem);
+					}
+			}
+		});
 
 	}
 
@@ -349,6 +367,7 @@ public class HubService {
 
 		voteItem.Closed = jsObj.getBoolean("Closed");
 		voteItem.Opened = jsObj.getBoolean("Opened");
+		voteItem.Finished = jsObj.optBoolean("Finished", false);
 		voteItem.OveralMark = jsObj.getInt("OverallMark");
 		voteItem.HostRoomId = jsObj.getInt("HostRoomId");
 

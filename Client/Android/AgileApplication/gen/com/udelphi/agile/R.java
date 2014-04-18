@@ -26,9 +26,9 @@ public final class R {
         public static final int item_opened_bg=0x7f020002;
     }
     public static final class id {
-        public static final int RoomActivity_form=0x7f08000e;
-        public static final int action_forgot_password=0x7f080015;
-        public static final int action_settings=0x7f080016;
+        public static final int RoomActivity_form=0x7f08000f;
+        public static final int action_forgot_password=0x7f080021;
+        public static final int action_settings=0x7f080022;
         public static final int chckLogAsMaster=0x7f08000c;
         public static final int chooseRoom_form=0x7f08000a;
         public static final int email=0x7f080004;
@@ -37,16 +37,28 @@ public final class R {
         public static final int login_status=0x7f080000;
         public static final int login_status_message=0x7f080001;
         public static final int password=0x7f080005;
-        public static final int roomName=0x7f080012;
+        public static final int roomName=0x7f08001c;
         public static final int roomSpinner=0x7f08000b;
-        public static final int room_usergridview=0x7f08000f;
-        public static final int roomwaitstatusview=0x7f08000d;
+        public static final int room_usergridview=0x7f080010;
+        public static final int roomwaitstatusview=0x7f08000e;
         public static final int serverUrl=0x7f080003;
         public static final int sign_in_button=0x7f080007;
-        public static final int text=0x7f080011;
-        public static final int voteContent=0x7f080013;
-        public static final int voteItemsList=0x7f080010;
-        public static final int voteMark=0x7f080014;
+        public static final int start_room_button=0x7f08000d;
+        public static final int text=0x7f08001b;
+        public static final int voteContent=0x7f08001d;
+        public static final int voteItemsList=0x7f080011;
+        public static final int voteMark=0x7f08001e;
+        public static final int vote_activityForm=0x7f080014;
+        public static final int vote_horizontalLine1=0x7f080017;
+        public static final int vote_questionTxt=0x7f080016;
+        public static final int vote_txt1=0x7f080018;
+        public static final int vote_user=0x7f08001f;
+        public static final int vote_userGridView=0x7f080015;
+        public static final int vote_userVote=0x7f080020;
+        public static final int vote_voteButton=0x7f08001a;
+        public static final int vote_voteSpinner=0x7f080019;
+        public static final int vote_waitStatusView=0x7f080012;
+        public static final int vote_waitingVoteTxt=0x7f080013;
         public static final int wait_status_view=0x7f080008;
         public static final int waitingRoom=0x7f080009;
     }
@@ -58,6 +70,7 @@ public final class R {
         public static final int gridview_item=0x7f030004;
         public static final int room_item=0x7f030005;
         public static final int voteitemview=0x7f030006;
+        public static final int voteuser_item=0x7f030007;
     }
     public static final class menu {
         public static final int login=0x7f070000;
@@ -86,6 +99,9 @@ public final class R {
         public static final int room_acivation_wait=0x7f040012;
         public static final int title_activity_login=0x7f040006;
         public static final int title_activity_room=0x7f040003;
+        /**  Strings related to VoteActivity 
+         */
+        public static final int title_activity_vote=0x7f040013;
         public static final int title_activity_vote_item=0x7f040005;
     }
     public static final class style {

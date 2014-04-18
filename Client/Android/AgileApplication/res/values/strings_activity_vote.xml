@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Strings related to VoteActivity -->
+    <string name="title_activity_vote">Set your evaluation:</string>
+</resources>

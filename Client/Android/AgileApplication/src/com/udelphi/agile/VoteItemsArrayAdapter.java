@@ -3,7 +3,6 @@ package com.udelphi.agile;
 import java.util.List;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.*;
 import android.widget.*;
@@ -12,13 +11,11 @@ import com.udelphi.agile.common.VoteItem;
 
 public class VoteItemsArrayAdapter extends ArrayAdapter<VoteItem> {
 
-	private final Context context;
 	private final List<VoteItem> values;
 	private LayoutInflater inflater;
 
 	public VoteItemsArrayAdapter(Context context, List<VoteItem> values) {
 		super(context, R.layout.voteitemview, values);
-		this.context = context;
 		this.values = values;
 		inflater = LayoutInflater.from(context);
 	}
