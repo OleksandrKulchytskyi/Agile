@@ -15,7 +15,7 @@ namespace WebSignalR
 {
 	public class Global : HttpApplication
 	{
-		public static log4net.ILog Logger = null;
+		public static log4net.ILog Logger;
 
 		protected void Application_Start(object sender, EventArgs e)
 		{
