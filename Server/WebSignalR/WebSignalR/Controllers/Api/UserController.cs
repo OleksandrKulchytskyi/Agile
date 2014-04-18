@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using WebSignalR.Common.DTO;
 using WebSignalR.Common.Entities;
@@ -24,10 +25,14 @@ namespace WebSignalR.Controllers
 		[ActionName("GetUserPrivileges")]
 		[Infrastructure.Authorization.WebApiAuth(Roles = "Admin")]
 		[HttpGet]
-		public HttpResponseMessage GetUserPrivileges(int userId)
+		public async Task<HttpResponseMessage> GetUserPrivileges(int userId)
 		{
-			IReadOnlyRepository<User> userRepo = _unity.GetRepository<User>();
-			var user = userRepo.Get(x => x.Id == userId).FirstOrDefault();
+			User user = await TaskHelper.FromMethod<User>(() =>
+			{
+				IReadOnlyRepository<User> userRepo = _unity.GetRepository<User>();
+				return userRepo.Get(x => x.Id == userId).FirstOrDefault();
+			});
+
 			if (user == null)
 				return Request.CreateErrorResponse(HttpStatusCode.NotFound, "User with such id cannot be found.");
 
