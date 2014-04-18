@@ -79,7 +79,7 @@ namespace WebSignalR
 				var filePath = Context.Request.FilePath;
 				var url = ((HttpApplication)sender).Context.Request.Url;
 				Logger.Warn("URL: " + url + "; FilePath: " + filePath);
-				Logger.Error("Application_Error", ex);
+				//Logger.Error("Application_Error", ex);
 			}
 			else
 				Logger.Error("Application_Error", exception);
