@@ -39,7 +39,7 @@ namespace WebSignalR.Common
 		}
 	}
 
-	internal class ReturnWaiter
+	internal class ReturnWaiter:IDisposable
 	{
 		private ManualResetEvent _signal = new ManualResetEvent(false);
 
@@ -62,6 +62,11 @@ namespace WebSignalR.Common
 				_value = value;
 				Signal.Set();
 			}
+		}
+
+		public void Dispose()
+		{
+			_signal.Dispose();
 		}
 	}
 }

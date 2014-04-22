@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using WebSignalR.Common.DTO;
@@ -19,11 +20,14 @@ namespace WebSignalR.Controllers
 			base._unity = unity;
 		}
 
-		public ActionResult Index(string roomName)
+		public async Task<ActionResult> Index(string roomName)
 		{
 			if (roomName != null)
 			{
-				Room room = Unity.GetRepository<Room>().Get(x => x.Name == roomName).FirstOrDefault();
+				Room room = await TaskHelper.FromMethod(() =>
+				{
+					return Unity.GetRepository<Room>().Get(x => x.Name == roomName).FirstOrDefault();
+				});
 				if (room != null)
 				{
 					ViewData["RoomId"] = room.Id;
@@ -37,14 +41,13 @@ namespace WebSignalR.Controllers
 			ViewData["UserId"] = (User as Infrastructure.CustomPrincipal).UserId;
 			ViewData["IsAdmin"] = (User as Infrastructure.CustomPrincipal).IsInRole("Admin");
 			string baseAddress = Request.Url.GetLeftPart(UriPartial.Authority) + Url.Content("~");
-			//string baseAddress2 = new Uri(Request.Url, Url.Content("~")).ToString();
 			TempData["baseAddress"] = baseAddress;
 			return View();
 		}
 
 		[Authorize]
 		[HttpPost]
-		public ActionResult Upload(FormCollection formCollection)
+		public async Task<ActionResult> Upload(FormCollection formCollection)
 		{
 			if (Request != null)
 			{
@@ -65,16 +68,20 @@ namespace WebSignalR.Controllers
 					{
 						try
 						{
-							IVotesProvider provider = new Infrastructure.XmlVotesProvider();
-							provider.Source = file.InputStream;
-							ICollection<VoteItem> data = provider.GetVotes();
-							Room room = Unity.GetRepository<Room>().Get(x => x.Id == rid).FirstOrDefault();
-							foreach (var item in data)
+							Room room = await TaskHelper.FromMethod(() =>
 							{
-								item.HostRoom = room;
-								room.ItemsToVote.Add(item);
-							}
-							Unity.Commit();
+								IVotesProvider provider = new Infrastructure.XmlVotesProvider();
+								provider.Source = file.InputStream;
+								ICollection<VoteItem> data = provider.GetVotes();
+								Room innerRoom = Unity.GetRepository<Room>().Get(x => x.Id == rid).FirstOrDefault();
+								foreach (var item in data)
+								{
+									item.HostRoom = innerRoom;
+									innerRoom.ItemsToVote.Add(item);
+								}
+								Unity.Commit();
+								return innerRoom;
+							});
 
 							RoomDto dto = AutoMapper.Mapper.Map<RoomDto>(room);
 							base.AgileHubConnection.Group(dto.Name).onRoomStateChanged(dto);

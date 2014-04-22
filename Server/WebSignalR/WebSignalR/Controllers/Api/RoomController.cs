@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using WebSignalR.Common.DTO;
 using WebSignalR.Common.Entities;
@@ -32,8 +33,6 @@ namespace WebSignalR.Controllers
 		{
 			try
 			{
-				//AgileHubContext.Clients.All.onTestMethod(data);
-				//AgileHubContext.Clients.Group(room).onTestMethod(data);
 				AgileHubConnection.All.onTestMethod(data);
 				AgileHubConnection.Group(room).onTestMethod(data + " : " + room);
 			}
@@ -46,16 +45,19 @@ namespace WebSignalR.Controllers
 
 		[HttpGet]
 		[ActionName("ByName")]
-		public Room ByName([FromUri]string name)
+		public async Task<Room> ByName([FromUri]string name)
 		{
 			try
 			{
-				IReadOnlyRepository<Room> repo = _unity.GetRepository<Room>();
-				Room room = repo.Get(x => x.Name == name).FirstOrDefault();
-				if (room != null)
-					return room;
-				else
-					throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound) { Content = new StringContent("Room with such name cannot be found.") });
+				return await TaskHelper.FromMethod(() =>
+				{
+					IReadOnlyRepository<Room> repo = _unity.GetRepository<Room>();
+					Room room = repo.Get(x => x.Name == name).FirstOrDefault();
+					if (room != null)
+						return room;
+					else
+						throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound) { Content = new StringContent("Room with such name cannot be found.") });
+				});
 			}
 			catch (Exception ex)
 			{
@@ -66,13 +68,16 @@ namespace WebSignalR.Controllers
 
 		[HttpGet]
 		[ActionName("GetRooms")]
-		public IEnumerable<Room> GetRooms()
+		public async Task<IEnumerable<Room>> GetRooms()
 		{
 			try
 			{
-				IReadOnlyRepository<Room> repo = _unity.GetRepository<Room>();
-				IEnumerable<Room> rooms = repo.GetAll();
-				return rooms;
+				return await TaskHelper.FromMethod(() =>
+				{
+					IReadOnlyRepository<Room> repo = _unity.GetRepository<Room>();
+					IEnumerable<Room> rooms = repo.GetAll();
+					return rooms;
+				});
 			}
 			catch (Exception ex)
 			{
@@ -83,35 +88,39 @@ namespace WebSignalR.Controllers
 
 		[HttpPost]
 		[Infrastructure.Authorization.WebApiAuth(Roles = "Admin")]
-		public HttpResponseMessage CreateRoom(RoomDto roomdto)
+		public async Task<HttpResponseMessage> CreateRoom(RoomDto roomdto)
 		{
-			Room room = AutoMapper.Mapper.Map<Room>(roomdto);
-			if (room == null || !ModelState.IsValid)
-				return new HttpResponseMessage(HttpStatusCode.BadRequest);
-
-			IRepository<Room> repo = _unity.GetRepository<Room>();
-			if (repo.Exist(x => x.Name == room.Name))
-				return new HttpResponseMessage(HttpStatusCode.Conflict) { Content = new StringContent("Room with such name already exists.") };
-
 			try
 			{
-				repo.Add(room);
-				_unity.Commit();
+				return await TaskHelper.FromMethod(() =>
+				{
+					Room room = AutoMapper.Mapper.Map<Room>(roomdto);
+					if (room == null || !ModelState.IsValid)
+						return new HttpResponseMessage(HttpStatusCode.BadRequest);
+
+					IRepository<Room> repo = _unity.GetRepository<Room>();
+					if (repo.Exist(x => x.Name == room.Name))
+						return new HttpResponseMessage(HttpStatusCode.Conflict) { Content = new StringContent("Room with such name already exists.") };
+
+
+					repo.Add(room);
+					_unity.Commit();
+
+					// Need to detach to avoid loop reference exception during JSON serialization
+					Room repoRoom = repo.Get(x => x.Name == room.Name).FirstOrDefault();
+					roomdto.Id = repoRoom.Id;
+					base.AgileHubConnection.All.onRoomAdded(roomdto);
+
+					HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, roomdto);
+					response.Headers.Location = new Uri(Url.Link("DefaultApi", new { id = roomdto.Id }));
+					return response;
+				});
 			}
 			catch (System.Exception ex)
 			{
 				Global.Logger.Error(ex);
 				return new HttpResponseMessage(HttpStatusCode.InternalServerError);
 			}
-
-			// Need to detach to avoid loop reference exception during JSON serialization
-			Room repoRoom = repo.Get(x => x.Name == room.Name).FirstOrDefault();
-			roomdto.Id = repoRoom.Id;
-			base.AgileHubConnection.All.onRoomAdded(roomdto);
-
-			HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created, roomdto);
-			response.Headers.Location = new Uri(Url.Link("DefaultApi", new { id = roomdto.Id }));
-			return response;
 		}
 
 		[HttpPut]
@@ -144,64 +153,71 @@ namespace WebSignalR.Controllers
 
 		[HttpDelete]
 		[Infrastructure.Authorization.WebApiAuth(Roles = "Admin")]
-		public HttpResponseMessage DeleteRoom([FromUri]int id)
+		public async Task<HttpResponseMessage> DeleteRoom([FromUri]int id)
 		{
-			IRepository<Room> repo = _unity.GetRepository<Room>();
-			Room room;
-			if ((room = repo.Get(x => x.Id == id).FirstOrDefault()) == null)
-				return new HttpResponseMessage(HttpStatusCode.BadRequest) { Content = new StringContent("No room with such id.") };
-
 			try
 			{
-				repo.Remove(room);
-				_unity.Commit();
+				return await TaskHelper.FromMethod(() =>
+				{
+					IRepository<Room> repo = _unity.GetRepository<Room>();
+					Room room;
+					if ((room = repo.Get(x => x.Id == id).FirstOrDefault()) == null)
+						return new HttpResponseMessage(HttpStatusCode.BadRequest) { Content = new StringContent("No room with such id.") };
+
+					repo.Remove(room);
+					_unity.Commit();
+
+					// Need to detach to avoid loop reference exception during JSON serialization
+					RoomDto dto = AutoMapper.Mapper.Map<RoomDto>(room);
+					this.AgileHubConnection.All.onRoomDeleted(dto);
+					return Request.CreateResponse(HttpStatusCode.OK, dto);
+				});
 			}
 			catch (Exception ex)
 			{
 				Global.Logger.Error(ex);
 				return new HttpResponseMessage(HttpStatusCode.InternalServerError);
 			}
-			// Need to detach to avoid loop reference exception during JSON serialization
-			RoomDto dto = AutoMapper.Mapper.Map<RoomDto>(room);
-			this.AgileHubConnection.All.onRoomDeleted(dto);
-			return Request.CreateResponse(HttpStatusCode.OK, dto);
 		}
 
 		[HttpGet]
-		public HttpResponseMessage EnterRoom([FromUri]int roomId, [FromUri] int userId)
+		public async Task<HttpResponseMessage> EnterRoom([FromUri]int roomId, [FromUri] int userId)
 		{
 			IRepository<User> repoUser = _unity.GetRepository<User>();
 			IRepository<Room> repoRoom = _unity.GetRepository<Room>();
 
 			try
 			{
-				User usr = repoUser.Get(x => x.Id == userId).FirstOrDefault();
-				Room room = repoRoom.Get(x => x.Id == roomId).FirstOrDefault();
-				if (usr != null && room != null)
+				return await TaskHelper.FromMethod(() =>
 				{
-					room.ConnectedUsers.Add(usr);
-					_unity.Commit();
-					UserDto userDto = AutoMapper.Mapper.Map<UserDto>(usr);
-					base.AgileHubConnection.Group(room.Name).onJoinedRoom(userDto);
-				}
-				else
-					return new HttpResponseMessage(HttpStatusCode.BadRequest) { Content = new StringContent("Unable to found entities with such id's.") };
+					User usr = repoUser.Get(x => x.Id == userId).FirstOrDefault();
+					Room room = repoRoom.Get(x => x.Id == roomId).FirstOrDefault();
+					if (usr != null && room != null)
+					{
+						room.ConnectedUsers.Add(usr);
+						_unity.Commit();
+						UserDto userDto = AutoMapper.Mapper.Map<UserDto>(usr);
+						base.AgileHubConnection.Group(room.Name).onJoinedRoom(userDto);
+					}
+					else
+						return new HttpResponseMessage(HttpStatusCode.BadRequest) { Content = new StringContent("Unable to found entities with such id's.") };
+
+					return Request.CreateResponse(HttpStatusCode.OK);
+				});
 			}
 			catch (System.Exception ex)
 			{
 				Global.Logger.Error(ex);
 				return new HttpResponseMessage(HttpStatusCode.InternalServerError);
 			}
-
-			return Request.CreateResponse(HttpStatusCode.OK);
 		}
 
 		[HttpGet]
-		public bool IsRoomActive([FromUri]int roomId)
+		public async Task<bool> IsRoomActive([FromUri]int roomId)
 		{
 			try
 			{
-				return _userRoomService.IsRoomActive(roomId);
+				return await TaskHelper.FromMethod(() => _userRoomService.IsRoomActive(roomId));
 			}
 			catch (System.Exception ex)
 			{
@@ -211,7 +227,7 @@ namespace WebSignalR.Controllers
 		}
 
 		[HttpPut]
-		public HttpResponseMessage LeaveRoom([FromUri]int roomId, [FromUri] int userId)
+		public async Task<HttpResponseMessage> LeaveRoom([FromUri]int roomId, [FromUri] int userId)
 		{
 			IRepository<User> repoUser = _unity.GetRepository<User>();
 			IRepository<Room> repoRoom = _unity.GetRepository<Room>();
@@ -219,53 +235,59 @@ namespace WebSignalR.Controllers
 
 			try
 			{
-				User usr = repoUser.Get(x => x.Id == userId).FirstOrDefault();
-				Room room = repoRoom.Get(x => x.Id == roomId).FirstOrDefault();
-				if (usr != null && room != null)
+				return await TaskHelper.FromMethod(() =>
 				{
-					room.ConnectedUsers.Remove(usr);
-					SessionRoom sr = srRepo.Get(x => x.Session.User.Id == userId).FirstOrDefault();
-					if (sr != null)
-						srRepo.Remove(sr);
+					User usr = repoUser.Get(x => x.Id == userId).FirstOrDefault();
+					Room room = repoRoom.Get(x => x.Id == roomId).FirstOrDefault();
+					if (usr != null && room != null)
+					{
+						room.ConnectedUsers.Remove(usr);
+						SessionRoom sr = srRepo.Get(x => x.Session.User.Id == userId).FirstOrDefault();
+						if (sr != null)
+							srRepo.Remove(sr);
 
-					_unity.Commit();
-					UserDto userDto = AutoMapper.Mapper.Map<UserDto>(usr);
-					base.AgileHubConnection.Group(room.Name).onLeftRoom(userDto);
-				}
-				else
-					return new HttpResponseMessage(HttpStatusCode.BadRequest) { Content = new StringContent("Unable to found entities with such id's.") };
+						_unity.Commit();
+						UserDto userDto = AutoMapper.Mapper.Map<UserDto>(usr);
+						base.AgileHubConnection.Group(room.Name).onLeftRoom(userDto);
+					}
+					else
+						return new HttpResponseMessage(HttpStatusCode.BadRequest) { Content = new StringContent("Unable to found entities with such id's.") };
+
+					return Request.CreateResponse(HttpStatusCode.OK);
+				});
 			}
 			catch (System.Exception ex)
 			{
 				Global.Logger.Error(ex);
 				return new HttpResponseMessage(HttpStatusCode.InternalServerError);
 			}
-
-			return Request.CreateResponse(HttpStatusCode.OK);
 		}
 
 		[HttpPost]
-		public HttpResponseMessage DisconnectFromRoom([FromUri]string roomName, [FromUri] string sessionId)
+		public async Task<HttpResponseMessage> DisconnectFromRoom([FromUri]string roomName, [FromUri] string sessionId)
 		{
 			if (string.IsNullOrEmpty(roomName) || string.IsNullOrEmpty(sessionId))
 				return new HttpResponseMessage(HttpStatusCode.BadRequest) { Content = new StringContent("Unable to found entities with such id's.") };
 
 			try
 			{
-				_userRoomService.DisconnecFromRoomBySessionId(roomName, sessionId);
+				return await TaskHelper.FromMethod(() =>
+				{
+					_userRoomService.DisconnecFromRoomBySessionId(roomName, sessionId);
 
-				IRepository<UserSession> sessionRepo = _unity.GetRepository<UserSession>();
-				UserSession session = sessionRepo.Get(x => x.SessionId == sessionId).FirstOrDefault();
-				if (session != null)
-					AgileHubConnection.Group(roomName).onLeftRoom(AutoMapper.Mapper.Map<UserDto>(session.User));
+					IRepository<UserSession> sessionRepo = _unity.GetRepository<UserSession>();
+					UserSession session = sessionRepo.Get(x => x.SessionId == sessionId).FirstOrDefault();
+					if (session != null)
+						AgileHubConnection.Group(roomName).onLeftRoom(AutoMapper.Mapper.Map<UserDto>(session.User));
+
+					return new HttpResponseMessage(HttpStatusCode.OK);
+				});
 			}
 			catch (System.Exception ex)
 			{
 				Global.Logger.Error(ex);
 				return new HttpResponseMessage(HttpStatusCode.InternalServerError);
 			}
-
-			return new HttpResponseMessage(HttpStatusCode.OK);
 		}
 
 		protected override void Dispose(bool disposing)

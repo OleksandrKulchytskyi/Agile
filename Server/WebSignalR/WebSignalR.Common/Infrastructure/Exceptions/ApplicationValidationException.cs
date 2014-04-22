@@ -6,6 +6,7 @@ namespace WebSignalR.Common.Infrastructure
 	/// <summary>
 	/// The custom exception for validation errors
 	/// </summary>
+	[Serializable]
 	public class ApplicationValidationException
 		: Exception
 	{

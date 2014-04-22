@@ -49,31 +49,34 @@ namespace WebSignalR.Controllers
 
 		[HttpPut]
 		[ActionName("AppendUserRole")]
-		public HttpResponseMessage AppendUserRole(int userId, int privilegeId)
+		public async Task<HttpResponseMessage> AppendUserRole(int userId, int privilegeId)
 		{
-			Privileges privilege;
 			try
 			{
-				IReadOnlyRepository<Privileges> privRepo = _unity.GetRepository<Privileges>();
-				IRepository<User> userRepo = _unity.GetRepository<User>();
-				User user = userRepo.Get(x => x.Id == userId).FirstOrDefault();
-				privilege = privRepo.Get(x => x.Id == privilegeId).FirstOrDefault();
-				if (user != null && privilege != null)
+				return await TaskHelper.FromMethod<HttpResponseMessage>(() =>
 				{
-					user.UserPrivileges.Add(privilege);
-					userRepo.Update(user);
-					_unity.Commit();
-				}
-				else
-					Request.CreateErrorResponse(HttpStatusCode.NotFound, "Entities were not found.");
+					Privileges privilege;
+					IReadOnlyRepository<Privileges> privRepo = _unity.GetRepository<Privileges>();
+					IRepository<User> userRepo = _unity.GetRepository<User>();
+					User user = userRepo.Get(x => x.Id == userId).FirstOrDefault();
+					privilege = privRepo.Get(x => x.Id == privilegeId).FirstOrDefault();
+					if (user != null && privilege != null)
+					{
+						user.UserPrivileges.Add(privilege);
+						userRepo.Update(user);
+						_unity.Commit();
+					}
+					else
+						Request.CreateErrorResponse(HttpStatusCode.NotFound, "Entities were not found.");
 
+					return Request.CreateResponse(HttpStatusCode.OK, AutoMapper.Mapper.Map<PrivilegeDto>(privilege));
+				});
 			}
 			catch (Exception ex)
 			{
 				Global.Logger.Error(ex);
 				return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
 			}
-			return Request.CreateResponse(HttpStatusCode.OK, AutoMapper.Mapper.Map<PrivilegeDto>(privilege));
 		}
 
 		protected override void Dispose(bool disposing)

@@ -6,7 +6,7 @@ using WebSignalR.Common.Interfaces;
 
 namespace WebSignalR.Common.Infrastructure
 {
-	public class UserCredentialsValidator : IEntityValidator, IDisposable
+	public sealed class UserCredentialsValidator : IEntityValidator, IDisposable
 	{
 		private IUnityOfWork _unity;
 		private bool isValid;

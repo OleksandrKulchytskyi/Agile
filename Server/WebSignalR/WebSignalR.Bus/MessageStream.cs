@@ -26,10 +26,7 @@ namespace WebSignalR.Bus
 
 		public virtual void Broadcast(T value)
 		{
-			foreach (var item in _observers)
-			{
-				item.OnNext(value);
-			}
+			System.Threading.Tasks.Parallel.ForEach(_observers, (item) => item.OnNext(value));
 		}
 
 		public void EndTransmission()
@@ -85,7 +82,7 @@ namespace WebSignalR.Bus
 		}
 	}
 
-	public class MessagePipeline : IMessgaePipeline
+	public sealed class MessagePipeline : IMessgaePipeline
 	{
 		private readonly ConcurrentDictionary<Type, MessageStream<IBroadcastMessage>> _container;
 

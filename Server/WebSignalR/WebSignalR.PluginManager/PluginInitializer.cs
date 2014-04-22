@@ -19,7 +19,7 @@ namespace WebSignalR.PluginManager
 			string pluginsTempPath = HostingEnvironment.MapPath("~/plugins/temp");
 
 			if (pluginsPath == null || pluginsTempPath == null)
-				throw new DirectoryNotFoundException("plugins");
+				return;
 
 			PluginFolder = new DirectoryInfo(pluginsPath);
 			TempPluginFolder = new DirectoryInfo(pluginsTempPath);

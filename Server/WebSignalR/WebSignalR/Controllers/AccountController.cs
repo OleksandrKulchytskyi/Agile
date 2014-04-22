@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -27,7 +28,7 @@ namespace WebSignalR.Controllers
 
 		[AllowAnonymous]
 		[HttpPost]
-		public JsonResult JsonLogin(LoginViewModel model, string returnUrl)
+		public async Task<JsonResult> JsonLogin(LoginViewModel model, string returnUrl)
 		{
 			if (ModelState.IsValid)
 			{
@@ -38,13 +39,14 @@ namespace WebSignalR.Controllers
 					client.BaseAddress = GetBaseUrl();
 					client.DefaultRequestHeaders.Add("Authorization", "Basic " + (model.Username + ":" + model.Password.toBase64Utf8()).toBase64Utf8());
 					client.DefaultRequestHeaders.Add("Persistant", model.RememberMe ? "1" : "0");
-					var task = client.GetAsync("handlers/loginhandler.ashx");
+					HttpResponseMessage response = null;
 					try
 					{
-						task.Wait();
+						response = await client.GetAsync("handlers/loginhandler.ashx");
 					}
 					catch (AggregateException ex) { Global.Logger.Error(ex); }
-					if (task.Result.StatusCode == System.Net.HttpStatusCode.OK)
+
+					if (response.StatusCode == System.Net.HttpStatusCode.OK)
 					{
 						if (cookieContainer != null)
 						{
@@ -103,7 +105,7 @@ namespace WebSignalR.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult LogOff()
+		public async Task<ActionResult> LogOff()
 		{
 			System.Net.CookieContainer cookieContainer = new System.Net.CookieContainer();
 			using (HttpClientHandler handler = new HttpClientHandler() { CookieContainer = cookieContainer })
@@ -118,21 +120,26 @@ namespace WebSignalR.Controllers
 					System.Net.Cookie cookie = new System.Net.Cookie(Infrastructure.Constants.FormsAuthKey, strEncryptedTicket, "/", domain);
 					cookieContainer.Add(cookie);
 				}
-				var task = client.GetAsync("handlers/LogoutHandler.ashx");
+				HttpResponseMessage response = null;
 				try
 				{
-					task.Wait();
+					response = await client.GetAsync("handlers/LogoutHandler.ashx");
 				}
 				catch (AggregateException ex) { Global.Logger.Error(ex); }
-				if (task.Result.StatusCode == System.Net.HttpStatusCode.OK)
+				if (response.StatusCode == System.Net.HttpStatusCode.OK)
 				{
-					//return Json(new { success = true, redirect = returnUrl });
+					HttpCookie c = Request.Cookies[Infrastructure.Constants.FormsAuthKey];
+					if (c != null)
+					{
+						c.Expires = DateTime.Now.AddDays(-1);
+						c.Value = string.Empty;
+						Response.Cookies.Add(c);
+					}
 				}
 				else
 					ModelState.AddModelError(string.Empty, "The user name or password provided is incorrect.");
 			}
-
-			FormsAuthentication.SignOut();
+			//FormsAuthentication.SignOut();
 			return RedirectToAction("Index", "Home");
 		}
 
@@ -144,34 +151,36 @@ namespace WebSignalR.Controllers
 		[HttpPost]
 		[AllowAnonymous]
 		[ValidateAntiForgeryToken]
-		public ActionResult JsonRegister(RegisterViewModel model, string returnUrl)
+		public async Task<ActionResult> JsonRegister(RegisterViewModel model, string returnUrl)
 		{
 			if (ModelState.IsValid)
 			{
 				// Attempt to register the user
 				try
 				{
-					IRepository<User> userRepo = Unity.GetRepository<User>();
-					if (userRepo.Get(x => x.Name == model.UserName).FirstOrDefault() != null)
-						throw new InvalidOperationException("User with such name already exists.");
-					if (model.Password != model.ConfirmPassword)
-						throw new InvalidOperationException("Password must be the same.");
+					return await TaskHelper.FromMethod(() =>
+					{
+						IRepository<User> userRepo = Unity.GetRepository<User>();
+						if (userRepo.Get(x => x.Name == model.UserName).FirstOrDefault() != null)
+							throw new InvalidOperationException("User with such name already exists.");
+						if (model.Password != model.ConfirmPassword)
+							throw new InvalidOperationException("Password must be the same.");
 
-					User usr = new User();
-					usr.Name = model.UserName;
-					usr.Password = model.Password.toBase64Utf8();
-					usr.UserPrivileges.Add(Unity.GetRepository<Privileges>().Get(x => x.Name == "User").FirstOrDefault());
-					userRepo.Add(usr);
-					Unity.Commit();
+						User usr = new User();
+						usr.Name = model.UserName;
+						usr.Password = model.Password.toBase64Utf8();
+						usr.UserPrivileges.Add(Unity.GetRepository<Privileges>().Get(x => x.Name == "User").FirstOrDefault());
+						userRepo.Add(usr);
+						Unity.Commit();
 
-					return Json(new { success = true, redirect = returnUrl });
+						return Json(new { success = true, redirect = returnUrl });
+					});
 				}
 				catch (Exception ex)
 				{
 					ModelState.AddModelError(string.Empty, ex.Message);
 				}
 			}
-
 			// If we got this far, something failed
 			return Json(new { errors = GetErrorsFromModelState() });
 		}
@@ -201,7 +210,6 @@ namespace WebSignalR.Controllers
 					ModelState.AddModelError(string.Empty, ex.Message);
 				}
 			}
-
 			// If we got this far, something failed
 			return Json(new { errors = GetErrorsFromModelState() });
 		}

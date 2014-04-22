@@ -23,23 +23,21 @@ namespace WebSignalR.Common.Infrastructure
 					using (var ms = new MemoryStream())
 					{
 						ms.Write(initializationVector, 0, initializationVector.Length);
-						using (var cryptoStream = new CryptoStream(ms, transform, CryptoStreamMode.Write))
-						{
-							// Encrypted payload
-							cryptoStream.Write(plainText, 0, plainText.Length);
-							cryptoStream.FlushFinalBlock();
+						CryptoStream cryptoStream = new CryptoStream(ms, transform, CryptoStreamMode.Write);
+						// Encrypted payload
+						cryptoStream.Write(plainText, 0, plainText.Length);
+						cryptoStream.FlushFinalBlock();
 
-							// Compute signature
-							using (var sha = new HMACSHA256(validationKey))
+						// Compute signature
+						using (var sha = new HMACSHA256(validationKey))
+						{
+							checked
 							{
-								checked
-								{
-									byte[] signature = sha.ComputeHash(ms.GetBuffer(), 0, (int)ms.Length);
-									// Write the signature to the paylod
-									ms.Write(signature, 0, signature.Length);
-									// Final bytes
-									return ms.ToArray();
-								}
+								byte[] signature = sha.ComputeHash(ms.GetBuffer(), 0, (int)ms.Length);
+								// Write the signature to the paylod
+								ms.Write(signature, 0, signature.Length);
+								// Final bytes
+								return ms.ToArray();
 							}
 						}
 					}
@@ -71,14 +69,12 @@ namespace WebSignalR.Common.Infrastructure
 				{
 					using (var ms = new MemoryStream())
 					{
-						using (var cryptoStream = new CryptoStream(ms, transform, CryptoStreamMode.Write))
+						CryptoStream cryptoStream = new CryptoStream(ms, transform, CryptoStreamMode.Write);
+						checked
 						{
-							checked
-							{
-								cryptoStream.Write(payload, IVLength, payload.Length - (HMacLength + IVLength));
-								cryptoStream.FlushFinalBlock();
-								return ms.ToArray();
-							}
+							cryptoStream.Write(payload, IVLength, payload.Length - (HMacLength + IVLength));
+							cryptoStream.FlushFinalBlock();
+							return ms.ToArray();
 						}
 					}
 				}

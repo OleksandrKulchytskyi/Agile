@@ -8,7 +8,7 @@ using WebSignalR.Common.Interfaces;
 
 namespace WebSignalR.DataAccess.DB
 {
-	public class DatabaseContext : DbContext, IContext
+	public sealed class DatabaseContext : DbContext, IContext
 	{
 		public DatabaseContext(string connection)
 			: base(connection)
@@ -116,5 +116,6 @@ namespace WebSignalR.DataAccess.DB
 		{
 			return (entity.State & state) == state;
 		}
+
 	}
 }
