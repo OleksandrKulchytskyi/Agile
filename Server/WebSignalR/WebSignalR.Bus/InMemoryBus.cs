@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using WebSignalR.Common.Interfaces.Bus;
-using WebSignalR.Common.Extension;
-using System.Diagnostics;
 using System.Threading.Tasks.Dataflow;
+using WebSignalR.Common.Extension;
+using WebSignalR.Common.Interfaces.Bus;
 
 namespace WebSignalR.Bus
 {
@@ -77,7 +75,6 @@ namespace WebSignalR.Bus
 						continue;
 					}
 				}
-
 				// All done send result back to caller
 				request.OnSendComplete(result);
 			});
