@@ -33,6 +33,8 @@ http://localhost:6404/signalr/signalr/connect?transport=serverSentEvents&amp;Con
 
 http://localhost/WebSignalR/signalr/connect?transport=serverSentEvents&amp;ConnectionId=6918ea2d-28aa-4b00-8ecb-916bd722c9c5&amp;connectionData=%5B%7B%22name%22%3A%22agileHub%22%7D%5D&amp;tid=9;ConnectionToken=PPzEGVr3c8MYZ8VdQ0RzgKyoEuzqY5s40E0QShe9xpmTqipFixIzdGEiNB0pzTbm3hSH-crnYmEgHbW_7-H6ikwNd-JX1ZzvnZrmSqH78yiSxCfc4nPPtLUmLXRcrNR5jp15KZxfUkTJkBQeBz6P-PIGewkPw4E4S2WYglCWwcPQb3aoRVw4P2kW3hRsxqSq0
 
+http://habrahabr.ru/post/220343/ LIGHT STREAM
+
 public class YieldInOperator
 {
     public static void Main(string[] args)

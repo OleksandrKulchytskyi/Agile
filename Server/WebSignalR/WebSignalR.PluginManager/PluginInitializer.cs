@@ -15,8 +15,8 @@ namespace WebSignalR.PluginManager
 	{
 		static PluginInitializer()
 		{
-			string pluginsPath = HostingEnvironment.MapPath("~/plugins");
-			string pluginsTempPath = HostingEnvironment.MapPath("~/plugins/temp");
+			string pluginsPath = HostingEnvironment.MapPath("~/App_Data/plugins");
+			string pluginsTempPath = HostingEnvironment.MapPath("~/App_Data/plugins/temp");
 
 			if (pluginsPath == null || pluginsTempPath == null)
 				return;
