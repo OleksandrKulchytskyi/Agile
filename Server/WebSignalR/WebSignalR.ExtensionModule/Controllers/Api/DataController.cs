@@ -65,7 +65,7 @@ namespace WebSignalR.ExtensionModule.Controllers.Api
 		public HttpResponseMessage Download([FromUri]bool lengthOnly, [FromUri]string fileId)
 		{
 			string fname = fileId + ".csv";
-			string path = HttpContext.Current.Server.MapPath("~/App_Data/" + fname);
+			string path =System.Web.Hosting.HostingEnvironment.MapPath("~/App_Data/" + fname);
 			if (!File.Exists(path))
 			{
 				return Request.CreateErrorResponse(HttpStatusCode.NotFound, new HttpError("The file does not exist."));
