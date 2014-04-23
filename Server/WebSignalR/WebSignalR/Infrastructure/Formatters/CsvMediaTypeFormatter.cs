@@ -48,15 +48,12 @@ namespace WebSignalR.Infrastructure.Formatters
 			return isTypeOfIEnumerable(type);
 		}
 
-		public override Task WriteToStreamAsync(Type type, object value, Stream writeStream, HttpContent content, TransportContext transportContext)
+		public async override Task WriteToStreamAsync(Type type, object value, Stream writeStream, HttpContent content, TransportContext transportContext)
 		{
-			return TaskHelper.RunSynchronously(() =>
-			{
-				writeToStream(type, value, writeStream, content.Headers);
-			});
+			await writeToStream(type, value, writeStream, content.Headers);
 		}
 
-		private void writeToStream(Type type, object value, Stream stream, HttpContentHeaders contentHeaders)
+		private async Task writeToStream(Type type, object value, Stream stream, HttpContentHeaders contentHeaders)
 		{
 			//NOTE: We have check the type inside CanWriteType method
 			//If request comes this far, the type is IEnumerable. We are safe.
@@ -67,12 +64,7 @@ namespace WebSignalR.Infrastructure.Formatters
 
 				foreach (var obj in (IEnumerable<object>)value)
 				{
-					var vals = obj.GetType().GetProperties().Select(
-						pi => new
-						{
-							Value = pi.GetValue(obj, null)
-						}
-					);
+					var vals = obj.GetType().GetProperties().Select(pi => new { Value = pi.GetValue(obj, null) });
 
 					string _valueLine = string.Empty;
 
@@ -98,11 +90,11 @@ namespace WebSignalR.Infrastructure.Formatters
 							_valueLine = string.Concat(string.Empty, ",");
 						}
 					}
-					_stringWriter.WriteLine(_valueLine.TrimEnd(','));
+					await _stringWriter.WriteLineAsync(_valueLine.TrimEnd(','));
 				}
 
 				var streamWriter = new StreamWriter(stream);
-				streamWriter.Write(_stringWriter.ToString());
+				await streamWriter.WriteAsync(_stringWriter.ToString());
 			}
 		}
 

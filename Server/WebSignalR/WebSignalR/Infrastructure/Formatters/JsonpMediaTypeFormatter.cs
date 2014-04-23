@@ -46,24 +46,23 @@ namespace WebSignalR.Infrastructure.Formatters
 			return new JsonpMediaTypeFormatter(request) { SerializerSettings = SerializerSettings };
 		}
 
-		public override Task WriteToStreamAsync(Type type, object value, Stream stream, HttpContent content, TransportContext transportContext)
+		public async override Task WriteToStreamAsync(Type type, object value, Stream stream, HttpContent content, TransportContext transportContext)
 		{
 			string callback;
 			if (IsJsonpRequest(request, out callback))
 			{
 				var writer = new StreamWriter(stream);
-				writer.Write(callback + "(");
-				writer.Flush();
+				await writer.WriteAsync(callback + "(");
+				await writer.FlushAsync();
 
-				return base.WriteToStreamAsync(type, value, stream, content, transportContext).ContinueWith(_ =>
-				{
-					//TODO: Inspecting the task status and acting on that is better
+				await base.WriteToStreamAsync(type, value, stream, content, transportContext).ContinueWith(_ =>
+				{	//TODO: Inspecting the task status and acting on that is better
 					writer.Write(")");
 					writer.Flush();
 				});
 			}
 
-			return base.WriteToStreamAsync(type, value, stream, content, transportContext);
+			await base.WriteToStreamAsync(type, value, stream, content, transportContext);
 		}
 
 		private bool IsJsonpRequest(HttpRequestMessage request, out string callback)

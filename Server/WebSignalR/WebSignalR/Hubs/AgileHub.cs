@@ -57,58 +57,64 @@ namespace WebSignalR.Hubs
 			_bus = messageBus;
 		}
 
-		public override Task OnConnected()
+		public async override Task OnConnected()
 		{
 #if DEBUG
 			System.Diagnostics.Debug.WriteLine("OnConnected user: " + Context.User.Identity.Name + " SessionId: " + Context.ConnectionId);
 #endif
 			if (Context.User.Identity.IsAuthenticated)
 			{
+				
 				IRepository<User> repo = GetRepository<User>();
 				User usr = repo.Get(x => x.Name == Context.User.Identity.Name).FirstOrDefault();
 				if (usr != null)
 				{
-					IRepository<UserSession> repoSession = GetRepository<UserSession>();
-					UserDto dto = Mapper.Map<UserDto>(usr);
-					Clients.Caller.onUserLogged(dto);
-					UserSession us = new UserSession();
-					us.User = usr;
-					us.SessionId = this.Context.ConnectionId;
-					SessionState state = new SessionState() { UserId = usr.Id, SessionId = us.SessionId };
-					SetStateData(JsonConvert.SerializeObject(state));
-					Clients.Caller.onState(state);
-					us.UserAgent = UserAgent;
-					us.UserId = usr.Id;
-					us.SetLastActivityNow();
-					repoSession.Add(us);
-					_unity.Commit();
+					await TaskHelper.FromMethod(() =>
+					{
+						IRepository<UserSession> repoSession = GetRepository<UserSession>();
+						UserDto dto = Mapper.Map<UserDto>(usr);
+						Clients.Caller.onUserLogged(dto);
+						UserSession us = new UserSession();
+						us.User = usr;
+						us.SessionId = this.Context.ConnectionId;
+						SessionState state = new SessionState() { UserId = usr.Id, SessionId = us.SessionId };
+						SetStateData(JsonConvert.SerializeObject(state));
+						Clients.Caller.onState(state);
+						us.UserAgent = UserAgent;
+						us.UserId = usr.Id;
+						us.SetLastActivityNow();
+						repoSession.Add(us);
+						_unity.Commit();
+
+						return TaskHelper.Empty;
+					});
 				}
 			}
 
-			return base.OnConnected();
+			await base.OnConnected();
 		}
 
-		public override Task OnDisconnected()
+		public async override Task OnDisconnected()
 		{
 #if DEBUG
 			System.Diagnostics.Debug.WriteLine("OnDisconnected user: " + Context.User.Identity.Name + " SessionId: " + Context.ConnectionId);
 #endif
 			DisconnectClient(Context.ConnectionId);
-			return base.OnDisconnected();
+			await base.OnDisconnected();
 		}
 
-		public override Task OnReconnected()
+		public async override Task OnReconnected()
 		{
 			if (!Context.User.Identity.IsAuthenticated)
-				return null;
+				await TaskHelper.Empty;
 
 			try
 			{
 				_sessionServ.UpdateSessionActivity(Context.ConnectionId);
 			}
 			catch (Exception ex) { Global.Logger.Error(ex); }
-			Clients.Caller.onStatus("Reconnecting...").Wait();
-			return base.OnReconnected();
+			Clients.Caller.onStatus("Reconnecting...");
+			await base.OnReconnected();
 		}
 
 		private void SetStateData(string sate)

@@ -12,13 +12,13 @@ namespace WebSignalR.Infrastructure.Handlers
 	/// </summary>
 	public class RequireHttpsHandler : DelegatingHandler
 	{
-		private const string ReasonPhrase = "SSL Required";
+		private const string ReasonPhrase = "SSL Required.";
 
-		protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+		protected async override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
 		{
 			if (request.RequestUri.Scheme != Uri.UriSchemeHttps)
 			{
-				return TaskHelper.FromMethod<HttpResponseMessage>(() =>
+				return await TaskHelper.FromMethod<HttpResponseMessage>(() =>
 				{
 					var response = request.CreateResponse(HttpStatusCode.Forbidden);
 					response.ReasonPhrase = ReasonPhrase;
@@ -26,7 +26,7 @@ namespace WebSignalR.Infrastructure.Handlers
 				});
 			}
 
-			return base.SendAsync(request, cancellationToken);
+			return await base.SendAsync(request, cancellationToken);
 		}
 	}
 }

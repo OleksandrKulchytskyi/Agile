@@ -356,6 +356,7 @@
     <Compile Include="Hubs\SignalRBase.cs" />
     <Compile Include="Hubs\TraceHub.cs" />
     <Compile Include="Infrastructure\Adapters\HttpContextCacheAdapter.cs" />
+    <Compile Include="Infrastructure\AsyncHelper.cs" />
     <Compile Include="Infrastructure\Authorization\CustomIdentity.cs" />
     <Compile Include="Infrastructure\Authorization\SignalRAuth.cs" />
     <Compile Include="Infrastructure\Authorization\WebApiAuth.cs" />

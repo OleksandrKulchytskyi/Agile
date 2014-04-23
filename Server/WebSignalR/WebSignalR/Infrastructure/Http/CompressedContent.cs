@@ -29,15 +29,13 @@ namespace WebSignalR.Infrastructure.Http
 			return false;
 		}
 
-		protected override Task SerializeToStreamAsync(Stream stream, TransportContext context)
+		protected async override Task SerializeToStreamAsync(Stream stream, TransportContext context)
 		{
 			Ensure.Argument.NotNull(stream, "stream");
-
 			using (content)
 			{
 				var result = content.ReadAsStreamAsync();
-				result.Wait();
-				return compressor.Compress(result.Result, stream);
+				await compressor.Compress(await result, stream);
 			}
 		}
 
@@ -47,7 +45,6 @@ namespace WebSignalR.Infrastructure.Http
 			{
 				Headers.TryAddWithoutValidation(header.Key, header.Value);
 			}
-
 			Headers.ContentEncoding.Add(compressor.EncodingType);
 		}
 	}
