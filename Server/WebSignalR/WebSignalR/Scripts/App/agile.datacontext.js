@@ -67,7 +67,7 @@ window.agileApp.datacontext = (function () {
 	}
 
 	function detachUserFromRoom(roomId, userId) {
-		return ajaxRequest("POST", roomItemUrl() + "LeaveRoom?roomId=" + roomId + "&userId=" + userId)
+		return ajaxRequest("PUT", roomItemUrl() + "LeaveRoom?roomId=" + roomId + "&userId=" + userId)
 		 .fail(function (XMLHttpRequest, textStatus, errorThrown) {
 		 	console.log(errorThrown);
 		 });
