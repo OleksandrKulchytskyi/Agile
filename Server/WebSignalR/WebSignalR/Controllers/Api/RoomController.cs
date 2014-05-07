@@ -226,7 +226,7 @@ namespace WebSignalR.Controllers
 			}
 		}
 
-		[HttpPut]
+		[HttpPost]
 		public async Task<HttpResponseMessage> LeaveRoom([FromUri]int roomId, [FromUri] int userId)
 		{
 			IRepository<User> repoUser = _unity.GetRepository<User>();

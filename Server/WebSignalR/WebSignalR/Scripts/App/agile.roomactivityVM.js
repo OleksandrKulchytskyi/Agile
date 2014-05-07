@@ -377,7 +377,7 @@ $(window).unload(function () {
 	var address = $('#txtBaseAddress').val();
 	var myUrl = address + 'api/room/leaveroom?roomId=' + rId + '&userId=' + uId;
 	$.ajax({
-		type: 'PUT',
+		type: 'POST',
 		url: myUrl,
 		async: false
 	});

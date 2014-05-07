@@ -49,7 +49,7 @@ window.agileApp.datacontext = (function () {
 	}
 	function deleteRoomItem(roomItem) {
 		clearErrorMessage(roomItem);
-		return ajaxRequest("delete", roomItemUrl("deleteRoom/?id=" + roomItem.id))
+		return ajaxRequest("delete", roomItemUrl("deleteRoom?id=" + roomItem.id))
 		.fail(function () {
 			roomItem.errorMessage("Error occured while removing room item.");
 		});
@@ -67,7 +67,7 @@ window.agileApp.datacontext = (function () {
 	}
 
 	function detachUserFromRoom(roomId, userId) {
-		return ajaxRequest("put", roomItemUrl() + "LeaveRoom/?roomId=" + roomId + "&userId=" + userId)
+		return ajaxRequest("POST", roomItemUrl() + "LeaveRoom?roomId=" + roomId + "&userId=" + userId)
 		 .fail(function (XMLHttpRequest, textStatus, errorThrown) {
 		 	console.log(errorThrown);
 		 });

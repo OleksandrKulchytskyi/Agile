@@ -24,10 +24,7 @@ namespace WebSignalR.Controllers
 		{
 			if (roomName != null)
 			{
-				Room room = await TaskHelper.FromMethod(() =>
-				{
-					return Unity.GetRepository<Room>().Get(x => x.Name == roomName).FirstOrDefault();
-				});
+				Room room = await TaskHelper.FromMethod(() => { return Unity.GetRepository<Room>().Get(x => x.Name == roomName).FirstOrDefault(); });
 				if (room != null)
 				{
 					ViewData["RoomId"] = room.Id;
@@ -84,7 +81,7 @@ namespace WebSignalR.Controllers
 							});
 
 							RoomDto dto = AutoMapper.Mapper.Map<RoomDto>(room);
-							base.AgileHubConnection.Group(dto.Name).onRoomStateChanged(dto);
+							await base.AgileHubConnection.Group(dto.Name).onRoomStateChanged(dto);
 						}
 						catch (Exception ex)
 						{

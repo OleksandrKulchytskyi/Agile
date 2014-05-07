@@ -10,7 +10,9 @@ namespace WebSignalR.Infrastructure.Handlers
 			if (request.Content != null)
 			{
 				var content = await request.Content.ReadAsStringAsync();
-				if (HttpMethod.Post == request.Method && content.Length == 0)
+				if (HttpMethod.Post == request.Method && content.Length == 0 &&
+					request.RequestUri.Segments != null &&
+					!request.RequestUri.Segments[request.RequestUri.Segments.Length - 1].Contains("LeaveRoom", System.StringComparison.OrdinalIgnoreCase))
 				{
 #if DEBUG
 					System.Diagnostics.Debug.WriteLine("Empty body has been detected in the POST request.");
