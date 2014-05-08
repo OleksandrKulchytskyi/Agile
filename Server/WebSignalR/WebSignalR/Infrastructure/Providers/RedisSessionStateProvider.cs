@@ -69,6 +69,18 @@ namespace WebSignalR.Infrastructure.Providers
 			}
 		}
 
+		private RedisConnection RedisSessionAdmin
+		{
+			get
+			{
+				if (!string.IsNullOrEmpty(this.redisPassword))
+				{
+					return new BookSleeve.RedisConnection(this.redisServer, this.redisPort, password: this.redisPassword, allowAdmin: true);
+				}
+				return new BookSleeve.RedisConnection(this.redisServer, this.redisPort, allowAdmin: true);
+			}
+		}
+
 		private string redisServer = "localhost";
 		private int redisPort = 6379;
 		private string redisPassword = string.Empty;
@@ -152,10 +164,16 @@ namespace WebSignalR.Infrastructure.Providers
 				this.redisPassword = crypto.Decrypt(config["password"]);
 			}
 
-			using (RedisConnection conn = this.RedisSessionClient)
+			using (RedisConnection conn = this.RedisSessionAdmin)
 			{
 				var openAsync = conn.Open();
 				conn.Wait(openAsync);
+
+				if (conn.Server.Ping().Result > 0)
+				{
+					conn.Server.FlushDb(1).Wait();
+				}
+
 				conn.Wait(conn.CloseAsync(true));
 			}
 		}
