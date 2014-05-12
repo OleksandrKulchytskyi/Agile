@@ -114,18 +114,14 @@ namespace WebSignalR.Infrastructure.Providers
 
 		}
 
-		public override void Initialize(string name, NameValueCollection config)
+		public async override void Initialize(string name, NameValueCollection config)
 		{
 			// Initialize values from web.config.
 			if (config == null)
-			{
 				throw new ArgumentNullException("config");
-			}
 
 			if (name == null || name.Length == 0)
-			{
 				name = "RedisSessionStateStore";
-			}
 
 			if (String.IsNullOrEmpty(config["description"]))
 			{
@@ -142,20 +138,14 @@ namespace WebSignalR.Infrastructure.Providers
 
 
 			if (config["writeExceptionsToEventLog"] != null)
-			{
 				if (config["writeExceptionsToEventLog"].ToUpper() == "TRUE")
 					this.writeExceptionsToLog = true;
-			}
 
 			if (config["server"] != null)
-			{
 				this.redisServer = config["server"];
-			}
 
 			if (config["port"] != null)
-			{
 				int.TryParse(config["port"], out this.redisPort);
-			}
 
 			if (config["password"] != null)
 			{
@@ -166,15 +156,12 @@ namespace WebSignalR.Infrastructure.Providers
 
 			using (RedisConnection conn = this.RedisSessionAdmin)
 			{
-				var openAsync = conn.Open();
-				conn.Wait(openAsync);
+				await conn.Open();
 
 				if (conn.Server.Ping().Result > 0)
-				{
-					conn.Server.FlushDb(1).Wait();
-				}
+					await conn.Server.FlushDb(1);
 
-				conn.Wait(conn.CloseAsync(true));
+				await conn.CloseAsync(true);
 			}
 		}
 
@@ -418,6 +405,7 @@ namespace WebSignalR.Infrastructure.Providers
 		{
 			this.Dispose();
 		}
+
 		#endregion Overrides
 
 		#region Serialization
