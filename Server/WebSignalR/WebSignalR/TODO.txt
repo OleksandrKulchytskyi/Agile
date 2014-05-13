@@ -1,4 +1,6 @@
-﻿!!!!!!!!!!!!!!!!!!!!!!!!! auth and expiration
+﻿https://www.youtube.com/watch?v=DRPVO3-W4Rs&feature=c4-overview&list=UU-DCjVla8pR4tbHpen8dUsQ
+
+!!!!!!!!!!!!!!!!!!!!!!!!! auth and expiration
 http://stackoverflow.com/questions/14629212/concerning-the-sliding-expiration-of-asp-nets-forms-authentication-and-session
 
 http://xsockets.net/blog/building-real-time-spa-using-knockoutjs-codefirst-and-xsocketsnet
