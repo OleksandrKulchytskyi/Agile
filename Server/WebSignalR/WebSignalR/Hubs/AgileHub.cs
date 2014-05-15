@@ -64,7 +64,6 @@ namespace WebSignalR.Hubs
 #endif
 			if (Context.User.Identity.IsAuthenticated)
 			{
-				
 				IRepository<User> repo = GetRepository<User>();
 				User usr = repo.Get(x => x.Name == Context.User.Identity.Name).FirstOrDefault();
 				if (usr != null)
@@ -84,7 +83,14 @@ namespace WebSignalR.Hubs
 						us.UserId = usr.Id;
 						us.SetLastActivityNow();
 						repoSession.Add(us);
-						_unity.Commit();
+						try
+						{
+							_unity.Commit();
+						}
+						catch (Exception ex)
+						{
+							Global.Logger.Error(ex);
+						}
 
 						return TaskHelper.Empty;
 					});
