@@ -35,7 +35,6 @@ namespace WebSignalR.Infrastructure.Providers
 			Configuration cfg = WebConfigurationManager.OpenWebConfiguration(string.Empty);
 			SessionStateSection sessionStateConfig = (SessionStateSection)cfg.GetSection("system.web/sessionState");
 
-
 			if (config["host"] != null)
 				this.host = config["host"];
 
@@ -143,13 +142,14 @@ namespace WebSignalR.Infrastructure.Providers
 				var sessionDataHash = getSessionData.Result;
 				if (sessionDataHash.Count == 3)
 				{
-					var ms = new MemoryStream(sessionDataHash["data"]);
-					if (ms.Length > 0)
+					using (var ms = new MemoryStream(sessionDataHash["data"]))
 					{
-						var reader = new BinaryReader(ms);
-						sessionItems = SessionStateItemCollection.Deserialize(reader);
+						if (ms.Length > 0)
+						{
+							var reader = new BinaryReader(ms);
+							sessionItems = SessionStateItemCollection.Deserialize(reader);
+						}
 					}
-
 					var timeoutMinutes = BitConverter.ToInt32(sessionDataHash["timeoutMinutes"], 0);
 					redis.Keys.Expire(0, GetKeyForSessionId(id), timeoutMinutes * 60);
 				}
@@ -169,7 +169,7 @@ namespace WebSignalR.Infrastructure.Providers
 			lockAge = TimeSpan.MinValue;
 
 			getLockData.Wait();
-			var rawLockData = getLockData.Result;
+			byte[] rawLockData = getLockData.Result;
 
 			if (rawLockData == null)
 			{
@@ -192,11 +192,13 @@ namespace WebSignalR.Infrastructure.Providers
 						{
 							actions = sessionDataHash["initialize"][0] == 1 ? SessionStateActions.InitializeItem : SessionStateActions.None;
 
-							var ms = new MemoryStream(sessionDataHash["data"]);
-							if (ms.Length > 0)
+							using (var ms = new MemoryStream(sessionDataHash["data"]))
 							{
-								var reader = new BinaryReader(ms);
-								sessionItems = SessionStateItemCollection.Deserialize(reader);
+								if (ms.Length > 0)
+								{
+									var reader = new BinaryReader(ms);
+									sessionItems = SessionStateItemCollection.Deserialize(reader);
+								}
 							}
 
 							var timeoutMinutes = BitConverter.ToInt32(sessionDataHash["timeoutMinutes"], 0);

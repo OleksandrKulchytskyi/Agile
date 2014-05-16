@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BookSleeve;
+using System;
+using System.Collections.Specialized;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
-using System.Collections.Specialized;
-using System.Web.SessionState;
-using BookSleeve;
-using System.Configuration;
-using System.Configuration.Provider;
 using System.Web.Configuration;
-using System.IO;
+using System.Web.SessionState;
 
 
 //https://github.com/chadman/redis-service-provider/blob/master/RedisProvider/SessionProvider/RedisSessionProvider.cs
