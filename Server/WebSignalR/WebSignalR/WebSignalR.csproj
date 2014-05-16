@@ -386,6 +386,7 @@
     <Compile Include="Infrastructure\ObjectExtensions.cs" />
     <Compile Include="Infrastructure\PagedList.cs" />
     <Compile Include="Infrastructure\Providers\RedisSessionStateProvider.cs" />
+    <Compile Include="Infrastructure\Providers\RedisSessionStateStore.cs" />
     <Compile Include="Infrastructure\Services\CsvProvider.cs" />
     <Compile Include="Infrastructure\Services\FormsPrincipalProvider.cs" />
     <Compile Include="Infrastructure\Services\CsvStatePusher.cs" />

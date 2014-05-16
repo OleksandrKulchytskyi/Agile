@@ -36,9 +36,36 @@ namespace WebSignalR.Infrastructure.Providers
 
 	public sealed class RedisSessionProvider : System.Web.SessionState.SessionStateStoreProviderBase, IDisposable
 	{
+		private class RedisConnectionFactory
+		{
+			public RedisConnection Get(string server, int port, string password, bool admin)
+			{
+				if (admin)
+				{
+					if (!string.IsNullOrEmpty(password))
+					{
+						return new BookSleeve.RedisConnection(server, port, password: password, allowAdmin: true);
+					}
+					return new BookSleeve.RedisConnection(server, port, allowAdmin: true);
+				}
+				else
+				{
+					if (!string.IsNullOrEmpty(password))
+					{
+						return new BookSleeve.RedisConnection(server, port, password: password);
+					}
+					return new BookSleeve.RedisConnection(server, port);
+				}
+			}
+		}
+
 		private const int dbId = 1;
 
 		#region Properties
+
+		private RedisConnectionFactory _factory;
+		private RedisConnection _connection;
+
 		private string _name;
 		private string ApplicationName
 		{
@@ -62,11 +89,7 @@ namespace WebSignalR.Infrastructure.Providers
 		{
 			get
 			{
-				if (!string.IsNullOrEmpty(this.redisPassword))
-				{
-					return new BookSleeve.RedisConnection(this.redisServer, this.redisPort, password: this.redisPassword);
-				}
-				return new BookSleeve.RedisConnection(this.redisServer, this.redisPort);
+				return _factory.Get(this.redisServer, this.redisPort, this.redisPassword, false);
 			}
 		}
 
@@ -74,11 +97,7 @@ namespace WebSignalR.Infrastructure.Providers
 		{
 			get
 			{
-				if (!string.IsNullOrEmpty(this.redisPassword))
-				{
-					return new BookSleeve.RedisConnection(this.redisServer, this.redisPort, password: this.redisPassword, allowAdmin: true);
-				}
-				return new BookSleeve.RedisConnection(this.redisServer, this.redisPort, allowAdmin: true);
+				return _factory.Get(this.redisServer, this.redisPort, this.redisPassword, true);
 			}
 		}
 
@@ -105,14 +124,19 @@ namespace WebSignalR.Infrastructure.Providers
 		#region Constructor
 		public RedisSessionProvider()
 		{
-
+			_factory = new RedisConnectionFactory();
 		}
 		#endregion Constructor
 
 		#region Overrides
 		public override void Dispose()
 		{
-
+			if (_connection != null)
+			{
+				_connection.Error -= OnConnectionError;
+				_connection.Close(true);
+				_connection.Dispose();
+			}
 		}
 
 		public async override void Initialize(string name, NameValueCollection config)
@@ -142,7 +166,7 @@ namespace WebSignalR.Infrastructure.Providers
 				if (config["writeExceptionsToEventLog"].ToUpper() == "TRUE")
 					this.writeExceptionsToLog = true;
 
-			if (config["server"] != null)
+			if (config["host"] != null)
 				this.redisServer = config["server"];
 
 			if (config["port"] != null)
@@ -173,64 +197,57 @@ namespace WebSignalR.Infrastructure.Providers
 
 		public async override void CreateUninitializedItem(HttpContext context, string id, int timeout)
 		{
-			using (RedisConnection client = this.RedisSessionClient)
-			{
-				await client.Open();
-				SessionItem sessionItem = new SessionItem();
-				sessionItem.CreatedAt = DateTime.Now.ToUniversalTime();
-				sessionItem.LockDate = DateTime.Now.ToUniversalTime();
-				sessionItem.LockID = 0;
-				sessionItem.Timeout = timeout;
-				sessionItem.Locked = false;
-				sessionItem.SessionItems = string.Empty;
-				sessionItem.Flags = 0;
-				//client.Set<SessionItem>(this.RedisKey(id), sessionItem, DateTime.UtcNow.AddMinutes(timeout));
-				if (await client.Keys.Exists(dbId, id))
-					await client.Keys.Remove(dbId, id);
+			SessionItem sessionItem = new SessionItem();
+			sessionItem.CreatedAt = DateTime.Now.ToUniversalTime();
+			sessionItem.LockDate = DateTime.Now.ToUniversalTime();
+			sessionItem.LockID = 0;
+			sessionItem.Timeout = timeout;
+			sessionItem.Locked = false;
+			sessionItem.SessionItems = string.Empty;
+			sessionItem.Flags = 0;
 
-				await client.Sets.Add(dbId, id, Newtonsoft.Json.JsonConvert.SerializeObject(sessionItem));
-				await client.CloseAsync(true);
-			}
+			//client.Set<SessionItem>(this.RedisKey(id), sessionItem, DateTime.UtcNow.AddMinutes(timeout));
+			if (await _connection.Keys.Exists(dbId, id))
+				await _connection.Keys.Remove(dbId, id);
+
+			await _connection.Sets.Add(dbId, id, Newtonsoft.Json.JsonConvert.SerializeObject(sessionItem));
 		}
 
 		public async override void SetAndReleaseItemExclusive(HttpContext context, string id, SessionStateStoreData item, object lockId, bool newItem)
 		{
-			using (RedisConnection client = this.RedisSessionClient)
+			// Serialize the SessionStateItemCollection as a string.
+			string sessionItems = Serialize((SessionStateItemCollection)item.Items);
+
+			try
 			{
-				await client.Open();
-				// Serialize the SessionStateItemCollection as a string.
-				string sessionItems = Serialize((SessionStateItemCollection)item.Items);
-
-				try
+				if (newItem)
 				{
-					if (newItem)
-					{
-						SessionItem sessionItem = new SessionItem();
-						sessionItem.CreatedAt = DateTime.UtcNow;
-						sessionItem.LockDate = DateTime.UtcNow;
-						sessionItem.LockID = 0;
-						sessionItem.Timeout = item.Timeout;
-						sessionItem.Locked = false;
-						sessionItem.SessionItems = sessionItems;
-						sessionItem.Flags = 0;
+					SessionItem sessionItem = new SessionItem();
+					sessionItem.CreatedAt = DateTime.UtcNow;
+					sessionItem.LockDate = DateTime.UtcNow;
+					sessionItem.LockID = 0;
+					sessionItem.Timeout = item.Timeout;
+					sessionItem.Locked = false;
+					sessionItem.SessionItems = sessionItems;
+					sessionItem.Flags = 0;
 
-						await client.Sets.Add(dbId, id, Newtonsoft.Json.JsonConvert.SerializeObject(sessionItem));
-					}
-					else
+					await _connection.Sets.Add(dbId, id, Newtonsoft.Json.JsonConvert.SerializeObject(sessionItem));
+				}
+				else
+				{
+					SessionItem currentSessionItem = GetSessionItem(_connection, id);
+					if (currentSessionItem != null && currentSessionItem.LockID == (int?)lockId)
 					{
-						SessionItem currentSessionItem = GetSessionItem(client, id);
-						if (currentSessionItem != null && currentSessionItem.LockID == (int?)lockId)
-						{
-							currentSessionItem.Locked = false;
-							currentSessionItem.SessionItems = sessionItems;
-							await client.Sets.Add(dbId, id, Newtonsoft.Json.JsonConvert.SerializeObject(currentSessionItem));
-						}
+						currentSessionItem.Locked = false;
+						currentSessionItem.SessionItems = sessionItems;
+						await _connection.Sets.Add(dbId, id, Newtonsoft.Json.JsonConvert.SerializeObject(currentSessionItem));
 					}
 				}
-				catch (Exception e)
-				{
-					throw e;
-				}
+			}
+			catch (Exception e)
+			{
+				Global.Logger.Error(e);
+				throw e;
 			}
 		}
 
@@ -246,6 +263,7 @@ namespace WebSignalR.Infrastructure.Providers
 
 		private SessionItem GetSessionItem(RedisConnection connection, string id)
 		{
+			//connection.s
 			string[] data = connection.Sets.GetAllString(dbId, id).Result;
 			if (data != null && data.Length > 0)
 				return Newtonsoft.Json.JsonConvert.DeserializeObject<SessionItem>(data[0]);
@@ -267,102 +285,88 @@ namespace WebSignalR.Infrastructure.Providers
 			// Timeout value from the data store.
 			int timeout = 0;
 
-			using (RedisConnection client = this.RedisSessionClient)
+			try
 			{
-				client.Wait(client.Open());
-				try
+				if (lockRecord)
 				{
-					if (lockRecord)
-					{
-						locked = false;
-						SessionItem currentItem = GetSessionItem(client, id);
-						//SessionItem currentItem = client.Sets.Get<SessionItem>(this.RedisKey(id));
+					locked = false;
+					SessionItem currentItem = GetSessionItem(_connection, id);
+					//SessionItem currentItem = client.Sets.Get<SessionItem>(this.RedisKey(id));
 
-						if (currentItem != null)
+					if (currentItem != null)
+					{
+						// If the item is locked then do not attempt to update it
+						if (!currentItem.Locked)
 						{
-							// If the item is locked then do not attempt to update it
-							if (!currentItem.Locked)
-							{
-								currentItem.Locked = true;
-								currentItem.LockDate = DateTime.UtcNow;
-								client.Sets.Add(dbId, id, Newtonsoft.Json.JsonConvert.SerializeObject(currentItem));
-								//client.Set<SessionItem>(this.RedisKey(id), currentItem, DateTime.UtcNow.AddMinutes(sessionStateConfig.Timeout.TotalMinutes));
-							}
-							else
-								locked = true;
+							currentItem.Locked = true;
+							currentItem.LockDate = DateTime.UtcNow;
+							_connection.Sets.Add(dbId, id, Newtonsoft.Json.JsonConvert.SerializeObject(currentItem));
+							//client.Set<SessionItem>(this.RedisKey(id), currentItem, DateTime.UtcNow.AddMinutes(sessionStateConfig.Timeout.TotalMinutes));
 						}
-					}
-
-					SessionItem currentSessionItem = GetSessionItem(client, id);
-					//SessionItem currentSessionItem = client.Get<SessionItem>(this.RedisKey(id));
-
-					if (currentSessionItem != null)
-					{
-						serializedItems = currentSessionItem.SessionItems;
-						lockId = currentSessionItem.LockID;
-						lockAge = DateTime.UtcNow.Subtract(currentSessionItem.LockDate);
-						actionFlags = (SessionStateActions)currentSessionItem.Flags;
-						timeout = currentSessionItem.Timeout;
-					}
-					else
-						locked = false;
-
-					if (currentSessionItem != null && !locked)
-					{
-						// Delete the old item before inserting the new one
-						client.Keys.Remove(dbId, id);
-
-						lockId = (int?)lockId + 1;
-						currentSessionItem.LockID = lockId != null ? (int)lockId : 0;
-						currentSessionItem.Flags = 0;
-
-						client.Sets.Add(dbId, id, Newtonsoft.Json.JsonConvert.SerializeObject(currentSessionItem));
-
-						// If the actionFlags parameter is not InitializeItem,
-						// deserialize the stored SessionStateItemCollection.
-						if (actionFlags == SessionStateActions.InitializeItem)
-							item = CreateNewStoreData(context, 30);
 						else
-							item = Deserialize(context, serializedItems, timeout);
+							locked = true;
 					}
 				}
-				catch (Exception e)
+
+				SessionItem currentSessionItem = GetSessionItem(_connection, id);
+				//SessionItem currentSessionItem = client.Get<SessionItem>(this.RedisKey(id));
+
+				if (currentSessionItem != null)
 				{
-					throw e;
+					serializedItems = currentSessionItem.SessionItems;
+					lockId = currentSessionItem.LockID;
+					lockAge = DateTime.UtcNow.Subtract(currentSessionItem.LockDate);
+					actionFlags = (SessionStateActions)currentSessionItem.Flags;
+					timeout = currentSessionItem.Timeout;
+				}
+				else
+					locked = false;
+
+				if (currentSessionItem != null && !locked)
+				{
+					// Delete the old item before inserting the new one
+					_connection.Keys.Remove(dbId, id);
+
+					lockId = (int?)lockId + 1;
+					currentSessionItem.LockID = lockId != null ? (int)lockId : 0;
+					currentSessionItem.Flags = 0;
+
+					_connection.Sets.Add(dbId, id, Newtonsoft.Json.JsonConvert.SerializeObject(currentSessionItem));
+
+					// If the actionFlags parameter is not InitializeItem,
+					// deserialize the stored SessionStateItemCollection.
+					if (actionFlags == SessionStateActions.InitializeItem)
+						item = CreateNewStoreData(context, 30);
+					else
+						item = Deserialize(context, serializedItems, timeout);
 				}
 			}
+			catch (Exception e)
+			{
+				Global.Logger.Error(e);
+				throw e;
+			}
+
 			return item;
 		}
 
 		public async override void ReleaseItemExclusive(HttpContext context, string id, object lockId)
 		{
-			using (RedisConnection client = this.RedisSessionClient)
+			//SessionItem currentSessionItem = client.Get<SessionItem>(this.RedisKey(id));
+			SessionItem currentSessionItem = GetSessionItem(_connection, id);
+
+			if (currentSessionItem != null && (int?)lockId == currentSessionItem.LockID)
 			{
-				await client.Open();
-
-				//SessionItem currentSessionItem = client.Get<SessionItem>(this.RedisKey(id));
-				SessionItem currentSessionItem = GetSessionItem(client, id);
-
-				if (currentSessionItem != null && (int?)lockId == currentSessionItem.LockID)
-				{
-					currentSessionItem.Locked = false;
-					//client.Set<SessionItem>(this.RedisKey(id), currentSessionItem, DateTime.UtcNow.AddMinutes(sessionStateConfig.Timeout.TotalMinutes));
-					await client.Sets.Add(dbId, id, Newtonsoft.Json.JsonConvert.SerializeObject(currentSessionItem));
-				}
-
-				await client.CloseAsync(true);
+				currentSessionItem.Locked = false;
+				//client.Set<SessionItem>(this.RedisKey(id), currentSessionItem, DateTime.UtcNow.AddMinutes(sessionStateConfig.Timeout.TotalMinutes));
+				await _connection.Sets.Add(dbId, id, Newtonsoft.Json.JsonConvert.SerializeObject(currentSessionItem));
 			}
 		}
 
 		public async override void RemoveItem(HttpContext context, string id, object lockId, SessionStateStoreData item)
 		{
-			using (RedisConnection client = this.RedisSessionClient)
-			{
-				await client.Open();
-				// Delete the old item before inserting the new one
-				await client.Keys.Remove(dbId, id);
-				await client.CloseAsync(true);
-			}
+			// Delete the old item before inserting the new one
+			await _connection.Keys.Remove(dbId, id);
 		}
 
 		public override SessionStateStoreData CreateNewStoreData(System.Web.HttpContext context, int timeout)
@@ -372,25 +376,23 @@ namespace WebSignalR.Infrastructure.Providers
 
 		public async override void ResetItemTimeout(HttpContext context, string id)
 		{
-			using (RedisConnection client = this.RedisSessionClient)
+			try
 			{
-				await client.Open();
-				try
-				{
-					// TODO :: GET THIS VALUE FROM THE CONFIG
-					await client.Keys.Expire(dbId, id, (int)sessionStateConfig.Timeout.TotalSeconds);
-					//client.ExpireEntryAt(id, DateTime.UtcNow.AddMinutes(sessionStateConfig.Timeout.TotalMinutes));
-				}
-				catch (Exception e)
-				{
-					throw e;
-				}
+				// TODO :: GET THIS VALUE FROM THE CONFIG
+				await _connection.Keys.Expire(dbId, id, (int)sessionStateConfig.Timeout.TotalSeconds);
+				//client.ExpireEntryAt(id, DateTime.UtcNow.AddMinutes(sessionStateConfig.Timeout.TotalMinutes));
+			}
+			catch (Exception e)
+			{
+				throw e;
 			}
 		}
 
-		public override void InitializeRequest(HttpContext context)
+		public async override void InitializeRequest(HttpContext context)
 		{
-			// Was going to open the redis connection here but sometimes I had 5 connections open at one time which was strange
+			_connection = RedisSessionClient;
+			_connection.Error += OnConnectionError;
+			await _connection.Open();
 		}
 
 		public override void EndRequest(HttpContext context)
@@ -399,6 +401,17 @@ namespace WebSignalR.Infrastructure.Providers
 		}
 
 		#endregion Overrides
+
+		private void OnConnectionError(object sender, BookSleeve.ErrorEventArgs e)
+		{
+			RedisConnection con = (sender as RedisConnection);
+			if (con != null)
+				con.Error -= OnConnectionError;
+
+			Global.Logger.Error("OnConnectionError - " + e.Cause + ". " + e.Exception.GetBaseException());
+
+			//AttemptReconnect(e.Exception);
+		}
 
 		#region Serialization
 		/// <summary>

@@ -13,6 +13,7 @@ namespace WebSignalR.Test
 		[TestMethod]
 		public void TestICrypto()
 		{
+			string enc = "j1L1z5DjJ6oRNJq4TWPueuggucH8NYqnMaBdzmCpVZdwbB33R9szOBI/Udjz0WQDTymP8Z4MsBRG7TeXnJLk1vC2Fj8z5LYc+NXh0iZ2YeUiEfzGoy3XKiZsTKdgSTNBp5Eo9y8AHslT80IFTyVPsmJclD+YBEXD";
 			ICrypto crypto = new WebSignalR.Infrastructure.CommonCryptoHelper();
 			string data = "<Constr data=\"key1\" val=\"12\" />";
 			string encrypted = crypto.Encrypt(data);
