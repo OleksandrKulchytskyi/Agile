@@ -141,7 +141,7 @@ namespace WebSignalR.Infrastructure.Services
 					{
 						fs = System.IO.File.OpenRead(files[1]);
 					}
-					catch (System.IO.IOException ex)
+					catch (System.IO.IOException)
 					{
 						result = false;
 					}

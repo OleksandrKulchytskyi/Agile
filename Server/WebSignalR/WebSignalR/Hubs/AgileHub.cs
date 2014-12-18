@@ -22,6 +22,7 @@ namespace WebSignalR.Hubs
 	{
 		private static readonly Version _version = typeof(AgileHub).Assembly.GetName().Version;
 		private static readonly string _versionString = _version.ToString();
+		private static readonly string _guestRoomName = "{47384BC9-0AD0-452C-A64A-EE24ABA8746E}";
 
 		private readonly IUnityOfWork _unity;
 		private readonly IBus _bus;
@@ -81,6 +82,7 @@ namespace WebSignalR.Hubs
 					us.UserId = usr.Id;
 					us.SetLastActivityNow();
 					repoSession.Add(us);
+					Groups.Add(us.SessionId, _guestRoomName);
 					_unity.Commit();
 				}
 			}
@@ -161,6 +163,8 @@ namespace WebSignalR.Hubs
 					SessionRoom sr = srRepo.Get(x => x.Id == us.Id).FirstOrDefault();
 					if (sr != null)
 					{
+						Room room = _roomService.JoinToRoomBySessionId(sr.RoomName, Context.ConnectionId);
+						Clients.Group(_guestRoomName).onHubStateChanged(Mapper.Map<RoomDto>(room));
 						UserDto uDto = Mapper.Map<UserDto>(us.User);
 						this.Clients.Group(sr.RoomName).onLeftRoom(uDto);
 						srRepo.Remove(us.SessionRoom);
@@ -208,6 +212,7 @@ namespace WebSignalR.Hubs
 
 			try
 			{
+				Groups.Remove(sessionId, _guestRoomName);
 				Task addTask = Groups.Add(sessionId, roomName);
 				Room room = _roomService.JoinToRoomBySessionId(roomName, sessionId);
 				RoomDto rDto = Mapper.Map<RoomDto>(room);
@@ -226,6 +231,7 @@ namespace WebSignalR.Hubs
 					usRepo.Update(us);
 					_unity.Commit();
 
+					Clients.Group(_guestRoomName).onHubStateChanged(rDto);
 					UserDto uDto = Mapper.Map<UserDto>(us.User);
 					return Clients.Group(roomName, Context.ConnectionId).onJoinedRoom(uDto);
 				}
@@ -245,6 +251,7 @@ namespace WebSignalR.Hubs
 			if (!Guid.TryParse(sessionId, out sesID))
 				sessionId = Context.ConnectionId;
 
+			Groups.Add(sessionId, _guestRoomName);
 			Task removeTask = Groups.Remove(sessionId, roomName);
 
 			_sessionServ.UpdateSessionActivity(sessionId);
@@ -262,6 +269,7 @@ namespace WebSignalR.Hubs
 				}
 			}
 
+			Clients.Group(_guestRoomName).onHubStateChanged(Mapper.Map<RoomDto>(room));
 			UserDto uDto = Mapper.Map<UserDto>(GetRepository<UserSession>().Get(x => x.SessionId == sessionId).Select(x => x.User).FirstOrDefault());
 			Clients.Group(roomName).onLeftRoom(uDto);
 
@@ -300,6 +308,7 @@ namespace WebSignalR.Hubs
 			}
 
 			RoomDto dto = Mapper.Map<RoomDto>(room);
+			Clients.Group(_guestRoomName).onHubStateChanged(dto);
 			return Clients.Group(roomName).onRoomStateChanged(dto);
 		}
 
@@ -349,8 +358,10 @@ namespace WebSignalR.Hubs
 			{
 				try
 				{
-					room.ItemsToVote.Remove(vote);
+					//room.ItemsToVote.Remove(vote);
+					voteRepo.Remove(vote);
 					roomRepo.Update(room);
+					//vote.RoomId = room.Id;
 					_unity.Commit();
 				}
 				catch (Exception ex)
@@ -360,7 +371,6 @@ namespace WebSignalR.Hubs
 #endif
 					throw;
 				}
-
 				return Clients.Group(room.Name).onRoomStateChanged(Mapper.Map<RoomDto>(room));
 			}
 			return TaskHelper.Empty;
@@ -378,12 +388,24 @@ namespace WebSignalR.Hubs
 			UserVoteDto userVoteDto = null;
 			if (voteItem != null && usr != null && voteItem.Opened)
 			{
-				UserVote uv = new UserVote();
-				uv.UserId = usr.Id;
-				uv.VoteId = voteItem.Id;
+				UserVote uv;
+				try
+				{
+					uv = voteItem.VotedUsers.First(item => (item.UserId == usr.Id && item.VoteId == voteItem.Id));
+				}
+				catch (InvalidOperationException)
+				{
+					uv = null;
+				}
+				if (uv == null)
+				{
+					uv = new UserVote();
+					uv.UserId = usr.Id;
+					uv.VoteId = voteItem.Id;
+					userVorePero.Add(uv);
+					voteItem.VotedUsers.Add(uv);
+				}
 				uv.Mark = mark;
-				userVorePero.Add(uv);
-				voteItem.VotedUsers.Add(uv);
 
 				_sessionServ.UpdateSessionActivity(Context.ConnectionId);
 				userVoteDto = Mapper.Map<UserVoteDto>(uv);
@@ -418,6 +440,7 @@ namespace WebSignalR.Hubs
 			{
 				voteItem.Opened = true;
 				voteItem.Closed = false;
+				voteItem.Finished = false;
 				if (voteItem.VotedUsers.Count > 0)
 				{
 					IRepository<UserVote> repoVotes = GetRepository<UserVote>();//fixing the issue related to foreign key missing exception in case of voteItem.VotedUsers.Clear(); be only invoked.

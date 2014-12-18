@@ -15,6 +15,7 @@ namespace WebSignalR.Controllers
 	[WebSignalR.Infrastructure.Filters.ValidateHttpAntiForgeryToken]
 	public class RoomController : BaseController
 	{
+		private static readonly string _guestRoomName = "{47384BC9-0AD0-452C-A64A-EE24ABA8746E}";
 		private readonly IUnityOfWork _unity;
 		private readonly IUserRoomService _userRoomService;
 
@@ -229,6 +230,7 @@ namespace WebSignalR.Controllers
 						srRepo.Remove(sr);
 
 					_unity.Commit();
+					base.AgileHubConnection.Group(_guestRoomName).onHubStateChanged(AutoMapper.Mapper.Map<RoomDto>(room));
 					UserDto userDto = AutoMapper.Mapper.Map<UserDto>(usr);
 					base.AgileHubConnection.Group(room.Name).onLeftRoom(userDto);
 				}
@@ -257,7 +259,10 @@ namespace WebSignalR.Controllers
 				IRepository<UserSession> sessionRepo = _unity.GetRepository<UserSession>();
 				UserSession session = sessionRepo.Get(x => x.SessionId == sessionId).FirstOrDefault();
 				if (session != null)
+				{
+					AgileHubConnection.Group(_guestRoomName).onHubStateChanged(AutoMapper.Mapper.Map<RoomDto>(session.SessionRoom));
 					AgileHubConnection.Group(roomName).onLeftRoom(AutoMapper.Mapper.Map<UserDto>(session.User));
+				}
 			}
 			catch (System.Exception ex)
 			{

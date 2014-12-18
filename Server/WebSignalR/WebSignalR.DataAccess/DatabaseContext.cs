@@ -10,6 +10,12 @@ namespace WebSignalR.DataAccess.DB
 {
 	public class DatabaseContext : DbContext, IContext
 	{
+
+		public DatabaseContext()
+			: base("ConnectionSettings")
+		{
+		}
+
 		public DatabaseContext(string connection)
 			: base(connection)
 		{
