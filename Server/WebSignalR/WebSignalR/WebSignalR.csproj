@@ -249,9 +249,7 @@
     <Content Include="Content\toastr.less" />
     <Content Include="ConnectionStrings.config" />
     <None Include="Properties\PublishProfiles\Somee.pubxml" />
-    <None Include="Properties\PublishProfiles\Test.pubxml" />
     <Content Include="Global.asax" />
-    <None Include="Properties\PublishProfiles\Work.pubxml" />
     <Content Include="index.html" />
     <Content Include="Modules\BusModule.xml" />
     <Content Include="Modules\DataAccessModule.xml" />
